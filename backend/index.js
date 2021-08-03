@@ -1,12 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 var path = require('path');
+const { dbConnection } = require('./db/config');
 
 //Lo que hace esto es que cuando cargue la aplicacion lea el archivo .env
 require('dotenv').config();
 
 //Crear servidor utilizando express
 const app = express();
+
+//Conexion a la base de datos
+dbConnection();
 
 //port es una variable y luego accedo al puerto con app.get('port');
 //Aqui le digo que utilice la variable de entorno PORT o sino 5050
@@ -27,4 +31,5 @@ app.use('/', require('./routes/auth'));
 
 app.listen( app.get('port') , ()=>{
     console.log(`Servidor corriendo en el puerto ${ app.get('port') }`);
+   
 });
