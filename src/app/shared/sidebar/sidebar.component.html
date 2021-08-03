@@ -1,1 +1,53 @@
-<p>sidebar works!</p>
+<div class="sidebar">
+  <div class="logo_content">
+    <div class="logo">
+      <i class="fab fa-angular"></i>
+      <div class="logo_name">Dashboard</div>
+    </div>
+    <i class="fas fa-bars" #btnBurger id="btn" (click)="toggleBtn(btnBurger)"></i>
+  </div>
+  <ul class="nav_list">
+    <li>
+            <i class="fas fa-search"  id="icon-search" (click)="toggleBtn(btnBurger)"></i>
+            <input type="text" name="search" id="searchBtn" placeholder="Search...">
+        <span class="tooltip">Buscar</span>
+    </li>
+    <li>
+        <a href="#">
+            <i class="fas fa-home"></i>
+            <span class="links_name">Inicio</span>
+        </a>
+        <span class="tooltip">Ir al inicio</span>
+    </li>
+    <li>
+        <a href="#">
+            <i class="fas fa-user-circle"></i>
+            <span class="links_name">Ir al perfil</span>
+        </a>
+        <span class="tooltip">Ir al perfil</span>
+    </li>
+    <li>
+        <a href="#">
+            <i class="fas fa-history"></i>
+            <span class="links_name">Historia</span>
+        </a>
+        <span class="tooltip">Ver la Historia</span>
+    </li>
+    <li>
+        <a href="#">
+            <i class="fas fa-video"></i>
+            <span class="links_name">Video</span>
+        </a>
+        <span class="tooltip">Ver video</span>
+    </li>
+    <li>
+        <a href="#">
+            <i class="fas fa-sign-out-alt" id="log_out"></i>
+            <span class="links_name">Salir</span>
+        </a>
+        <span class="tooltip">Salir</span>
+    </li>
+    
+  </ul>
+  
+</div>
