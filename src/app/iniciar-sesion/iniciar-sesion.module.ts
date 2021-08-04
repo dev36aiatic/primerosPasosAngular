@@ -6,7 +6,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { FormularioLoginComponent } from './components/formulario-login/formulario-login.component';
 import { FormularioRegistroComponent } from './components/formulario-registro/formulario-registro.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MainComponent } from './pages/main/main.component';
 
 
@@ -20,6 +20,7 @@ import { MainComponent } from './pages/main/main.component';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     IniciarSesionRoutingModule,
     FormsModule
   ],
