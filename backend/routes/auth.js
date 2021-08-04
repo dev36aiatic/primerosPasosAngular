@@ -28,7 +28,7 @@ router.post('/new', [
     ],crearUsuario );
 
 //Login de usuario
-router.post('/', 
+router.post('/login', 
 [
     check('email','El email es obligatorio.').isEmail(),
     check('password','La cantidad minima de caracteres para la contraseña es 6').isLength({min:6}),

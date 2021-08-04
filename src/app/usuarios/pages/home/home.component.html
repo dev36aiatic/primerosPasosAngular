@@ -3,8 +3,10 @@
 <div class=" container"  [ngStyle]="{'height': '100vh'}">
     <div class="row justiy-content-center align-items-center" 
     [ngStyle]="{'height': '100%'}">
-        <div class="col  rounded text-white p-5 presentacion">
-            <h6 *ngFor="let item of autor | keyvalue">
+    
+        <div [ngStyle]="{'margin-left':'78px'}" class="col  rounded text-white p-5 presentacion">
+            <h2>Hola Mundo</h2>
+            <h6 *ngFor="let item of infoUser | keyvalue">
                 {{ item.key | titlecase}} : {{ item.value}}</h6>
         </div>
     </div>

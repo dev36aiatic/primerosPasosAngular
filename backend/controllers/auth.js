@@ -47,7 +47,8 @@ const authController = {
            ok: true,
            uid: dbUser.id,
            name:dbUser.name,
-           token
+           token,
+           email: dbUser.email
        })
 
     } catch (error) {
@@ -101,7 +102,8 @@ const authController = {
         ok: true,
         uid: dbUser.id,
         name:dbUser.name,
-        token
+        token,
+        email: dbUser.email
       })
 
     } catch (error) {
@@ -124,12 +126,18 @@ const authController = {
     //Se genera el nuevo JWT
     const token = await generarJWT(uid, name);
 
+    //Buscar usuario para devolver email
+
+    const { email } = await Usuario.findById(uid);
+  
+
     //Se envia la respuesta con los datos del usuario y el jwt
     return res.json({
       ok: true,
       uid,
       name,
-      token
+      token,
+      email
     });
 
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -7,14 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  autor = {
-    correo : 'dev36@aiatic.com',
-    nombre : 'Mauricio Barva',
-    ocupacion: ' Estudiante de Ingenieria de Sistemas de la UNAB'
+  get infoUser(){
+    return this.authService.user;
   }
-  constructor() { }
+  
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
+   
+    
   }
 
 }
