@@ -1,21 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginComponent } from './pages/login/login.component';
-import { FormsModule } from '@angular/forms';
-import { FormularioLoginComponent } from './components/formulario-login/formulario-login.component';
-import { SignupComponent } from './pages/signup/signup.component';
-import { FormularioRegistroComponent } from './components/formulario-registro/formulario-registro.component';
-import { RouterModule } from '@angular/router';
 
+import { IniciarSesionRoutingModule } from './iniciar-sesion-routing.module';
+import { LoginComponent } from './pages/login/login.component';
+import { SignupComponent } from './pages/signup/signup.component';
+import { FormularioLoginComponent } from './components/formulario-login/formulario-login.component';
+import { FormularioRegistroComponent } from './components/formulario-registro/formulario-registro.component';
+import { FormsModule } from '@angular/forms';
+import { MainComponent } from './pages/main/main.component';
 
 
 @NgModule({
-  declarations: [LoginComponent, FormularioLoginComponent, SignupComponent, FormularioRegistroComponent],
+  declarations: [
+    LoginComponent, 
+    SignupComponent,
+    FormularioLoginComponent,
+    FormularioRegistroComponent,
+    MainComponent
+  ],
   imports: [
     CommonModule,
-    FormsModule,
-    RouterModule
+    IniciarSesionRoutingModule,
+    FormsModule
   ],
-  exports:[LoginComponent]
+  exports:[LoginComponent,SignupComponent]
+  
 })
 export class IniciarSesionModule { }

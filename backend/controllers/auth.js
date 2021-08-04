@@ -3,8 +3,7 @@ const { response } = require('express');
 //Importacion del modelo Usuario
 const Usuario = require('../models/Usuario');
 
-//Imporatcion del modulo JSONWEBTOKEN
-
+//Importacion de la funcion para generar el JWT
 const { generarJWT } = require('../helpers/jwt');
 
 //Importacion de bcrypt para el hash de la contraseña
@@ -15,10 +14,8 @@ const authController = {
   crearUsuario: async (req, res = response) => {
 
     const { nombre, email, password } = req.body;
-
-
+    
     try {
-
     /*   Verificar email si existe el email y si ya está me devuelve un mensaje y 
       no sigue ejecutando el codigo */
 

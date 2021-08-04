@@ -1,25 +1,18 @@
 import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from '@angular/core';
-import { LoginComponent } from './iniciar-sesion/pages/login/login.component';
-import { HomeComponent } from './usuarios/pages/home/home.component';
-import { SignupComponent } from './iniciar-sesion/pages/signup/signup.component';
 
 const routes: Routes = [
     {
-        path:'', 
-        component:LoginComponent
+        path:'auth', 
+        loadChildren: () => import('./iniciar-sesion/iniciar-sesion.module').then(m => m.IniciarSesionModule)
     },
     {
-        path:'signup',
-        component:SignupComponent
+        path:'dashboard', 
+        loadChildren: () => import('./usuarios/usuarios.module').then(m => m.UsuariosModule)
     },
     {
-        path: 'home',
-        component: HomeComponent
-    },
-    {
-        path:'**',
-        redirectTo :''
+        path:'**', 
+        redirectTo:'auth'
     }
 ]
 
