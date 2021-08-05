@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../iniciar-sesion/services/auth.service';
 
+import { SocialAuthService } from "angularx-social-login";
+import { SocialUser } from "angularx-social-login";
+
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -9,16 +12,20 @@ import { AuthService } from '../../iniciar-sesion/services/auth.service';
 })
 export class SidebarComponent implements OnInit {
 
-  constructor(private router:Router, private authservice:AuthService) { 
+  constructor(private router:Router, private authservice:AuthService, private googleFbService: SocialAuthService) { 
   }
+  loggedIn: boolean;
 
   ngOnInit(): void {
+   
   }
 
 
   logout(){
-    this.authservice.logout();
-    this.router.navigateByUrl('/auth');
+    
+      this.authservice.logout();
+      this.router.navigateByUrl('/auth');
+    
   }
 
   toggleBtn(btnBurger) {

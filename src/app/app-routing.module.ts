@@ -10,8 +10,8 @@ const routes: Routes = [
     {
         path:'dashboard', 
         loadChildren: () => import('./usuarios/usuarios.module').then(m => m.UsuariosModule),
-        canActivate:[ ValidateTokenGuard ],
-        canLoad: [ ValidateTokenGuard ]
+        canActivate:[ ValidateTokenGuard],
+        canLoad: [ ValidateTokenGuard,  ]
     },
     {
         path:'**', 

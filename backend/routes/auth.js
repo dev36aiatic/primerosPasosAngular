@@ -16,7 +16,7 @@ const { validateFields } = require('../middlewares/validate-fields');
 const { validateJWT } = require('../middlewares/validate-jwt');
 
 //Improtacion de las funciones que se ejecutan cuando se hace una peticion a las rutas
-const { newUser, userLogin, renewToken } = authController;
+const { newUser, userLogin, renewToken, authGoogleFb} = authController;
 
 //Crear un nuevo usuario
 router.post('/new', [
@@ -38,6 +38,10 @@ router.post('/login',
 
 //Validar token
 router.get('/renew', validateJWT, renewToken);
+
+//Validar Auth Google Fb
+
+router.get('/validateToken', authGoogleFb);
 
 //Exportacion del router
 module.exports = router;

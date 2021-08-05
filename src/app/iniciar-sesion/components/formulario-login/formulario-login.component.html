@@ -22,5 +22,17 @@
     <button type="button" class="btn  mx-3 mb-2" routerLink="signup"
      [ngStyle]="{'background-color':'#ccc'}">Signup</button>
   </div>
+  <div class="vl">
+    <span class="vl-innertext">or</span>
+  </div>
+
+  <div class="col d-flex justify-content-around">
+    <a  [ngStyle]="{'cursor':'pointer'}" class="fb btn-s" (click)="signInWithFB()">
+      <i class="fab fa-facebook-f d-inline-block " style="font-size: 19px; " ></i> <span class="d-inline-block mx-2 px-2">Login with Facebook</span>
+    </a>
+    <a  [ngStyle]="{'cursor':'pointer'}" class="google btn-s" (click)="signInWithGoogle()">
+      <i class="fab fa-google d-inline-block"  style="font-size: 17px;"></i> <span class="d-inline-block px-3">Login with Google+</span>
+    </a>
+  </div>
 
 </form>
