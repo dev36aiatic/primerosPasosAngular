@@ -32,21 +32,21 @@ export class SidebarComponent implements OnInit {
 
       btnBurger.style.left = "90%";
       texts.forEach( element =>{
-        element.classList.add('mostrarLinks')
+        element.classList.add('showLinks')
       });
 
       tooltips.forEach( element => {
-        element.classList.add('ocultarTooltip');
+        element.classList.add('hideTooltip');
       });
       
     } else {
       btnBurger.style.left = "55%";
       texts.forEach( element =>{
-        element.classList.remove('mostrarLinks')
+        element.classList.remove('showLinks')
       });
 
       tooltips.forEach( element => {
-        element.classList.remove('ocultarTooltip');
+        element.classList.remove('hideTooltip');
       });
     }
 

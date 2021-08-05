@@ -38,6 +38,5 @@ app.use('/', require('./routes/auth'));
 
 //Aqui se al servidor a escuchar el puerto que está guardado en la variable 'port'
 app.listen( app.get('port') , ()=>{
-    console.log(`Servidor corriendo en el puerto ${ app.get('port') }`);
-   
+    console.log(`Server is running on port ${ app.get('port') }`);
 });

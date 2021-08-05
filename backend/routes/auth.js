@@ -10,34 +10,34 @@ const router = Router();
 const authController = require('../controllers/auth');
 
 //Middleware para validar que los campos no tengan errores
-const { validarCampos } = require('../middlewares/validar-campos');
+const { validateFields } = require('../middlewares/validate-fields');
 
 //Middleware que valida si el jwt es valido
-const { validarJWT } = require('../middlewares/validar-jwt');
+const { validateJWT } = require('../middlewares/validate-jwt');
 
 //Improtacion de las funciones que se ejecutan cuando se hace una peticion a las rutas
-const { crearUsuario, loginUsuario, renovarToken } = authController;
+const { newUser, userLogin, renewToken } = authController;
 
 //Crear un nuevo usuario
 router.post('/new', [
-    check('name','La cantidad minima de caracteres para el nombre es 2 y no puede ser vacio')
+    check('name','The min number of characters for the name is 2 and cannot be empty.')
     .not().isEmpty().isLength({min:2}),
-    check('email','El email es obligatorio').isEmail(),
-    check('password','La cantidad minima de caracteres para la contraseña es 6').isLength({min:6}),
-    validarCampos
-    ],crearUsuario );
+    check('email','Email is required.').isEmail(),
+    check('password','The min number of characters for the password is 6.').isLength({min:6}),
+    validateFields
+    ],newUser );
 
 //Login de usuario
 router.post('/login', 
 [
-    check('email','El email es obligatorio.').isEmail(),
-    check('password','La cantidad minima de caracteres para la contraseña es 6').isLength({min:6}),
-    validarCampos
+    check('email','Email is required.').isEmail(),
+    check('password','The min number of characters for the password is 6.').isLength({min:6}),
+    validateFields
 ] 
-,loginUsuario);
+,userLogin);
 
 //Validar token
-router.get('/renew', validarJWT, renovarToken);
+router.get('/renew', validateJWT, renewToken);
 
 //Exportacion del router
 module.exports = router;

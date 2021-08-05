@@ -13,14 +13,14 @@ body {
 
 /* Estilos de la pantalla de inicio */
 
-.padre {
+.dad {
     display: flex;
     position: relative;
     height: 100% !important;
     width: 100% !important;
 }
 
-.hijo-1 {
+.child-1 {
     position: relative;
     height: 100vh;
     top: 0;
@@ -34,14 +34,14 @@ body {
     align-items: center;
 }
 
-.hijo-1 .texto-1 h1 {
+.child-1 .text-1 h1 {
     margin-bottom: 20px;
 }
-.hijo-1 .texto-1 p {
+.child-1 .text-1 p {
     font-style: italic;
 }
 
-.hijo-2 {
+.child-2 {
     width: 60%;
     background-color: #fff;
     display: flex;
@@ -55,14 +55,14 @@ body {
 }
 
 @media screen and (max-width: 800px){
-    .padre {
+    .dad {
         flex-direction: column;
     }
-    .hijo-1 { 
+    .child-1 { 
         width: 100% !important;
         height: 50vh;
     }
-    .hijo-2 { 
+    .child-2 { 
         width: 100% !important;
         padding: 30px 0px;
     }

@@ -5,7 +5,7 @@ const { validationResult } = require("express-validator");
 
 const MiddleWares = {
     //Funcion que me permite validar los campos a la hora de crear un usuario o iniciar sesion
-    validarCampos : (req , res = response, next)=>{
+    validateFields : (req , res = response, next)=>{
 
         /*  Se le pasan los datos del req.body
          que debe validar a la funcion validationResult de express-validator,

@@ -92,7 +92,7 @@ body{
     font-weight: bold;
 }
 
-.ocultarTooltip{
+.hideTooltip{
     display: none !important;
 }
 .sidebar ul li:hover .tooltip{
@@ -110,7 +110,7 @@ body{
     white-space: nowrap;
 }
 
-.mostrarLinks{
+.showLinks{
     opacity: 1 !important;
 }
 

@@ -69,7 +69,7 @@ export class AuthService {
   }
 
   logout(){
-    localStorage.removeItem('x-token');
+    localStorage.removeItem('token');
   }
 
   setTokenAndUser(resp: AuthResponse) {

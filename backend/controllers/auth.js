@@ -1,17 +1,17 @@
 const { response } = require('express');
 
 //Importacion del modelo Usuario
-const Usuario = require('../models/Usuario');
+const User = require('../models/User');
 
 //Importacion de la funcion para generar el JWT
-const { generarJWT } = require('../helpers/jwt');
+const { generateJWT } = require('../helpers/jwt');
 
 //Importacion de bcrypt para el hash de la contraseña
 const bcrypt = require('bcryptjs');
 
 const authController = {
     //Funcion que me permite crear el usuario y guardarlo en la base de datos
-  crearUsuario: async (req, res = response) => {
+  newUser: async (req, res = response) => {
 
     const { nombre, email, password } = req.body;
     
@@ -19,14 +19,14 @@ const authController = {
     /*   Verificar email si existe el email y si ya está me devuelve un mensaje y 
       no sigue ejecutando el codigo */
 
-      const usuario = await Usuario.findOne({email});
+      const user = await User.findOne({email});
 
-      if( usuario ){
-          return res.status(400).json({ ok: false, msg:'Usuario ya existe con ese email'});
+      if( user ){
+          return res.status(400).json({ ok: false, msg:'A user with this email already exists.'});
       }
 
       //Crea usuario y le mando los datos obtenidos del body
-      const dbUser = new Usuario(req.body)
+      const dbUser = new User(req.body)
 
       //Encriptar contraseña
       const salt = bcrypt.genSaltSync();
@@ -35,7 +35,7 @@ const authController = {
       dbUser.password = bcrypt.hashSync( password, salt);
 
       //Generar JsonWebToken
-      const token = await  generarJWT(dbUser.id, dbUser.name);
+      const token = await  generateJWT(dbUser.id, dbUser.name);
 
       //Guardar usuario
       await dbUser.save();
@@ -57,14 +57,14 @@ const authController = {
       //Error que manda de respuesta cuando el proceso de crear el usuario falla
       return res.status(500).json({
         ok: false,
-        msg: 'Por favor hable con el administrador, algo salio mal!'
+        msg: 'Something went wrong :('
       });
     }
 
   },
 
   //Funcion que me permite el login del Usuario
-  loginUsuario: async (req, res = response) => {
+  userLogin: async (req, res = response) => {
 
     //Tomo el email y la contraseña del cuerpo de la pagina
     const { email, password } = req.body;
@@ -72,13 +72,13 @@ const authController = {
     try {
 
       //Busco un usuario con el email
-      const dbUser = await Usuario.findOne({email});
+      const dbUser = await User.findOne({email});
 
       //Si no encuentra el usuario significa que no existe y retorno un mensaje
       if(!dbUser){
         return res.status(400).json({
           ok:false,
-          msg:'Credenciales no son correctas'
+          msg:'Credentials are not correct.'
         });
       }
 
@@ -90,12 +90,12 @@ const authController = {
       if(!validPassword){
         return res.status(400).json({
           ok:false,
-          msg:'Credenciales no son correctas'
+          msg:'Credentials are not correct.'
         });
       }
 
       // De lo contrario se genera el JWT
-      const token = await generarJWT(dbUser._id, dbUser.name);
+      const token = await generateJWT(dbUser._id, dbUser.name);
 
       //Y por ultimo se envia la respuesta del servicio si el email y contraseñas hacen match
       return res.status(200).json({
@@ -111,24 +111,24 @@ const authController = {
       //Si hay algun error con el login envia el siguiente mensaje
       return res.status(500).json({
         ok:false,
-        msg:'Hablar con el administrador'
+        msg:'Something went wrong :('
       });
     }
 
 
   },
   //Funcion que me renueva el Token
-  renovarToken: async (req, res = response) => {
+  renewToken: async (req, res = response) => {
 
     //Se desestructura el uid y el name que me envia el middleWare validar-jwt
     const { uid , name } = req;
    
     //Se genera el nuevo JWT
-    const token = await generarJWT(uid, name);
+    const token = await generateJWT(uid, name);
 
     //Buscar usuario para devolver email
 
-    const { email } = await Usuario.findById(uid);
+    const { email } = await User.findById(uid);
   
 
     //Se envia la respuesta con los datos del usuario y el jwt

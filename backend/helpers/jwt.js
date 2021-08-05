@@ -1,7 +1,7 @@
 //Importancion de jsonwebtoken
 const jwt = require('jsonwebtoken');
 
-const generarJWT = ( uid, name) => {
+const generateJWT = ( uid, name) => {
 
     //Se define la informacion del usuario
     const payload = { uid, name };
@@ -25,5 +25,5 @@ const generarJWT = ( uid, name) => {
 }
 //Exportacion de la funcion generarJWT
 module.exports = {
-    generarJWT
+    generateJWT
 }

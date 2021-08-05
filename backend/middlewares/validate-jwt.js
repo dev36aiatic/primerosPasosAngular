@@ -1,7 +1,7 @@
 const { response } = require("express");
 const jwt = require('jsonwebtoken');
 
-const validarJWT = (req, res = response, next)=>{
+const validateJWT = (req, res = response, next)=>{
 
     //Se guarda en la constante token el valor enviado por los headers con llave x-token
     const token = req.header('x-token');
@@ -10,7 +10,7 @@ const validarJWT = (req, res = response, next)=>{
     if(!token){
       return res.status(401).json({
         ok: false,
-        msg: 'Error en el token'
+        msg: 'Token error'
       })
     }
 
@@ -29,7 +29,7 @@ const validarJWT = (req, res = response, next)=>{
     } catch (error) {
         return res.status(401).json({
             ok: false,
-            msg:'Token no valido'
+            msg:'Invalid token'
         })
     }
 
@@ -38,5 +38,5 @@ const validarJWT = (req, res = response, next)=>{
 }
 
 module.exports = {
-    validarJWT
+    validateJWT
 }

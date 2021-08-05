@@ -11,12 +11,12 @@ const dbConnection = async ()=>{
         useCreateIndex: true
     });
     //Si se logra conectar exitosamente mostrará este mensaje
-    console.log('Base de datos corriendo...');
+    console.log('Database is running...');
         
     } catch (error) {
         console.log(error);
         //Si no se logra conectra a la base de datos mostrará este mensaje
-        throw new Error('Error a la hora de inicializar la base de datos');
+        throw new Error('Error while initializing the database.');
     }
 }
 
