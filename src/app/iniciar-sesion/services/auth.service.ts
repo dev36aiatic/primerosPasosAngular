@@ -17,16 +17,26 @@ export class AuthService {
   private baseUrl: string = environment.baseUrl;
   private _user!: (User | SocialUser);
 
-  private isLogged: boolean;
+  private isLogged: boolean = false;
+
+  private provider: string;
+  private socialToken: string;
 
   get user() {
     return { ... this._user }
   }
 
-  get isLoggedIn(){
+  get isLoggedIn() {
     return this.isLogged;
   }
+
+  get getSocialToken(){
+    return this.socialToken;
+  }
   
+  get getProvider(){
+    return this.provider;
+  }
 
   constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
 
@@ -74,24 +84,43 @@ export class AuthService {
           this.setTokenAndUser(resp);
           return resp.ok;
         }),
-        catchError(err => of(false, this.isLogged = false))
+        catchError(err => of(false))
       );
   }
 
-  validateAuthGoogle():Observable<boolean>{
+  //TODO: crear metodo que me guarde el usuario en la base de datos
+
+
+  validateAuthGoogle(): Observable<boolean> {
 
     const url = `${this.baseUrl}/validateToken`;
-    const headers = new HttpHeaders().set('token-auth', localStorage.getItem('logged') || '');
+    const headers = new HttpHeaders().set('token-auth', this.getSocialToken || '');
 
-    return this.httpClient.get<AuthResponse>(url, { headers })
+    return this.httpClient.get<any>(url, { headers })
       .pipe(
         map(resp => {
-          this.isLogged = true;
+
           this._user = resp;
           return resp.ok;
         }),
         catchError(err => of(false, this.isLogged = false))
       );
+  }
+  validateAuthFacebook(): Observable<boolean> {
+
+    //TODO: HACER QUE VALIDAD FEISBUC FUNCIONE
+    const url = `${this.baseUrl}/auth/facebook/token?access_token=${ this.getSocialToken || ''}`;
+
+    return this.httpClient.get<any>(url)
+      .pipe(
+        map(resp => {
+
+          this._user = resp;
+          return resp.ok;
+        }),
+        catchError(err => of(false, this.isLogged = false))
+      );
+
   }
 
   logout() {
@@ -100,15 +129,25 @@ export class AuthService {
 
   loginGoogle() {
     return this.authService.authState.pipe(
-      tap( user =>{
+      tap(user => {
         this._user = user;
-        localStorage.setItem('logged',user.idToken);
-        this.isLogged = true;
-      }),
-      catchError(err => of(this.isLogged = false))
+        console.log(user);
+        
+        this.isLogged = (user != null);
+
+        if (this.user.provider == "GOOGLE") {
+            this.provider = "GOOGLE";
+            this.socialToken = user.idToken;
+        }
+        if (this.user.provider == "FACEBOOK") {
+          this.provider = "FACEBOOK";
+          this.socialToken = user.authToken;
+        }
+      }),catchError(err => of(err))
     )
    
   }
+
 
   setTokenAndUser(resp: AuthResponse) {
     localStorage.setItem('token', resp.token!);

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -20,13 +20,14 @@ import Swal from 'sweetalert2'
   styles: [
   ]
 })
-export class FormularioLoginComponent {
+export class FormularioLoginComponent implements OnInit {
 
   myLogin: FormGroup = this.formBuilder.group({
     email: ['dev36@aiatic.com', [Validators.required, Validators.email]],
     password: ['123456', [Validators.required, Validators.minLength(6)]]
   })
 
+  private loggedIn: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,49 +35,33 @@ export class FormularioLoginComponent {
     private authService: AuthService,
     private googleFacebookAuth: SocialAuthService) { }
 
-    signInWithGoogle(): void {
-      this.googleFacebookAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
 
-      this.authService.loginGoogle().subscribe(user =>{
-        
-        if(user != undefined){
-          
-          console.log(user);
-      
-          this.router.navigateByUrl('/dashboard');
-          
-        }else{
-          Swal.fire('Error','Something went wrong :(','error');
-        }
-        
-      });
-      
-    }
-  
-    signInWithFB(): void {
-      this.googleFacebookAuth.signIn(FacebookLoginProvider.PROVIDER_ID);
+  ngOnInit(): void {
+    this.authService.loginGoogle().subscribe(user => {
 
-      this.authService.loginGoogle().subscribe(user =>{
-        
-        if(user){
+      if (this.authService.isLoggedIn) {
 
-          this.router.navigateByUrl('/dashboard');
-          
-        }else{
-          Swal.fire('Error','Something went wrong :(','error');
-        }
-        
-      });
-      
-      
-    }
-  
-    signOut(): void {
-      this.googleFacebookAuth.signOut();
-    }
+        this.router.navigateByUrl('/dashboard');
+
+      } else {
+
+        this.router.navigateByUrl('/');
+      }
+
+    });
+  }
+
+  signInWithGoogle(): void {
+    this.googleFacebookAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  signInWithFB(): void {
+    this.googleFacebookAuth.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
+
 
   login() {
- /*    console.log(this.myLogin.value); */
+    /*    console.log(this.myLogin.value); */
     const { email, password } = this.myLogin.value;
 
     this.authService.login(email, password).subscribe(resp => {
@@ -84,7 +69,7 @@ export class FormularioLoginComponent {
       if (resp.ok === true) {
         this.router.navigateByUrl('/dashboard');
       } else {
-        Swal.fire('Error',resp,'error');
+        Swal.fire('Error', resp, 'error');
       }
 
     });

@@ -1,10 +1,10 @@
 //Importancion de jsonwebtoken
 const jwt = require('jsonwebtoken');
 
-const generateJWT = ( uid, name) => {
+const generateJWT = ( uid, name, email = false) => {
 
     //Se define la informacion del usuario
-    const payload = { uid, name };
+    const payload = { uid, name, email};
 
    /*  Al llamar la funcion generarJWT esta me devuelve una promesa la cual llama al JWT
     y le envia el payload, la firma y se establece el tiempo de expiracion.

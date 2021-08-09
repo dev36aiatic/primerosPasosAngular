@@ -5,6 +5,15 @@ const {
 //Importacion del modelo Usuario
 const User = require('../models/User');
 
+
+//Modelo de Google o Facebook y autenticación de facebook
+
+const GoogleUsuario = require('../models/GoogleFbUser');
+
+
+const passport = require('passport');
+
+
 //Importacion de la funcion para generar el JWT
 const {
   generateJWT
@@ -150,7 +159,28 @@ const authController = {
     });
 
   },
-  authGoogleFb: async (req, res) => {
+  //Funcion que me recibe el usuario ya verificado cuando el token es valido
+  authFb: function (req, res) {
+    passport.authenticate('facebook-token', function (error, user, info) {
+    
+      if(user){
+        res.status(200).json({
+          ok:true,
+          user,
+          token:info});
+      }
+      if(error){
+        return res.status(500).json({
+          ok:false,
+          error
+        })
+      }
+    })(req, res);
+  },
+  /*   Funcion que  guarda el usuario si no existe. Autentica el token
+    y me devuelve uno nuevo para permitir que el usuario navegue por las rutas */
+
+  authGoogle: async (req, res) => {
     async function verify() {
 
       const ticket = await client.verifyIdToken({
@@ -166,15 +196,28 @@ const authController = {
         lastname: payload['family_name']
       }
 
+
+      const dbUser = await GoogleUsuario.findOne({
+        email: userDetails.email
+      });
+
+      if (dbUser == null) {
+        let newUser = new GoogleUsuario({
+          email: payload['email'],
+          name: payload['name']
+        });
+        await newUser.save();
+      }
+
       let token = jwt.sign(userDetails, process.env.SECRET_KEY, {
         expiresIn: "24h"
       });
 
       res.status(200).json({
-        ok:true,
+        ok: true,
         token: token,
-        name: userDetails.firstname +" "+ userDetails.lastname,
-        email:userDetails.email
+        name: payload['name'],
+        email: payload['email']
       })
     }
     verify().catch(console.error);

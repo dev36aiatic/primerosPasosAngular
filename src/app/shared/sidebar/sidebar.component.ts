@@ -12,20 +12,21 @@ import { SocialUser } from "angularx-social-login";
 })
 export class SidebarComponent implements OnInit {
 
-  constructor(private router:Router, private authservice:AuthService, private googleFbService: SocialAuthService) { 
+  constructor(private router: Router, private authservice: AuthService, private googleFbService: SocialAuthService) {
   }
   loggedIn: boolean;
 
   ngOnInit(): void {
-   
+
   }
 
 
-  logout(){
-    
-      this.authservice.logout();
-      this.router.navigateByUrl('/auth');
-    
+  logout() {
+    if(this.authservice.isLoggedIn){
+      this.googleFbService.signOut();
+    }
+    this.authservice.logout();
+    this.router.navigateByUrl('/auth');
   }
 
   toggleBtn(btnBurger) {
@@ -38,21 +39,21 @@ export class SidebarComponent implements OnInit {
     if (decision) {
 
       btnBurger.style.left = "90%";
-      texts.forEach( element =>{
+      texts.forEach(element => {
         element.classList.add('showLinks')
       });
 
-      tooltips.forEach( element => {
+      tooltips.forEach(element => {
         element.classList.add('hideTooltip');
       });
-      
+
     } else {
       btnBurger.style.left = "55%";
-      texts.forEach( element =>{
+      texts.forEach(element => {
         element.classList.remove('showLinks')
       });
 
-      tooltips.forEach( element => {
+      tooltips.forEach(element => {
         element.classList.remove('hideTooltip');
       });
     }
