@@ -30,13 +30,6 @@ export class AuthService {
     return this.isLogged;
   }
 
-  get getSocialToken(){
-    return this.socialToken;
-  }
-  
-  get getProvider(){
-    return this.provider;
-  }
 
   constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
 
@@ -91,35 +84,35 @@ export class AuthService {
   //TODO: crear metodo que me guarde el usuario en la base de datos
 
 
-  validateAuthGoogle(): Observable<boolean> {
+  validateAuthGoogleFb(decision: string): Observable<boolean> {
 
-    const url = `${this.baseUrl}/validateToken`;
-    const headers = new HttpHeaders().set('token-auth', this.getSocialToken || '');
+    if (decision == 'GOOGLE') {
+      const url = `${this.baseUrl}/validateToken`;
+      const headers = new HttpHeaders().set('token-auth', localStorage.getItem('social-token') || '');
 
-    return this.httpClient.get<any>(url, { headers })
-      .pipe(
-        map(resp => {
+      return this.httpClient.get<any>(url, { headers })
+        .pipe(
+          map(resp => {
 
-          this._user = resp;
-          return resp.ok;
-        }),
-        catchError(err => of(false, this.isLogged = false))
-      );
-  }
-  validateAuthFacebook(): Observable<boolean> {
+            this._user = resp;
+            return resp.ok;
+          }),
+          catchError(err => of(false, this.isLogged = false))
+        );
+    } else
+      if (decision == 'FACEBOOK') {
+        const url = `${this.baseUrl}/auth/facebook/token?access_token=${localStorage.getItem('social-token') || ''}`;
 
-    //TODO: HACER QUE VALIDAD FEISBUC FUNCIONE
-    const url = `${this.baseUrl}/auth/facebook/token?access_token=${ this.getSocialToken || ''}`;
+        return this.httpClient.get<any>(url)
+          .pipe(
+            map(resp => {
 
-    return this.httpClient.get<any>(url)
-      .pipe(
-        map(resp => {
-
-          this._user = resp;
-          return resp.ok;
-        }),
-        catchError(err => of(false, this.isLogged = false))
-      );
+              this._user = resp;
+              return resp.ok;
+            }),
+            catchError(err => of(false, this.isLogged = false))
+          );
+      }
 
   }
 
@@ -130,22 +123,25 @@ export class AuthService {
   loginGoogle() {
     return this.authService.authState.pipe(
       tap(user => {
-        this._user = user;
-        console.log(user);
-        
-        this.isLogged = (user != null);
 
-        if (this.user.provider == "GOOGLE") {
-            this.provider = "GOOGLE";
-            this.socialToken = user.idToken;
+        this._user = user;
+        this.isLogged = (user != null);
+        if ((user != null)) {
+
+          if (user.provider == "GOOGLE") {
+            localStorage.setItem('provider', 'GOOGLE');
+            localStorage.setItem('social-token', user.idToken);
+          }
+          if (user.provider == "FACEBOOK") {
+            localStorage.setItem('provider', 'FACEBOOK');
+            localStorage.setItem('social-token', user.authToken);
+          }
         }
-        if (this.user.provider == "FACEBOOK") {
-          this.provider = "FACEBOOK";
-          this.socialToken = user.authToken;
-        }
-      }),catchError(err => of(err))
+
+
+      }), catchError(err => of(err))
     )
-   
+
   }
 
 

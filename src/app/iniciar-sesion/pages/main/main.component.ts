@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -8,9 +10,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthService, private router: Router) { 
+    
+    if(localStorage.getItem('token') || localStorage.getItem('social-token')){
+      this.router.navigateByUrl('/dashboard');
+    }
+    
+  }
 
   ngOnInit(): void {
+
   }
 
 }

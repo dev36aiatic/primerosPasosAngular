@@ -23,11 +23,10 @@ import Swal from 'sweetalert2'
 export class FormularioLoginComponent implements OnInit {
 
   myLogin: FormGroup = this.formBuilder.group({
-    email: ['dev36@aiatic.com', [Validators.required, Validators.email]],
-    password: ['123456', [Validators.required, Validators.minLength(6)]]
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
   })
 
-  private loggedIn: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -39,15 +38,18 @@ export class FormularioLoginComponent implements OnInit {
   ngOnInit(): void {
     this.authService.loginGoogle().subscribe(user => {
 
-      if (this.authService.isLoggedIn) {
+      if(user == null){
+        if(localStorage.getItem('provider')){
+          localStorage.clear();
+        }
+      }
+      
+      if ((user != null)) {
 
         this.router.navigateByUrl('/dashboard');
 
-      } else {
-
-        this.router.navigateByUrl('/');
       }
-
+     
     });
   }
 

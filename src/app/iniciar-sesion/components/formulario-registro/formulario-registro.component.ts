@@ -13,9 +13,9 @@ import Swal from 'sweetalert2';
 export class FormularioRegistroComponent {
 
   mySignup: FormGroup = this.fb.group({
-    name:     ['Mauricio', [ Validators.required, Validators.minLength(2)] ],
-    email:    ['dev36@aiatic.com', [ Validators.required, Validators.email] ],
-    password: ['123456', [ Validators.required, Validators.minLength(6)] ]
+    name:     ['', [ Validators.required, Validators.minLength(2)] ],
+    email:    ['', [ Validators.required, Validators.email] ],
+    password: ['', [ Validators.required, Validators.minLength(6)] ]
   })
 
   constructor(private fb: FormBuilder, private router:Router, private authService: AuthService) { }

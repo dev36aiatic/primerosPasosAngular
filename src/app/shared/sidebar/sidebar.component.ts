@@ -23,6 +23,8 @@ export class SidebarComponent implements OnInit {
 
   logout() {
     if(this.authservice.isLoggedIn){
+      
+      this.authservice.logout();
       this.googleFbService.signOut();
     }
     this.authservice.logout();
