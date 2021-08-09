@@ -24,7 +24,6 @@ const {
     validateJWT
 } = require('../middlewares/validate-jwt');
 
-const { generateJWT } = require('../helpers/jwt');
 
 //Improtacion de las funciones que se ejecutan cuando se hace una peticion a las rutas
 const {

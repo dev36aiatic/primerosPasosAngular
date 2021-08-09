@@ -1,3 +1,4 @@
+/* Interfaz de la respuesta que me devuelve la base de datos */
 export interface AuthResponse {
     ok: boolean;
     uid?: string;
@@ -11,6 +12,7 @@ export interface AuthResponse {
     authToken?: string;
 }
 
+/* Interfaz de usuario */
 export interface User {
     uid?: string;
     name?: string;

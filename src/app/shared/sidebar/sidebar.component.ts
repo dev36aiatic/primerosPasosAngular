@@ -20,7 +20,7 @@ export class SidebarComponent implements OnInit {
 
   }
 
-
+  //Funcion para cerrar sesion
   logout() {
     if(this.authservice.isLoggedIn){
       
@@ -31,6 +31,7 @@ export class SidebarComponent implements OnInit {
     this.router.navigateByUrl('/auth');
   }
 
+  //Funcion para la animacion del sidebar
   toggleBtn(btnBurger) {
 
     let sidebar = document.querySelector(".sidebar");

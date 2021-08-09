@@ -16,16 +16,14 @@ export class AuthService {
 
   private baseUrl: string = environment.baseUrl;
   private _user!: (User | SocialUser);
-
   private isLogged: boolean = false;
 
-  private provider: string;
-  private socialToken: string;
-
+  //Getter del usuario
   get user() {
     return { ... this._user }
   }
 
+  //Getter del estado del usuario si inicia sesion con google y facebook
   get isLoggedIn() {
     return this.isLogged;
   }
@@ -34,6 +32,7 @@ export class AuthService {
   constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
 
 
+  //Metodo para iniciar sesion
   login(email: string, password: string) {
 
     const url = `${this.baseUrl}/login`;
@@ -50,8 +49,9 @@ export class AuthService {
       );
   }
 
+  //Metodo para registrarse
   signup(name: string, email: string, password: string) {
-
+ 
     const url = `${this.baseUrl}/new`;
     const body = { name, email, password }
 
@@ -65,6 +65,7 @@ export class AuthService {
 
   }
 
+  //Metodo para validar token creado utilizando jwt
   validateToken(): Observable<boolean> {
 
     const url = `${this.baseUrl}/renew`;
@@ -81,9 +82,8 @@ export class AuthService {
       );
   }
 
-  //TODO: crear metodo que me guarde el usuario en la base de datos
 
-
+//Metodo que me permite validar el token de google o facebook
   validateAuthGoogleFb(decision: string): Observable<boolean> {
 
     if (decision == 'GOOGLE') {
@@ -116,10 +116,12 @@ export class AuthService {
 
   }
 
+  //Metodo para borrar los tokens (cerrar sesion)
   logout() {
     localStorage.clear();
   }
 
+  //Metodo para asber si el usuario esta logeado en la app
   loginGoogle() {
     return this.authService.authState.pipe(
       tap(user => {
@@ -145,6 +147,7 @@ export class AuthService {
   }
 
 
+  //Metodo para colocar el token que me devuelve jwt para validar el inicio de sesion
   setTokenAndUser(resp: AuthResponse) {
     localStorage.setItem('token', resp.token!);
     this._user = {
