@@ -3,9 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { MainComponent } from './pages/main/main.component';
 
+
+/** Rutas hijas del modulo usuarios */
 const routes: Routes = [
   {
-    /* El path vacio es Dashboard, el que defini en appRouting */
     path:'',
     component:MainComponent,
     children:[

@@ -1,39 +1,26 @@
-const {
-  response
-} = require('express');
+import { response } from 'express';
+import passport from 'passport';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 
-//Importacion del modelo Usuario
-const User = require('../models/User');
+import  {Usuario} from '../models/User.mjs';
+import  {SocialUser} from '../models/GoogleFbUser.mjs';
+import { generateJWT } from '../helpers/jwt.mjs';
 
-
-//Modelo de Google o Facebook y autenticación de facebook
-
-const GoogleUsuario = require('../models/GoogleFbUser');
-
-
-const passport = require('passport');
-
-
-//Importacion de la funcion para generar el JWT
-const {
-  generateJWT
-} = require('../helpers/jwt');
-
-//Importacion de bcrypt para el hash de la contraseña
-const bcrypt = require('bcryptjs');
-
-//Google Auth
-const {
-  OAuth2Client
-} = require('google-auth-library');
-
+/** Creacion del OAuth2Client de google para autenticacion */
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-const jwt = require('jsonwebtoken');
 
+/** Controlador de las funciones ejecutadas cuando se hacen peticiones http*/
 const authController = {
 
-  //Funcion que me permite crear el usuario y guardarlo en la base de datos
+  /**Funcion para crear usuarios y guardarlos en la base de datos 
+   * @constructor
+   * @param {string} nombre - Nombre del usuario
+   * @param {string} email - Correo del usuario
+   * @param {string} password - Contraseña del usuario
+   * */ 
   newUser: async (req, res = response) => {
 
     const {
@@ -44,7 +31,7 @@ const authController = {
 
     try {
 
-      const user = await User.findOne({
+      const user = await Usuario.findOne({
         email
       });
 
@@ -60,7 +47,7 @@ const authController = {
       const salt = bcrypt.genSaltSync();
 
       dbUser.password = bcrypt.hashSync(password, salt);
-
+      
       const token = await generateJWT(dbUser.id, dbUser.name);
 
       await dbUser.save();
@@ -85,7 +72,11 @@ const authController = {
 
   },
 
-  //Funcion que me permite el login del Usuario
+  /**Funcion para iniciar sesion del usuario
+   * @param {string} email - Correo del usuario
+   * @param {string} password - Contraseña del usuario
+   * @param {string} dbUser._id - Identificador del usuario
+  */
   userLogin: async (req, res = response) => {
 
     const {
@@ -94,7 +85,7 @@ const authController = {
     } = req.body;
 
     try {
-      const dbUser = await User.findOne({
+      const dbUser = await Usuario.findOne({
         email
       });
 
@@ -134,7 +125,10 @@ const authController = {
 
 
   },
-  //Funcion que me renueva el Token
+  /** Funcion para renovar el Token 
+   * @param {string} uid - Identificador del usuario
+   * @param {string} name- Nombre del usuario
+  */
   renewToken: async (req, res = response) => {
 
     const {
@@ -147,7 +141,7 @@ const authController = {
 
     const {
       email
-    } = await User.findById(uid);
+    } = await Usuario.findById(uid);
 
 
     return res.json({
@@ -159,27 +153,40 @@ const authController = {
     });
 
   },
-  //Funcion que me recibe el usuario ya verificado cuando el token es valido
+  /** Funcion que me recibe el usuario de Facebook  verificado
+   *  cuando el token es valido
+   * @param {error} error - Error
+   * @param {Object} user - Inforamcion del usuario
+   * @param {string} info - Token de facebook
+   *  */
   authFb: function (req, res) {
     passport.authenticate('facebook-token', function (error, user, info) {
-    
-      if(user){
+
+      if (user) {
         res.status(200).json({
-          ok:true,
+          ok: true,
           user,
-          token:info});
+          token: info
+        });
       }
-      if(error){
+      if (error) {
         return res.status(500).json({
-          ok:false,
+          ok: false,
           error
         })
       }
     })(req, res);
   },
-  /*   Funcion que  guarda el usuario si no existe. Autentica el token
-    y me devuelve uno nuevo para permitir que el usuario navegue por las rutas */
-
+  /** Funcion que Autentica el token enviado por Google y si es valido me devuelve el usuario
+   * @property {(string | string[])} idToken - El token enviado para ver si es valido
+   * @property {(string | string[])} audience - El id del cliente de la app creada en google console
+   * @property {string} email - Correo del usuario
+   * @property {string} firstname - Primer nombre del usuario
+   * @property {string} lastname - Segundo nombre del usuario
+   * @property {string} name- Nombre completo del usuario
+   * @param {Object} userDetails - Objeto con el nombre completo del usuario y correo
+   * @param {string} process.env.SECRET_KEY - LLave secreta para crear el token
+  */
   authGoogle: async (req, res) => {
     async function verify() {
 
@@ -197,12 +204,12 @@ const authController = {
       }
 
 
-      const dbUser = await GoogleUsuario.findOne({
+      const dbUser = await SocialUser.findOne({
         email: userDetails.email
       });
 
       if (dbUser == null) {
-        let newUser = new GoogleUsuario({
+        let newUser = new SocialUser({
           email: payload['email'],
           name: payload['name']
         });
@@ -225,4 +232,4 @@ const authController = {
 }
 
 
-module.exports = authController;
+export { authController };

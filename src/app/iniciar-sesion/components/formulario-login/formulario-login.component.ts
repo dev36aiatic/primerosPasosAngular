@@ -36,7 +36,7 @@ export class FormularioLoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-    //Funcion que se subscribe y obtiene al usuario cuando este inicia sesion con facebook o google
+    /**Funcion que se subscribe y obtiene al usuario cuando este inicia sesion con facebook o google */
     this.authService.loginGoogle().subscribe(user => {
 
       if(user == null){
@@ -54,17 +54,17 @@ export class FormularioLoginComponent implements OnInit {
     });
   }
 
-  //Funcion que abre la pantalla de iniciar sesion con google
+  /**Funcion que abre la pantalla de iniciar sesion con google */
   signInWithGoogle(): void {
     this.googleFacebookAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
-//Funcion que abre la pantalla de sesion con facebook
+ /**Funcion que abre la pantalla de sesion con facebook*/
   signInWithFB(): void {
     this.googleFacebookAuth.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
 
-  //Funcion para iniciar sesion
+  /**Funcion para iniciar sesion*/
   login() {
     const { email, password } = this.myLogin.value;
 

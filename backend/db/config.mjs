@@ -1,25 +1,26 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-//Conexion a la base de datos
+/**
+ * Funncion que hace conexión a la base de datos
+ * @async
+ * @function dbConnection
+ * @param {string} process.env.BD_CNN - Variable de entorno con la ruta de conexion a la base de datos
+ * @return {string} - Mensaje de conexion exitosa o error en la conexion
+ */
 const dbConnection = async ()=>{
 
-    //Aqui se le dice que intente conectarse a la variable de entorno BD_CNN ( BASE DE DATOS_CONNECTION )
     try {
        await mongoose.connect(process.env.BD_CNN, {
         useNewUrlParser:true,
         useUnifiedTopology:true,
         useCreateIndex: true
     });
-    //Si se logra conectar exitosamente mostrará este mensaje
     console.log('Database is running...');
         
     } catch (error) {
         console.log(error);
-        //Si no se logra conectra a la base de datos mostrará este mensaje
         throw new Error('Error while initializing the database.');
     }
 }
 
-module.exports = {
-    dbConnection
-};
+export default dbConnection;

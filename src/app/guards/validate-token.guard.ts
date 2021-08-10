@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from '../iniciar-sesion/services/auth.service';
 
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,7 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
   constructor(private authService: AuthService, private router: Router,
     private socialAuthService: SocialAuthService) { }
 
-    /* Los metodos canActivate (Activar rutas) canLoad (Mostrar contenido de las rutas)
+    /** Los metodos canActivate (Activar rutas) canLoad (Mostrar contenido de las rutas)
      dependiendo si inicie sesion con una cuenta creada en mi base de datos 
     o me autentique con facebook y google me validan si las rutas deben ser activadas y mostradas */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {

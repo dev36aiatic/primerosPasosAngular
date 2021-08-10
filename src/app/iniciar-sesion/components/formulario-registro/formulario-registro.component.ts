@@ -20,7 +20,7 @@ export class FormularioRegistroComponent {
 
   constructor(private fb: FormBuilder, private router:Router, private authService: AuthService) { }
 
-  //Metodo para registrarse
+  /**Metodo para registrarse*/
   signup() {
 
     const { name, email, password } = this.mySignup.value;
@@ -34,6 +34,5 @@ export class FormularioRegistroComponent {
       }
     })
 
-  /*   console.log(this.mySignup.valid); */
   }
 }

@@ -1,14 +1,15 @@
 //Importancion de jsonwebtoken
-const jwt = require('jsonwebtoken');
-
+import jwt from 'jsonwebtoken';
+/**
+ * Funcion para generar un nuevo jwt
+ * @param uid - Identificador unico del usuario
+ * @param name  - Nombre completo del usuaio
+ * @param email - Correo del usuario
+ * @returns {string} Token
+ */
 const generateJWT = ( uid, name, email = false) => {
 
-    //Se define la informacion del usuario
     const payload = { uid, name, email};
-
-   /*  Al llamar la funcion generarJWT esta me devuelve una promesa la cual llama al JWT
-    y le envia el payload, la firma y se establece el tiempo de expiracion.
-    Por ultimo esta me devuelve el token o el error */
 
     return new Promise((resolve,rejected)=>{
 
@@ -23,7 +24,5 @@ const generateJWT = ( uid, name, email = false) => {
     });
     
 }
-//Exportacion de la funcion generarJWT
-module.exports = {
-    generateJWT
-}
+
+export {generateJWT}

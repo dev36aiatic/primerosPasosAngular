@@ -4,6 +4,8 @@ import { MainComponent } from './pages/main/main.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 
+/** Rutas hijas del modulo iniciar sesion */
+
 const routes: Routes = [
   {
     path:'',
