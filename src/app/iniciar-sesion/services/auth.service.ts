@@ -90,7 +90,7 @@ export class AuthService {
       const url = `${this.baseUrl}/validateToken`;
       const headers = new HttpHeaders().set('token-auth', localStorage.getItem('social-token') || '');
 
-      return this.httpClient.get<any>(url, { headers })
+      return this.httpClient.get<AuthResponse>(url, { headers })
         .pipe(
           map(resp => {
 
@@ -103,7 +103,7 @@ export class AuthService {
       if (decision == 'FACEBOOK') {
         const url = `${this.baseUrl}/auth/facebook/token?access_token=${localStorage.getItem('social-token') || ''}`;
 
-        return this.httpClient.get<any>(url)
+        return this.httpClient.get<AuthResponse>(url)
           .pipe(
             map(resp => {
 

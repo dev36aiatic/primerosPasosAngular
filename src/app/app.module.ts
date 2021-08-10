@@ -8,9 +8,6 @@ import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-logi
 
 //
 import { AppComponent } from './app.component';
-import { IniciarSesionModule } from './iniciar-sesion/iniciar-sesion.module';
-import { SharedModule } from './shared/shared.module';
-import { UsuariosModule } from './usuarios/usuarios.module';
 import { appRoutingModule } from './app-routing.module';
 
 @NgModule({
@@ -21,10 +18,7 @@ import { appRoutingModule } from './app-routing.module';
     BrowserModule,
     HttpClientModule,
     SocialLoginModule,
-    SharedModule,
     appRoutingModule,
-    IniciarSesionModule,
-    UsuariosModule
   ],
   providers: [{
     provide: 'SocialAuthServiceConfig',
