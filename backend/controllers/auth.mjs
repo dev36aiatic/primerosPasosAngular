@@ -1,12 +1,24 @@
-import { response } from 'express';
+import {
+  response
+} from 'express';
 import passport from 'passport';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { OAuth2Client } from 'google-auth-library';
+import {
+  OAuth2Client
+} from 'google-auth-library';
 
-import  {Usuario} from '../models/User.mjs';
-import  {SocialUser} from '../models/GoogleFbUser.mjs';
-import { generateJWT } from '../helpers/jwt.mjs';
+import {
+  Usuario
+} from '../models/User.mjs';
+import {
+  SocialUser
+} from '../models/GoogleFbUser.mjs';
+import {
+  generateJWT
+} from '../helpers/jwt.mjs';
+
+import userInfo from '../helpers/user-info.mjs';
 
 /** Creacion del OAuth2Client de google para autenticacion */
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -20,7 +32,7 @@ const authController = {
    * @param {string} nombre - Nombre del usuario
    * @param {string} email - Correo del usuario
    * @param {string} password - Contraseña del usuario
-   * */ 
+   * */
   newUser: async (req, res = response) => {
 
     const {
@@ -42,12 +54,12 @@ const authController = {
         });
       }
 
-      const dbUser = new User(req.body)
+      const dbUser = new Usuario(req.body)
 
       const salt = bcrypt.genSaltSync();
 
       dbUser.password = bcrypt.hashSync(password, salt);
-      
+
       const token = await generateJWT(dbUser.id, dbUser.name);
 
       await dbUser.save();
@@ -55,10 +67,8 @@ const authController = {
 
       return res.status(200).json({
         ok: true,
-        uid: dbUser.id,
-        name: dbUser.name,
+        user:userInfo(dbUser),
         token,
-        email: dbUser.email
       })
 
     } catch (error) {
@@ -71,12 +81,126 @@ const authController = {
     }
 
   },
+  /**
+   * Funcion para ctualizar usuario en la base de datos
+   * @param req - informacion enviada por el body
+   * @param res - Informacion enviada por url
+   * @returns - Usuario actualizado
+   */
+  updateUser: async (req, res = response) => {
+
+    let id = req.params.id;
+
+    const {
+      name,
+      cc,
+      address,
+      dateOfBirth,
+      city,
+      department,
+      country,
+      ZIP,
+      profession,
+      skills,
+      description
+    } = req.body
+
+    try {
+      
+      let dbUser;
+
+      if(req.params.provider == "GOOGLE" || req.params.provider == "FACEBOOK"){
+        dbUser = await SocialUser.findById(id);
+      }else{
+        dbUser = await Usuario.findById(id);
+      }
+
+      if (!dbUser) {
+        return res.status(500).json({
+          ok: false,
+          msg: 'User not found :('
+        })
+      }
+      let { profile } = dbUser;
+
+      dbUser.name = name;
+      profile.cc = cc;
+      profile.address = address;
+      profile.dateOfBirth = dateOfBirth;
+      profile.city = city;
+      profile.department = department;
+      profile.country = country;
+      profile.ZIP = ZIP;
+      profile.profession = profession;
+      profile.skills = skills;
+      profile.description = description;
+
+      await dbUser.save();
+
+
+      return res.status(200).json({
+        ok: true,
+        user: userInfo(dbUser)
+      })
+
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        ok: false,
+        msg: 'Something went wrong :('
+      })
+    }
+  },
+
+ /**
+   * Funcion para buscar informacion de un usuario en la base de datos
+   * @param req - informacion enviada por el body
+   * @param res - Informacion enviada por url
+   * @returns - Usuario actualizado
+   */
+  findUser: async ( req,res = response) =>{
+ 
+
+    let { id, provider } = req.params;
+
+    try {
+      
+      let dbUser;
+
+      if( provider == "GOOGLE" ||  provider == "FACEBOOK"){
+        dbUser = await SocialUser.findById(id);
+        console.log('fbgoogle');
+      }else{
+        dbUser = await Usuario.findById(id);
+      }
+
+      if(!dbUser){
+        return res.status(500).json({
+          ok:false,
+          msg:'User not found'
+        })
+      }
+
+      return res.status(200).json({
+        ok: true,
+        user: userInfo(dbUser)
+      })
+      
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        ok:false,
+        msg: 'Something went wrong with uid'
+      })
+    }
+  }
+  ,
 
   /**Funcion para iniciar sesion del usuario
    * @param {string} email - Correo del usuario
    * @param {string} password - Contraseña del usuario
    * @param {string} dbUser._id - Identificador del usuario
-  */
+   */
   userLogin: async (req, res = response) => {
 
     const {
@@ -109,10 +233,8 @@ const authController = {
 
       return res.status(200).json({
         ok: true,
-        uid: dbUser.id,
-        name: dbUser.name,
+        user:userInfo(dbUser),
         token,
-        email: dbUser.email
       })
 
     } catch (error) {
@@ -128,7 +250,7 @@ const authController = {
   /** Funcion para renovar el Token 
    * @param {string} uid - Identificador del usuario
    * @param {string} name- Nombre del usuario
-  */
+   */
   renewToken: async (req, res = response) => {
 
     const {
@@ -139,17 +261,13 @@ const authController = {
     const token = await generateJWT(uid, name);
 
 
-    const {
-      email
-    } = await Usuario.findById(uid);
+    const user = await Usuario.findById(uid);
 
 
     return res.json({
       ok: true,
-      uid,
-      name,
-      token,
-      email
+      user: userInfo(user),
+      token
     });
 
   },
@@ -165,7 +283,7 @@ const authController = {
       if (user) {
         res.status(200).json({
           ok: true,
-          user,
+          user:userInfo(user),
           token: info
         });
       }
@@ -186,7 +304,7 @@ const authController = {
    * @property {string} name- Nombre completo del usuario
    * @param {Object} userDetails - Objeto con el nombre completo del usuario y correo
    * @param {string} process.env.SECRET_KEY - LLave secreta para crear el token
-  */
+   */
   authGoogle: async (req, res) => {
     async function verify() {
 
@@ -223,8 +341,7 @@ const authController = {
       res.status(200).json({
         ok: true,
         token: token,
-        name: payload['name'],
-        email: payload['email']
+        user:userInfo(dbUser)
       })
     }
     verify().catch(console.error);
@@ -232,4 +349,6 @@ const authController = {
 }
 
 
-export { authController };
+export {
+  authController
+};

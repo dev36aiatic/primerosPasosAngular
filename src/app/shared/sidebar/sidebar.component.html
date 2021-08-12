@@ -12,36 +12,36 @@
             <input type="text" name="search" id="searchBtn" placeholder="Search...">
         <span class="tooltip">Search</span>
     </li>
-    <li>
-        <a href="#">
+    <li [routerLink]="['./']">
+        <a>
             <i class="fas fa-home"></i>
             <span class="links_name">Home</span>
         </a>
         <span class="tooltip">Go to Home</span>
     </li>
-    <li>
-        <a href="#">
+    <li [routerLink]="['./profile']">
+        <a>
             <i class="fas fa-user-circle"></i>
             <span class="links_name">Profile</span>
         </a>
         <span class="tooltip">Go to profile</span>
     </li>
     <li>
-        <a href="#">
+        <a>
             <i class="fas fa-history"></i>
             <span class="links_name">History</span>
         </a>
         <span class="tooltip">See the history</span>
     </li>
     <li>
-        <a href="#">
+        <a>
             <i class="fas fa-video"></i>
             <span class="links_name">Video</span>
         </a>
         <span class="tooltip">Watch video</span>
     </li>
     <li (click)="logout()">
-        <a href="#" >
+        <a >
             <i class="fas fa-sign-out-alt" id="log_out"></i>
             <span class="links_name" >Logout</span>
         </a>

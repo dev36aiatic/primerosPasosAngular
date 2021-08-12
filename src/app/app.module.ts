@@ -1,6 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+
+
 
 //Sign in with facebook and google modules
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
@@ -9,6 +12,7 @@ import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-logi
 //
 import { AppComponent } from './app.component';
 import { appRoutingModule } from './app-routing.module';
+
 
 @NgModule({
   declarations: [
@@ -19,6 +23,7 @@ import { appRoutingModule } from './app-routing.module';
     HttpClientModule,
     SocialLoginModule,
     appRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [{
     provide: 'SocialAuthServiceConfig',

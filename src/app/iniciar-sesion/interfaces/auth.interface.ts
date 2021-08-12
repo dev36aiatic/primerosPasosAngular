@@ -21,4 +21,5 @@ export interface User {
     provider?:string;
     authToken?: string;
     idToken?: string;
+    user?: any;
 }

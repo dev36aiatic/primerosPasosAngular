@@ -5,17 +5,24 @@ import { UsuariosRoutingModule } from './usuarios-routing.module';
 import { HomeComponent } from './pages/home/home.component';
 import { SharedModule } from '../shared/shared.module';
 import { MainComponent } from './pages/main/main.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { FormsModule  } from '@angular/forms';
 
+
+import { PrimengModule } from '../primeng/primeng.module';
 
 @NgModule({
-  declarations: [HomeComponent, MainComponent],
+  declarations: [HomeComponent, MainComponent, ProfileComponent],
   exports: [
     MainComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
-    UsuariosRoutingModule
+    FormsModule,
+    UsuariosRoutingModule,
+    PrimengModule
+    
   ]
 })
 export class UsuariosModule { }

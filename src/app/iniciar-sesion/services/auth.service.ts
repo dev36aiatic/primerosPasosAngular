@@ -7,6 +7,7 @@ import { of, Observable, pipe } from 'rxjs';
 
 import { SocialAuthService } from "angularx-social-login";
 import { SocialUser } from "angularx-social-login";
+import { ProfileData } from 'src/app/usuarios/interfaces/user.interface';
 
 
 @Injectable({
@@ -82,6 +83,29 @@ export class AuthService {
       );
   }
 
+  /**Metodo para llenar el formulario de perfil de usuario */
+  userProfile(user:ProfileData,id:string,provider:string = ''){
+    
+    const url = `${this.baseUrl}/update/${id}/${provider}`;
+    const body = {
+      name:user.name,
+      cc:user.cc,
+      address:user.address,
+      dateOfBirth:user.dateOfBirth,
+      city:user.city,
+      department:user.department,
+      country:user.country,
+      ZIP:user.ZIP,
+      profession:user.profession,
+      skills:user.skills,
+      description:user.description
+    }
+    
+    return this.httpClient.put(url,body).pipe(
+      tap(user => this._user = user),
+      catchError(err => of(err))
+    )
+  }
 
 /**Metodo que me permite validar el token de google o facebook*/
   validateAuthGoogleFb(decision: string): Observable<boolean> {
@@ -150,11 +174,7 @@ export class AuthService {
   /**Metodo para colocar el token que me devuelve jwt para validar el inicio de sesion*/
   setTokenAndUser(resp: AuthResponse) {
     localStorage.setItem('token', resp.token!);
-    this._user = {
-      name: resp.name!,
-      uid: resp.uid!,
-      email: resp.email
-    }
+    this._user = resp;
   }
 
 }

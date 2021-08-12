@@ -4,10 +4,11 @@
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+
 }
 
 body {
-  font-size: 16px;
+  font-size: 16px !important;
   font-family: 'Roboto', sans-serif !important;
 }
 
@@ -56,7 +57,7 @@ body {
 }
 
 .btn-s {
-  width: 45%;
+  width: 100%;
   padding: 12px;
   border: none;
   border-radius: 4px;
@@ -106,6 +107,20 @@ body {
   color: white;
 }
 
+.contenedor{
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 90%;
+  padding: 20px 130px;
+}
+.color{
+  width: 100% !important;
+}
+.p-inputtext {
+  padding: .375rem .75rem !important;
+  width: 100% !important;
+  display: block !important;
+}
 
 @media screen and (max-width: 800px) {
   .dad {

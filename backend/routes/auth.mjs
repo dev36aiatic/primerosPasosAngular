@@ -14,7 +14,9 @@ const {
     userLogin,
     renewToken,
     authGoogle,
-    authFb
+    authFb,
+    updateUser,
+    findUser
 } = authController;
 
 
@@ -45,6 +47,13 @@ router.post('/login',
         }),
         MiddleWares.validateFields
     ], userLogin);
+
+
+/** Peticion para actualizar información del usuario */
+router.put('/update/:id/:provider?',updateUser)
+
+/** Peticion para conseguir información del usuario */
+router.get('/user/:id/:provider?',findUser)
 
 /**Peticion get para renovar el token */
 router.get('/renew', validateJWT, renewToken);

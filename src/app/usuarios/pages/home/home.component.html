@@ -1,13 +1,6 @@
-<app-sidebar></app-sidebar>
-
-<div class=" container"  [ngStyle]="{'height': '100vh'}">
-    <div class="row justiy-content-center align-items-center" 
-    [ngStyle]="{'height': '100%'}">
-    
-        <div [ngStyle]="{'margin-left':'78px'}" class="col  rounded text-white p-5 presentation">
-            <h2>Hello World</h2>
-            <h6 *ngFor="let item of infoUser | keyvalue">
-                {{ item.key | titlecase}} : {{ item.value}}</h6>
-        </div>
+<div class="row text-dark">
+    <div class="col">
+        <h6 *ngFor="let item of infoUser | keyvalue">
+            {{ item.key | titlecase}} : {{ item.value}}</h6>
     </div>
 </div>
