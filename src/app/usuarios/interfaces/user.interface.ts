@@ -10,6 +10,5 @@ export interface ProfileData {
     profession:String,
     skills:String[],
     description:String
-    
 }
 

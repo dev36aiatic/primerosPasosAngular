@@ -36,19 +36,13 @@ export class FormularioLoginComponent implements OnInit {
   ngOnInit(): void {
     /**Funcion que se subscribe y obtiene al usuario cuando este inicia sesion con facebook o google */
     this.authService.loginGoogle().subscribe(user => {
-      
-      if(user == null){
-        if(localStorage.getItem('provider')){
-          localStorage.clear();
-        }
+      if (user == null) {
+        localStorage.clear();
+        this.router.navigateByUrl('/auth');
       }
-
       if ((user != null)) {
-
         this.router.navigateByUrl('/dashboard');
-
       }
-     
     });
   }
 
@@ -56,25 +50,20 @@ export class FormularioLoginComponent implements OnInit {
   signInWithGoogle(): void {
     this.googleFacebookAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
- /**Funcion que abre la pantalla de sesion con facebook*/
+  /**Funcion que abre la pantalla de sesion con facebook*/
   signInWithFB(): void {
     this.googleFacebookAuth.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
-
   /**Funcion para iniciar sesion*/
   login() {
     const { email, password } = this.myLogin.value;
-
     this.authService.login(email, password).subscribe(resp => {
-
       if (resp.ok === true) {
         this.router.navigateByUrl('/dashboard');
       } else {
         Swal.fire('Error', resp, 'error');
       }
-
     });
-
   }
 }

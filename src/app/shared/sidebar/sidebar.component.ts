@@ -21,15 +21,13 @@ export class SidebarComponent implements OnInit {
 
   /**Funcion para cerrar sesion */
   logout() {
-    if(this.authservice.isLoggedIn){
-      
+    if (this.authservice.isLoggedIn) {
       this.authservice.logout();
       this.googleFbService.signOut();
     }
     this.authservice.logout();
     this.router.navigateByUrl('/auth');
   }
-
 
   /**Funcion para la animacion del sidebar **/
   toggleBtn(btnBurger) {
@@ -40,22 +38,18 @@ export class SidebarComponent implements OnInit {
     let tooltips = document.querySelectorAll('.tooltip');
 
     if (decision) {
-
       btnBurger.style.left = "90%";
       texts.forEach(element => {
         element.classList.add('showLinks')
       });
-
       tooltips.forEach(element => {
         element.classList.add('hideTooltip');
       });
-
     } else {
       btnBurger.style.left = "55%";
       texts.forEach(element => {
         element.classList.remove('showLinks')
       });
-
       tooltips.forEach(element => {
         element.classList.remove('hideTooltip');
       });

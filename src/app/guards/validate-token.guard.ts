@@ -32,7 +32,6 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
     }else{
       return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
         tap(ok => {
-          
           if (!ok || !localStorage.getItem('provider') || !localStorage.getItem('social-token')) {
             if(this.authService.isLoggedIn){
               this.socialAuthService.signOut();
@@ -59,7 +58,6 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
     }else{
       return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
         tap(ok => {
-          
           if (!ok || !localStorage.getItem('provider') || !localStorage.getItem('social-token')) {
             if(this.authService.isLoggedIn){
               this.socialAuthService.signOut();

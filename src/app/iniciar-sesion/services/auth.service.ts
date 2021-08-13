@@ -16,7 +16,7 @@ import { ProfileData } from 'src/app/usuarios/interfaces/user.interface';
 export class AuthService {
 
   private baseUrl: string = environment.baseUrl;
-  private _user!: ( AuthResponse | SocialUser) ;
+  private _user!: (AuthResponse | SocialUser);
   private isLogged: boolean = false;
 
   /**Getter del usuario*/
@@ -31,7 +31,6 @@ export class AuthService {
 
 
   constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
-
 
   /**Metodo para iniciar sesion*/
   login(email: string, password: string) {
@@ -52,7 +51,7 @@ export class AuthService {
 
   /**Metodo para registrarse*/
   signup(name: string, email: string, password: string) {
- 
+
     const url = `${this.baseUrl}/new`;
     const body = { name, email, password }
 
@@ -84,52 +83,40 @@ export class AuthService {
   }
 
   /**Metodo para llenar el formulario de perfil de usuario */
-  userProfile(user:ProfileData,id:string,provider:string = ''){
-    
+  userProfile(user: ProfileData, id: string, provider: string = '') {
+
     const url = `${this.baseUrl}/update/${id}/${provider}`;
     const body = {
-      name:user.name,
-      cc:user.cc,
-      address:user.address,
-      dateOfBirth:user.dateOfBirth,
-      city:user.city,
-      department:user.department,
-      country:user.country,
-      ZIP:user.ZIP,
-      profession:user.profession,
-      skills:user.skills,
-      description:user.description
+      name: user.name,
+      cc: user.cc,
+      address: user.address,
+      dateOfBirth: user.dateOfBirth,
+      city: user.city,
+      department: user.department,
+      country: user.country,
+      ZIP: user.ZIP,
+      profession: user.profession,
+      skills: user.skills,
+      description: user.description
     }
-    
-    return this.httpClient.put<AuthResponse>(url,body).pipe(
+
+    return this.httpClient.put<AuthResponse>(url, body).pipe(
       tap(user => this._user = user),
       catchError(err => of(false))
     )
   }
 
-/**Metodo que me permite validar el token de google o facebook*/
-validateAuthGoogleFb(decision: string): Observable<boolean> {
-  if(!localStorage.getItem('provider') || !localStorage.getItem('social-token')){
-    return of(false,this.isLogged = false);
-  }
-  if (decision == 'GOOGLE') {
-    const url = `${this.baseUrl}/validateToken`;
-    const headers = new HttpHeaders().set('token-auth', localStorage.getItem('social-token') || '');
+  /**Metodo que me permite validar el token de google o facebook*/
+  validateAuthGoogleFb(decision: string): Observable<boolean> {
+    //Esto se puede refactorizar con un Object Literal en el futuro
+    if (!localStorage.getItem('provider') || !localStorage.getItem('social-token')) {
+      return of(false, this.isLogged = false);
+    }
+    if (decision == 'GOOGLE') {
+      const url = `${this.baseUrl}/validateToken`;
+      const headers = new HttpHeaders().set('token-auth', localStorage.getItem('social-token') || '');
 
-    return this.httpClient.get<AuthResponse>(url, { headers })
-      .pipe(
-        map(resp => {
-
-          this._user = resp;
-          return resp.ok;
-        }),
-        catchError(err => of(false, this.isLogged = false))
-      );
-  } else
-    if (decision == 'FACEBOOK') {
-      const url = `${this.baseUrl}/auth/facebook/token?access_token=${localStorage.getItem('social-token') || ''}`;
-
-      return this.httpClient.get<AuthResponse>(url)
+      return this.httpClient.get<AuthResponse>(url, { headers })
         .pipe(
           map(resp => {
 
@@ -138,40 +125,51 @@ validateAuthGoogleFb(decision: string): Observable<boolean> {
           }),
           catchError(err => of(false, this.isLogged = false))
         );
-    }
+    } else
+      if (decision == 'FACEBOOK') {
+        const url = `${this.baseUrl}/auth/facebook/token?access_token=${localStorage.getItem('social-token') || ''}`;
 
-}
+        return this.httpClient.get<AuthResponse>(url)
+          .pipe(
+            map(resp => {
 
-/**Metodo para borrar los tokens (cerrar sesion)*/
-logout() {
-  localStorage.clear();
-}
-
-/**Metodo para asber si el usuario esta logeado en la app*/
-loginGoogle() {
-  return this.authService.authState.pipe(
-    tap(user => {
-
-      this._user = user;
-      this.isLogged = (user != null);
-      if ((user != null)) {
-
-        if (user.provider == "GOOGLE") {
-          localStorage.setItem('provider', 'GOOGLE');
-          localStorage.setItem('social-token', user.idToken);
-        }
-        if (user.provider == "FACEBOOK") {
-          localStorage.setItem('provider', 'FACEBOOK');
-          localStorage.setItem('social-token', user.authToken);
-        }
+              this._user = resp;
+              return resp.ok;
+            }),
+            catchError(err => of(false, this.isLogged = false))
+          );
       }
 
+  }
 
-    }), catchError(err => of(err))
-  )
+  /**Metodo para borrar los tokens (cerrar sesion)*/
+  logout() {
+    localStorage.clear();
+  }
 
-}
+  /**Metodo para asber si el usuario esta logeado en la app*/
+  loginGoogle() {
+    return this.authService.authState.pipe(
+      tap(user => {
 
+        this._user = user;
+        this.isLogged = (user != null);
+
+        if ((user != null)) {
+
+          if (user.provider == "GOOGLE") {
+            localStorage.setItem('provider', 'GOOGLE');
+            localStorage.setItem('social-token', user.idToken);
+          }
+          if (user.provider == "FACEBOOK") {
+            localStorage.setItem('provider', 'FACEBOOK');
+            localStorage.setItem('social-token', user.authToken);
+          }
+        }
+      }), catchError(err => of(err))
+    )
+
+  }
 
   /**Metodo para colocar el token que me devuelve jwt para validar el inicio de sesion*/
   setTokenAndUser(resp: AuthResponse) {

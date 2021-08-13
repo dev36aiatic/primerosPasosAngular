@@ -86,7 +86,6 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
 
   /** FUncion que me permite actualizar el perfil del usuario*/
   sendProfile(formulario) {
-
     this.authService.userProfile(this.editProfile,this.dbUser.id, localStorage.getItem('provider') || '')
     .subscribe(data =>{
       this.profileChanged = true;
@@ -94,13 +93,11 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
         this.profileChanged = false;
       }, 5000);
     })
-    
   }
   
   /**Funcion que toma la fecha del componente de primeng y se la establece al usuario a editar */
   onChangeDate(fecha){
     this.editProfile.dateOfBirth = fecha;
-    
   }
 
 /**Objeto literal que me permite controlar los checkbox

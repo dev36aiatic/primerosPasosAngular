@@ -55,16 +55,11 @@ const authController = {
       }
 
       const dbUser = new Usuario(req.body)
-
       const salt = bcrypt.genSaltSync();
-
       dbUser.password = bcrypt.hashSync(password, salt);
-
       const token = await generateJWT(dbUser.id, dbUser.name);
-
       await dbUser.save();
-
-
+      
       return res.status(200).json({
         ok: true,
         user:userInfo(dbUser),
@@ -137,7 +132,6 @@ const authController = {
 
       await dbUser.save();
 
-
       return res.status(200).json({
         ok: true,
         user: userInfo(dbUser)
@@ -159,10 +153,7 @@ const authController = {
    * @returns - Usuario actualizado
    */
   findUser: async ( req,res = response) =>{
- 
-
     let { id, provider } = req.params;
-
     try {
       
       let dbUser;
@@ -209,6 +200,7 @@ const authController = {
     } = req.body;
 
     try {
+
       const dbUser = await Usuario.findOne({
         email
       });
@@ -221,7 +213,6 @@ const authController = {
       }
 
       const validPassword = bcrypt.compareSync(password, dbUser.password);
-
       if (!validPassword) {
         return res.status(400).json({
           ok: false,
@@ -259,10 +250,7 @@ const authController = {
     } = req;
 
     const token = await generateJWT(uid, name);
-
-
     const user = await Usuario.findById(uid);
-
 
     return res.json({
       ok: true,
@@ -347,7 +335,6 @@ const authController = {
     verify().catch(console.error);
   }
 }
-
 
 export {
   authController
