@@ -321,17 +321,17 @@ const authController = {
         lastname: payload['family_name']
       }
 
-
-      const dbUser = await SocialUser.findOne({
+      let dbUser = await SocialUser.findOne({
         email: userDetails.email
       });
 
       if (dbUser == null) {
-        let newUser = new SocialUser({
+          dbUser = new SocialUser({
           email: payload['email'],
-          name: payload['name']
+          name: payload['name'],
+          provider:"GOOGLE"
         });
-        await newUser.save();
+        await dbUser.save();
       }
 
       let token = jwt.sign(userDetails, process.env.SECRET_KEY, {

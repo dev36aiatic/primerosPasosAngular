@@ -32,17 +32,17 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
     }else{
       return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
         tap(ok => {
-          console.log(localStorage.getItem('provider').toUpperCase(), ok);
           
-          if (!ok) {
+          if (!ok || !localStorage.getItem('provider') || !localStorage.getItem('social-token')) {
+            if(this.authService.isLoggedIn){
+              this.socialAuthService.signOut();
+            }
+            localStorage.clear();
             this.router.navigateByUrl('/auth');
           }
         })
       );
     }
- 
-
-
   }
 
   canLoad(): Observable<boolean> | boolean {
@@ -59,20 +59,16 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
     }else{
       return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
         tap(ok => {
-          console.log(localStorage.getItem('provider').toUpperCase(), ok);
           
-          if (!ok) {
+          if (!ok || !localStorage.getItem('provider') || !localStorage.getItem('social-token')) {
+            if(this.authService.isLoggedIn){
+              this.socialAuthService.signOut();
+            }
+            localStorage.clear();
             this.router.navigateByUrl('/auth');
           }
         })
       );
     }
- 
-
-
-
   }
-
-
-
 }

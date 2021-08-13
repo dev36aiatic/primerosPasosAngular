@@ -16,7 +16,7 @@ import { ProfileData } from 'src/app/usuarios/interfaces/user.interface';
 export class AuthService {
 
   private baseUrl: string = environment.baseUrl;
-  private _user!: (User | SocialUser);
+  private _user!: ( AuthResponse | SocialUser) ;
   private isLogged: boolean = false;
 
   /**Getter del usuario*/
@@ -101,20 +101,35 @@ export class AuthService {
       description:user.description
     }
     
-    return this.httpClient.put(url,body).pipe(
+    return this.httpClient.put<AuthResponse>(url,body).pipe(
       tap(user => this._user = user),
-      catchError(err => of(err))
+      catchError(err => of(false))
     )
   }
 
 /**Metodo que me permite validar el token de google o facebook*/
-  validateAuthGoogleFb(decision: string): Observable<boolean> {
+validateAuthGoogleFb(decision: string): Observable<boolean> {
+  if(!localStorage.getItem('provider') || !localStorage.getItem('social-token')){
+    return of(false,this.isLogged = false);
+  }
+  if (decision == 'GOOGLE') {
+    const url = `${this.baseUrl}/validateToken`;
+    const headers = new HttpHeaders().set('token-auth', localStorage.getItem('social-token') || '');
 
-    if (decision == 'GOOGLE') {
-      const url = `${this.baseUrl}/validateToken`;
-      const headers = new HttpHeaders().set('token-auth', localStorage.getItem('social-token') || '');
+    return this.httpClient.get<AuthResponse>(url, { headers })
+      .pipe(
+        map(resp => {
 
-      return this.httpClient.get<AuthResponse>(url, { headers })
+          this._user = resp;
+          return resp.ok;
+        }),
+        catchError(err => of(false, this.isLogged = false))
+      );
+  } else
+    if (decision == 'FACEBOOK') {
+      const url = `${this.baseUrl}/auth/facebook/token?access_token=${localStorage.getItem('social-token') || ''}`;
+
+      return this.httpClient.get<AuthResponse>(url)
         .pipe(
           map(resp => {
 
@@ -123,52 +138,39 @@ export class AuthService {
           }),
           catchError(err => of(false, this.isLogged = false))
         );
-    } else
-      if (decision == 'FACEBOOK') {
-        const url = `${this.baseUrl}/auth/facebook/token?access_token=${localStorage.getItem('social-token') || ''}`;
+    }
 
-        return this.httpClient.get<AuthResponse>(url)
-          .pipe(
-            map(resp => {
+}
 
-              this._user = resp;
-              return resp.ok;
-            }),
-            catchError(err => of(false, this.isLogged = false))
-          );
+/**Metodo para borrar los tokens (cerrar sesion)*/
+logout() {
+  localStorage.clear();
+}
+
+/**Metodo para asber si el usuario esta logeado en la app*/
+loginGoogle() {
+  return this.authService.authState.pipe(
+    tap(user => {
+
+      this._user = user;
+      this.isLogged = (user != null);
+      if ((user != null)) {
+
+        if (user.provider == "GOOGLE") {
+          localStorage.setItem('provider', 'GOOGLE');
+          localStorage.setItem('social-token', user.idToken);
+        }
+        if (user.provider == "FACEBOOK") {
+          localStorage.setItem('provider', 'FACEBOOK');
+          localStorage.setItem('social-token', user.authToken);
+        }
       }
 
-  }
 
-  /**Metodo para borrar los tokens (cerrar sesion)*/
-  logout() {
-    localStorage.clear();
-  }
+    }), catchError(err => of(err))
+  )
 
-  /**Metodo para asber si el usuario esta logeado en la app*/
-  loginGoogle() {
-    return this.authService.authState.pipe(
-      tap(user => {
-
-        this._user = user;
-        this.isLogged = (user != null);
-        if ((user != null)) {
-
-          if (user.provider == "GOOGLE") {
-            localStorage.setItem('provider', 'GOOGLE');
-            localStorage.setItem('social-token', user.idToken);
-          }
-          if (user.provider == "FACEBOOK") {
-            localStorage.setItem('provider', 'FACEBOOK');
-            localStorage.setItem('social-token', user.authToken);
-          }
-        }
-
-
-      }), catchError(err => of(err))
-    )
-
-  }
+}
 
 
   /**Metodo para colocar el token que me devuelve jwt para validar el inicio de sesion*/

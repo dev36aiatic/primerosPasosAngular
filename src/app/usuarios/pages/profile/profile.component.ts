@@ -6,17 +6,27 @@ import { ProfileData } from '../../interfaces/user.interface';
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styles: [
+    `
+    .form-profile {
+      width: 100%;
+      padding: 20px;
+      margin: 0 auto;
+      padding: 20px 30px;
+      background: rgb(245 245 245);
+      border: 1px solid rgb(231 231 231);
+      border-radius: 6px;
+    }
+    
+    `
   ]
 })
 export class ProfileComponent implements OnInit, AfterViewInit  {
 
   dbUser = this.authService.user.user;
-
   editProfile: ProfileData | any;
-
-
   disableAll: boolean = false;
   flag: number = 0;
+  profileChanged: boolean = false;
 
   skills: string[] = [
     "Creativity",
@@ -35,6 +45,7 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
     private authService: AuthService
   ) {
 
+  //Desestructuracion de la informacion del usuario traida de la base de datos 
     let {
       cc,
       address,
@@ -47,6 +58,7 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
       description,
       skills } = this.dbUser.profile;
 
+    //Asignacion de los valores desestructurados al usuario que se enviara a la base de datos
     this.editProfile = {
       name:this.dbUser.name,
       cc,
@@ -71,14 +83,16 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
     this.contarChecks.putActiveFromBd(this.dbUser.profile.skills);
     this.contarChecks.flagGuardian();
   }
-  
 
   /** FUncion que me permite actualizar el perfil del usuario*/
   sendProfile(formulario) {
 
     this.authService.userProfile(this.editProfile,this.dbUser.id, localStorage.getItem('provider') || '')
     .subscribe(data =>{
-      console.log(data.ok);
+      this.profileChanged = true;
+      setTimeout(() => {
+        this.profileChanged = false;
+      }, 5000);
     })
     
   }
@@ -86,7 +100,9 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
   /**Funcion que toma la fecha del componente de primeng y se la establece al usuario a editar */
   onChangeDate(fecha){
     this.editProfile.dateOfBirth = fecha;
+    
   }
+
 /**Objeto literal que me permite controlar los checkbox
  * @property { function } url - Funcion retorna un array con los checkbox
  * @property { function } true - Funcion suma una habilidad al array de habilidades de usuario
@@ -127,7 +143,6 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
       });
     },
     putActiveFromBd: (arr)=>{
-
       this.contarChecks.url().forEach((element: any) => {
         if(arr.includes(element.value)){
           element.checked = true;
@@ -135,18 +150,16 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
         }
          
       });
-      
     },
     flagGuardian: ()=>{
       if(this.flag > 2){
         return this.contarChecks.disable();
       }
     },
-    null: (data) => this.flag = this.flag
+    null: () => this.flag = this.flag
   }
 
- 
-
+  /**Funcion que se ejecuta cada vez que se selecciona un checkbox */
   seleccionado(checkbox) {
     this.contarChecks[checkbox.target.checked](checkbox.target.value);
     return (this.flag < 3) ? this.contarChecks['active']() : this.contarChecks['disable']()

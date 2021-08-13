@@ -1,7 +1,12 @@
 <div class="container text-dark">
-  <h4>Profile</h4>
+  
 
-  <form #formProfile="ngForm" (ngSubmit)="sendProfile(formProfile)">
+  <form class="form-profile" #formProfile="ngForm" (ngSubmit)="sendProfile(formProfile)">
+    <div class="row mb-4">
+      <div class="col-12 text-center">
+        <h4>{{editProfile.name | titlecase}} Profile</h4>
+      </div>
+    </div>
     <hr>
     <div class="form-group">
       <label for="fullName">Full Name</label>
@@ -53,8 +58,8 @@
       <label for="inputdob">Date of Birth</label>
       <p-calendar id="inputdob" class="d-block" [yearNavigator]="true" [showIcon]="true" [monthNavigator]="true"
         yearRange="1920:2021" required name="dateOfBirth" placeholder="Date of Birth" dataType="string"
-        [ngModel]="editProfile.dateOfBirth  | date:'dd/MM/yyyy '" (ngModelChange)="onChangeDate($event)"
-        dateFormat="dd/mm/yy"></p-calendar>
+        [ngModel]="editProfile.dateOfBirth  " (ngModelChange)="onChangeDate($event)"
+        dateFormat="dd-mm-yy"></p-calendar>
     </div>
     <hr>
 
@@ -83,6 +88,7 @@
         </div>
       </div>
     </div>
+    <span *ngIf="profileChanged" class="text-success d-block text-center font-weight-bold">¡Changes Applied!</span>
     <hr>
     <div class="row">
       <div class="col-12 text-center">

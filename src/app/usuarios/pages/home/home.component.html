@@ -1,6 +1,19 @@
-<div class="row text-dark">
-    <div class="col">
-        <h6 *ngFor="let item of infoUser | keyvalue">
-            {{ item.key | titlecase}} : {{ item.value}}</h6>
+
+<div class="container text-dark info-user">
+    <div class="row  py-3">
+        <div class="col-12 text-center">
+            <h4>¡ Welcome {{ infoUser.name | titlecase}} !</h4>
+        </div>
+    </div>
+    <div class="row  pb-4 border bg-white overflow-hidden">
+        <div class="col-12 pt-2 bg-white mb-4 border-bottom">
+            <h6>Your information</h6>
+        </div>
+        <div class="col-12 bg-white">
+            <p class="mb-0"><span class="font-weight-bold mr-3">Name:</span> {{ infoUser.name}}</p>
+            <p class="mb-0"><span class="font-weight-bold mr-3">Email:</span> {{ infoUser.email}}</p>
+            <p *ngFor="let item of infoUser.profile | keyvalue" class="mb-0">
+                <span class="font-weight-bold mr-3">{{item.key | titlecase}}:</span> {{item.value }}</p>
+        </div>
     </div>
 </div>

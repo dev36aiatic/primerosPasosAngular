@@ -10,8 +10,6 @@ import { Component, OnInit } from '@angular/core';
      
      background-color:  var(--surface-a);
    }
-   .contenedor {
-   }
    `
   ]
 })

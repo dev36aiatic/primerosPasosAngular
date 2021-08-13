@@ -36,10 +36,10 @@ passport.use(new FacebookTokenStrategy({
     fbGraphVersion: 'v3.0'
   }, async function(accessToken, refreshToken, profile, done) {
 
-      let dbUser = await SocialUser.findOne({id: profile.id})
+      let dbUser = await SocialUser.findOne({idFb: profile.id})
       if(dbUser == null){
           const { name, email, id } = profile._json;
-          dbUser = new SocialUser({name,email,id});
+          dbUser = new SocialUser({name,email,idFb:id,provider:"FACEBOOK"});
           await dbUser.save();
       }
       return done((dbUser == null),dbUser,accessToken);

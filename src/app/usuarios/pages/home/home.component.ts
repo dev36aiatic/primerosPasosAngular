@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
 
   /**Getter de la informacion de usuario */
   get infoUser(){
-    return this.authService.user;
+    return this.authService.user.user;
   }
   
   constructor(private authService: AuthService) { 

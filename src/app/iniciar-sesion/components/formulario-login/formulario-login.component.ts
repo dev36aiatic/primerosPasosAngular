@@ -33,11 +33,10 @@ export class FormularioLoginComponent implements OnInit {
     private authService: AuthService,
     private googleFacebookAuth: SocialAuthService) { }
 
-
   ngOnInit(): void {
     /**Funcion que se subscribe y obtiene al usuario cuando este inicia sesion con facebook o google */
     this.authService.loginGoogle().subscribe(user => {
-
+      
       if(user == null){
         if(localStorage.getItem('provider')){
           localStorage.clear();

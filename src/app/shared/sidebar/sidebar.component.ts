@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../iniciar-sesion/services/auth.service';
 
 import { SocialAuthService } from "angularx-social-login";
-import { SocialUser } from "angularx-social-login";
 
 @Component({
   selector: 'app-sidebar',
@@ -30,6 +29,7 @@ export class SidebarComponent implements OnInit {
     this.authservice.logout();
     this.router.navigateByUrl('/auth');
   }
+
 
   /**Funcion para la animacion del sidebar **/
   toggleBtn(btnBurger) {
