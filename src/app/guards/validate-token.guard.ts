@@ -14,59 +14,102 @@ export class ValidateTokenGuard implements CanActivate, CanLoad {
   constructor(private authService: AuthService, private router: Router,
     private socialAuthService: SocialAuthService) { }
 
-    /** Los metodos canActivate (Activar rutas) canLoad (Mostrar contenido de las rutas)
-     dependiendo si inicie sesion con una cuenta creada en mi base de datos 
-    o me autentique con facebook y google me validan si las rutas deben ser activadas y mostradas */
+  /** Los metodos canActivate (Activar rutas) canLoad (Mostrar contenido de las rutas)
+   dependiendo si inicie sesion con una cuenta creada en mi base de datos 
+  o me autentique con facebook y google me validan si las rutas deben ser activadas y mostradas */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
 
     console.log('Can activate');
-    //
-    if (localStorage.getItem('token')) {
-      return this.authService.validateToken().pipe(
-        tap(ok => {
-          if (!ok) {
-            this.router.navigateByUrl('/auth');
+
+    let logoutObject = {
+      "LOGOUT": (ok: boolean) => {
+        if (!ok || !localStorage.getItem('token')) {
+          if (this.authService.isLoggedIn) {
+            this.socialAuthService.signOut();
           }
-        })
-      );
-    }else{
-      return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
-        tap(ok => {
-          if (!ok || !localStorage.getItem('provider') || !localStorage.getItem('social-token')) {
-            if(this.authService.isLoggedIn){
-              this.socialAuthService.signOut();
-            }
-            localStorage.clear();
-            this.router.navigateByUrl('/auth');
-          }
-        })
-      );
+          this.authService.logout();
+          this.router.navigateByUrl('/auth');
+        }
+      }
     }
+
+    let routesObject = {
+      "ownLogin": () => {
+        return this.authService.validateToken().pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "FACEBOOK": () => {
+        return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "GOOGLE": () => {
+        return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "DEFAULT": () => {
+        logoutObject["LOGOUT"](!!false);
+      }
+
+    }
+
+    return (!!localStorage.getItem('provider')) ? routesObject[localStorage.getItem('provider')]() : routesObject["DEFAULT"]();
+    
   }
 
   canLoad(): Observable<boolean> | boolean {
     console.log('Can load');
-   
-    if (localStorage.getItem('token')) {
-      return this.authService.validateToken().pipe(
-        tap(ok => {
-          if (!ok) {
-            this.router.navigateByUrl('/auth');
+
+    let logoutObject = {
+      "LOGOUT": (ok: boolean) => {
+        if (!ok || !localStorage.getItem('token')) {
+          if (this.authService.isLoggedIn) {
+            this.socialAuthService.signOut();
           }
-        })
-      );
-    }else{
-      return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
-        tap(ok => {
-          if (!ok || !localStorage.getItem('provider') || !localStorage.getItem('social-token')) {
-            if(this.authService.isLoggedIn){
-              this.socialAuthService.signOut();
-            }
-            localStorage.clear();
-            this.router.navigateByUrl('/auth');
-          }
-        })
-      );
+          this.authService.logout();
+          this.router.navigateByUrl('/auth');
+        }
+      }
     }
+
+    let routesObject = {
+      "ownLogin": () => {
+        return this.authService.validateToken().pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "FACEBOOK": () => {
+        return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "GOOGLE": () => {
+        return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "DEFAULT": () => {
+        console.log('default')
+        logoutObject["LOGOUT"](!!false);
+      }
+
+    }
+
+    return (!!localStorage.getItem('provider')) ? routesObject[localStorage.getItem('provider')]() : routesObject["DEFAULT"]();
+    
   }
 }

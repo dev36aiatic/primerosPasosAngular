@@ -332,7 +332,14 @@ const authController = {
         user:userInfo(dbUser)
       })
     }
-    verify().catch(console.error);
+    verify().catch((error) => {
+      console.log(error,'token erroneo');
+      res.status(400).json({
+        ok: false,
+        msg: 'Invalid Token',
+        error:error
+      })
+    });
   }
 }
 

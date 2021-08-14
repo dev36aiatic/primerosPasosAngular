@@ -41,6 +41,7 @@ export class FormularioLoginComponent implements OnInit {
         this.router.navigateByUrl('/auth');
       }
       if ((user != null)) {
+        
         this.router.navigateByUrl('/dashboard');
       }
     });

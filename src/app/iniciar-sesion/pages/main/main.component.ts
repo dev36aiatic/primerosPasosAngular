@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class MainComponent implements OnInit {
 
   get userOn(){
-    return localStorage.getItem('token') || localStorage.getItem('social-token');
+    return !!localStorage.getItem('token');
   }
   constructor(private authService: AuthService, private router: Router) { 
     /**Condicion para redirigir al usuario si ya inicio sesion previamente*/
@@ -21,7 +21,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    
   }
 
 }
