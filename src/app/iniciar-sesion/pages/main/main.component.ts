@@ -10,9 +10,12 @@ import { Router } from '@angular/router';
 })
 export class MainComponent implements OnInit {
 
+  get userOn(){
+    return localStorage.getItem('token') || localStorage.getItem('social-token');
+  }
   constructor(private authService: AuthService, private router: Router) { 
     /**Condicion para redirigir al usuario si ya inicio sesion previamente*/
-    if(localStorage.getItem('token') || localStorage.getItem('social-token')){
+    if(this.userOn){
       this.router.navigateByUrl('/dashboard');
     }
   }

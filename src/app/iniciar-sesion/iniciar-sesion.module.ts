@@ -8,6 +8,7 @@ import { FormularioLoginComponent } from './components/formulario-login/formular
 import { FormularioRegistroComponent } from './components/formulario-registro/formulario-registro.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MainComponent } from './pages/main/main.component';
+import { PrimengModule } from '../primeng/primeng.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { MainComponent } from './pages/main/main.component';
     CommonModule,
     ReactiveFormsModule,
     IniciarSesionRoutingModule,
-    FormsModule
+    FormsModule,
+    PrimengModule
   ],
   exports:[LoginComponent,SignupComponent]
   

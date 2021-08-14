@@ -105,7 +105,7 @@ export class AuthService {
       catchError(err => of(false))
     )
   }
-
+//TODO: DALE Z INDEX A LOS LI DEL MENU PARA QUE SE MUESTRNE POR ENCIMA DE TODOS
   /**Metodo que me permite validar el token de google o facebook*/
   validateAuthGoogleFb(decision: string): Observable<boolean> {
     //Esto se puede refactorizar con un Object Literal en el futuro
