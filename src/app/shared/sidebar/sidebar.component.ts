@@ -57,4 +57,11 @@ export class SidebarComponent implements OnInit {
 
 
   }
+
+  /**Funcion que me cambia el alto del sidebar cuando esta en dispositivos moviles */
+  toggleHidden(){
+    document.querySelector('.sidebar').classList.toggle('totalHeight');
+  }
+
+ 
 }
