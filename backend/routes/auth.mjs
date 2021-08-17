@@ -15,7 +15,7 @@ const {
     renewToken,
     authGoogle,
     authFb,
-    updateUser,
+    updateProfile,
     findUser
 } = authController;
 
@@ -50,7 +50,7 @@ router.post('/login',
 
 
 /** Peticion para actualizar información del usuario */
-router.put('/update/:id/:provider?',updateUser)
+router.put('/update/:id/:provider?',updateProfile)
 
 /** Peticion para conseguir información del usuario */
 router.get('/user/:id/:provider?',findUser)

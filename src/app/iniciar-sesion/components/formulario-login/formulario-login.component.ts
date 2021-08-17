@@ -17,6 +17,7 @@ import Swal from 'sweetalert2'
   selector: 'app-formulario-login',
   templateUrl: './formulario-login.component.html',
   styles: [
+  
   ]
 })
 export class FormularioLoginComponent implements OnInit {

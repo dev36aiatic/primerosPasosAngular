@@ -100,7 +100,7 @@ export class AuthService {
 
     return this.httpClient.put<AuthResponse>(url, body).pipe(
       tap(user => this._user = user),
-      catchError(err => of(false))
+      catchError(err => of(err.error))
     )
   }
   //TODO: DALE Z INDEX A LOS LI DEL MENU PARA QUE SE MUESTRNE POR ENCIMA DE TODOS

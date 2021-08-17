@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../iniciar-sesion/services/auth.service';
-import { Router } from '@angular/router';
 
 
 

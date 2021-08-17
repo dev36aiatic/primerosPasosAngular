@@ -5,10 +5,17 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './main.component.html',
   styles:[
    `
-   *{
-     color:#fff;
-     
-     background-color:  var(--surface-a);
+   .pattern{
+     position:fixed;
+     top:0;
+     left:0;
+     width:100%;
+     height:100%;
+     background: url('../../../../assets/pattern.jpg');
+     background-repeat: repeat-y;
+     background-size: cover;
+     background-attachment: fixed;
+     overflow-y: scroll;
    }
    `
   ]

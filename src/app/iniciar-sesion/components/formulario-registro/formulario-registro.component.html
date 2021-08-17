@@ -1,3 +1,5 @@
+<app-logo-unab></app-logo-unab>
+
 <form (ngSubmit)="signup()" [formGroup]="mySignup" class="form-login">
   <div class="row mb-4">
     <div class="col text-center text-dark">
@@ -32,7 +34,7 @@
   </div>
 
   <div class="col-auto text-center">
-    <button type="submit" [disabled]="mySignup.invalid" class="btn btn-dark mb-2  w-100">Register</button>
+    <button type="submit" [disabled]="mySignup.invalid" class="btn  btn-login mb-2  w-100">Register</button>
   </div>
 
 </form>

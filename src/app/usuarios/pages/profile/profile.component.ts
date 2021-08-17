@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 import { ProfileData } from '../../interfaces/user.interface';
 
+import Swal from 'sweetalert2'
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -12,21 +13,49 @@ import { ProfileData } from '../../interfaces/user.interface';
       padding: 20px;
       margin: 0 auto;
       padding: 20px 30px;
-      background: rgb(245 245 245);
-      border: 1px solid rgb(231 231 231);
-      border-radius: 6px;
+      border: 1px solid rgb(223 223 223);
+      border-radius: 9px;
+      background-color: rgba(255, 255, 255, 0.711);
+    }
+    .form-profile hr {
+      color: rgb(188 188 188) !important;
+      font-size: 15px;
     }
     
+    .warning {
+      font-size:12px;
+      color:red;
+    }
+    .mark{
+      display: inline-block;
+      color: red;
+      background: none;
+    }
+    .btn-send {
+      display:block;
+      margin:0 auto;
+      background:orange;
+      border: none !important;
+      outline: none !important;
+      padding: 8px 40px;
+      border-radius:6px;
+      color:#fff;
+      cursor: pointer;
+      transition: all ease .3s;
+    }
+    .btn-send:hover{
+      background: rgba(255, 166, 0, 0.788);;
+      transition: all ease .3s;
+    }
     `
   ]
 })
-export class ProfileComponent implements OnInit, AfterViewInit  {
+export class ProfileComponent implements OnInit, AfterViewInit {
 
   dbUser = this.authService.user.user;
   editProfile: ProfileData | any;
   disableAll: boolean = false;
   flag: number = 0;
-  profileChanged: boolean = false;
 
   skills: string[] = [
     "Creativity",
@@ -45,7 +74,7 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
     private authService: AuthService
   ) {
 
-  //Desestructuracion de la informacion del usuario traida de la base de datos 
+    //Desestructuracion de la informacion del usuario traida de la base de datos 
     let {
       cc,
       address,
@@ -60,7 +89,7 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
 
     //Asignacion de los valores desestructurados al usuario que se enviara a la base de datos
     this.editProfile = {
-      name:this.dbUser.name,
+      name: this.dbUser.name,
       cc,
       address,
       dateOfBirth,
@@ -75,41 +104,42 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
   }
 
   ngOnInit(): void {
-  
+
   }
 
   /**Funciones que se activan al iniciar el contenido de las vistas */
-  ngAfterViewInit(): void{
+  ngAfterViewInit(): void {
     this.contarChecks.putActiveFromBd(this.dbUser.profile.skills);
     this.contarChecks.flagGuardian();
   }
 
   /** FUncion que me permite actualizar el perfil del usuario*/
   sendProfile(formulario) {
-    this.authService.userProfile(this.editProfile,this.dbUser.id, localStorage.getItem('provider') || '')
-    .subscribe(data =>{
-      this.profileChanged = true;
-      setTimeout(() => {
-        this.profileChanged = false;
-      }, 5000);
-    })
+    this.authService.userProfile(this.editProfile, this.dbUser.id, localStorage.getItem('provider') || '')
+      .subscribe(data => {
+        if (data.ok == false) {
+          Swal.fire('Error', data.msg, 'error');
+        } else {
+          Swal.fire('Changes Applied :)', data.msg, 'success');
+        }
+      })
   }
-  
+
   /**Funcion que toma la fecha del componente de primeng y se la establece al usuario a editar */
-  onChangeDate(fecha){
+  onChangeDate(fecha) {
     this.editProfile.dateOfBirth = fecha;
   }
 
-/**Objeto literal que me permite controlar los checkbox
- * @property { function } url - Funcion retorna un array con los checkbox
- * @property { function } true - Funcion suma una habilidad al array de habilidades de usuario
- * @property { function } false - Funcion resta una habilidad al array de habilidades de usuario
- * @property { function } active - Funcion que remueve el atributo disabled a los checkbox
- * @property { function } disable - Funcion que añade el atributo disabled a los checkbox
- * @property { function } putActiveFromBd - Funcion que pone el atributo checkeck del checkbox en true si ya lo tenia el usuario
- * @property { function } flagGuardian - Funcion se fija si ya tiene 3 habilidades seleccionadas al cargar la info del usuario
- * @property { function } null - Funcion de error en caso de que se envie un valor que no valido
- */
+  /**Objeto literal que me permite controlar los checkbox
+   * @property { function } url - Funcion retorna un array con los checkbox
+   * @property { function } true - Funcion suma una habilidad al array de habilidades de usuario
+   * @property { function } false - Funcion resta una habilidad al array de habilidades de usuario
+   * @property { function } active - Funcion que remueve el atributo disabled a los checkbox
+   * @property { function } disable - Funcion que añade el atributo disabled a los checkbox
+   * @property { function } putActiveFromBd - Funcion que pone el atributo checkeck del checkbox en true si ya lo tenia el usuario
+   * @property { function } flagGuardian - Funcion se fija si ya tiene 3 habilidades seleccionadas al cargar la info del usuario
+   * @property { function } null - Funcion de error en caso de que se envie un valor que no valido
+   */
   contarChecks = {
     url: () => {
       let checkbox = document.querySelectorAll('.form-check-input');
@@ -117,7 +147,7 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
     },
     true: (value: string) => {
       this.flag += 1;
-      if(!this.editProfile.skills.includes(value)){
+      if (!this.editProfile.skills.includes(value)) {
         this.editProfile.skills.push(value)
       };
     },
@@ -139,17 +169,17 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
         };
       });
     },
-    putActiveFromBd: (arr)=>{
+    putActiveFromBd: (arr) => {
       this.contarChecks.url().forEach((element: any) => {
-        if(arr.includes(element.value)){
+        if (arr.includes(element.value)) {
           element.checked = true;
           this.contarChecks.true(element.value);
         }
-         
+
       });
     },
-    flagGuardian: ()=>{
-      if(this.flag > 2){
+    flagGuardian: () => {
+      if (this.flag > 2) {
         return this.contarChecks.disable();
       }
     },

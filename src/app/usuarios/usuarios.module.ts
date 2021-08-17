@@ -10,9 +10,10 @@ import { FormsModule  } from '@angular/forms';
 
 
 import { PrimengModule } from '../primeng/primeng.module';
+import { MunicipiosColombiaComponent } from './pages/municipios-colombia/municipios-colombia.component';
 
 @NgModule({
-  declarations: [HomeComponent, MainComponent, ProfileComponent],
+  declarations: [HomeComponent, MainComponent, ProfileComponent, MunicipiosColombiaComponent],
   exports: [
     MainComponent
   ],

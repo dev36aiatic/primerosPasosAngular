@@ -20,6 +20,17 @@ body {
   height: 100% !important;
   width: 100% !important;
 }
+.btn-login{
+  background: orange;
+  color: #fff;
+}
+
+.btn-login:hover{
+  background: rgba(255, 166, 0, 0.788);;
+  transition: all ease .3s;
+  color: #fff;
+  
+}
 
 .child-1 {
   position: relative;
@@ -136,6 +147,7 @@ body {
   margin: 0 auto;
   width: 90%;
   padding: 20px 130px;
+
 }
 
 .color {
@@ -156,6 +168,7 @@ body {
   .child-1 {
     width: 100% !important;
     height: 50vh;
+    padding-top: 80px;
   }
 
   .child-2 {

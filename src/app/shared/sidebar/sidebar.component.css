@@ -129,7 +129,14 @@ li {
 .showLinks {
   opacity: 1 !important;
 }
+.web-service {
+  border-bottom: 1px solid #fff;
+  border-top: 1px solid #fff;
+}
 
+.web-service > a {
+  border-radius: 0px !important;
+}
 .logo,
 .links_name {
   opacity: 0;

@@ -12,6 +12,9 @@ import {
   Usuario
 } from '../models/User.mjs';
 import {
+  Profile
+} from '../models/Profile.mjs';
+import {
   SocialUser
 } from '../models/GoogleFbUser.mjs';
 import {
@@ -77,12 +80,12 @@ const authController = {
 
   },
   /**
-   * Funcion para ctualizar usuario en la base de datos
+   * Funcion para añadir el perfil del usuario en la base de datos
    * @param req - informacion enviada por el body
    * @param res - Informacion enviada por url
    * @returns - Usuario actualizado
    */
-  updateUser: async (req, res = response) => {
+  updateProfile: async (req, res = response) => {
 
     let id = req.params.id;
 
@@ -116,6 +119,19 @@ const authController = {
           msg: 'User not found :('
         })
       }
+
+      //Añadir el perfil del usuario
+      let dbProfile = await Profile.findOne({cc});
+      if(dbProfile){
+        return res.status(500).json({
+          ok: false,
+          msg:'A user with this identification number already exists.'
+        })
+      }
+      dbProfile = new Profile(req.body);
+      await dbProfile.save();
+
+
       let { profile } = dbUser;
 
       dbUser.name = name;
@@ -134,7 +150,8 @@ const authController = {
 
       return res.status(200).json({
         ok: true,
-        user: userInfo(dbUser)
+        user: userInfo(dbUser),
+        msg:'Thanks for the registration.'
       })
 
     } catch (error) {
@@ -174,7 +191,7 @@ const authController = {
 
       return res.status(200).json({
         ok: true,
-        user: userInfo(dbUser)
+        user: userInfo(dbUser),
       })
       
     } catch (error) {
@@ -333,7 +350,7 @@ const authController = {
       })
     }
     verify().catch((error) => {
-      console.log(error,'token erroneo');
+      console.log(error,'Error con el token!');
       res.status(400).json({
         ok: false,
         msg: 'Invalid Token',

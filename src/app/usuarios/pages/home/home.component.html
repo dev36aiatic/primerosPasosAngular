@@ -1,19 +1,31 @@
+<div class="container home-page">
+  <div class="row">
+    <div class="col-12 py-4 text-center">
+      <h4 class="title">MINIONS UNAB</h4>
+      <hr>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-around">
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="../../../../assets/mauricio_profile.jpg" alt="Card image cap">
+        <div class="card-body text-center">
+          <p class="card-text"><strong>Mauricio Barva</strong> <br> Student of Systems Engineering <br> UNAB</p>
+        </div>
+      </div>
+      <div class="card h-100" style="width: 18rem;">
+        <img class="card-img-top" src="../../../../assets/daniel_profile.jpg" alt="Card image cap">
+        <div class="card-body text-center">
+          <p class="card-text"><strong>Daniel Pacheco</strong> <br> Student of Systems Engineering <br> UNAB</p>
+        </div>
+      </div>
+  </div>
 
-<div class="container text-dark info-user">
-    <div class="row  py-3">
-        <div class="col-12 text-center">
-            <h4>¡ Welcome {{ infoUser.name | titlecase}} !</h4>
-        </div>
-    </div>
-    <div class="row  pb-4 border bg-white overflow-hidden">
-        <div class="col-12 pt-2 bg-white mb-4 border-bottom">
-            <h6>Your information</h6>
-        </div>
-        <div class="col-12 bg-white">
-            <p class="mb-0"><span class="font-weight-bold mr-3">Name:</span> {{ infoUser.name}}</p>
-            <p class="mb-0"><span class="font-weight-bold mr-3">Email:</span> {{ infoUser.email}}</p>
-            <p *ngFor="let item of infoUser.profile | keyvalue" class="mb-0">
-                <span class="font-weight-bold mr-3">{{item.key | titlecase}}:</span> {{item.value }}</p>
-        </div>
-    </div>
+  <div class="row ">
+      <div class="col-12 text-center ">
+            <img class="logo-u" src="../../../../assets/NARANJA.png" alt="LOGO UNAB">
+      </div>
+      <div class="col-12 text-center pb-4">
+          <h6><strong>Prácticas Semestre II 2021</strong></h6>
+      </div>
+  </div>
 </div>

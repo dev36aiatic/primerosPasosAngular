@@ -1,10 +1,17 @@
-.info-user {
-  width: 100%;
-  margin: 0 auto;
-  padding: 20px 70px;
-  background: rgb(245 245 245);
-  border: 1px solid rgb(231 231 231);
-  border-radius: 6px;   
-  overflow: hidden;
+*{
+  color: #000;
 }
 
+.home-page{
+ border: 1px solid rgb(223 223 223);
+ background-color: rgba(255, 255, 255, 0.651);
+}
+
+.home-page .title {
+  color: orange;
+}
+
+.home-page .logo-u{
+  width: 40%;
+  vertical-align: top;
+}
