@@ -3,6 +3,8 @@ import {CalendarModule} from 'primeng/calendar';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import {TableModule} from 'primeng/table';
 import {SelectButtonModule} from 'primeng/selectbutton';
+import {TabMenuModule} from 'primeng/tabmenu';
+import {MenuModule} from 'primeng/menu';
 
 
 
@@ -11,7 +13,10 @@ import {SelectButtonModule} from 'primeng/selectbutton';
     CalendarModule,
     ProgressSpinnerModule,
     TableModule,
-    SelectButtonModule
+    SelectButtonModule,
+    TabMenuModule,
+    MenuModule,
+    
  ]
 })
 export class PrimengModule { }

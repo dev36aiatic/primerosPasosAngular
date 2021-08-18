@@ -9,7 +9,7 @@ import { WebServiceResponse } from '../../interfaces/web-service.interface';
 })
 export class InputComponent implements OnInit {
 
-  termino: string = "";
+  @Input() termino: string = "";
   @Input() listado:WebServiceResponse[] = []
   coincidencias: WebServiceResponse[] = [];
   @Output() onSendOptions: EventEmitter<WebServiceResponse[]> = new EventEmitter();
@@ -20,17 +20,14 @@ export class InputComponent implements OnInit {
   filtrar(){
 
     this.coincidencias = this.listado.filter(element =>{
-      return element.c_digo_dane_del_departamento.toLowerCase().includes(this.termino.toLowerCase()) ||
-             element.c_digo_dane_del_municipio.toLowerCase().includes(this.termino.toLowerCase()) ||
-             element.departamento.toLowerCase().includes(this.termino.toLowerCase()) ||
-             element.municipio.toLowerCase().includes(this.termino.toLowerCase()) ||
-             element.region.toLowerCase().includes(this.termino.toLowerCase())
-
+      return element.c_digo_dane_del_departamento.toLowerCase().indexOf(this.termino.toLowerCase()) > -1 ||
+             element.c_digo_dane_del_municipio.toLowerCase().indexOf(this.termino.toLowerCase()) > -1 ||
+             element.departamento.toLowerCase().indexOf(this.termino.toLowerCase()) > -1 ||
+             element.municipio.toLowerCase().indexOf(this.termino.toLowerCase()) > -1 ||
+             element.region.toLowerCase().indexOf(this.termino.toLowerCase()) > -1
     });
     
     this.onSendOptions.emit(this.coincidencias);
-
   };
-
 
 }

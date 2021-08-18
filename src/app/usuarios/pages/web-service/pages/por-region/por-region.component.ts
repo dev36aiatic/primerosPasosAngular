@@ -44,7 +44,5 @@ export class PorRegionComponent implements OnInit {
 
   filtrar(coincidencias: WebServiceResponse[]){
     this.options = coincidencias;
-
-    console.log(this.options.length);
   }
 }

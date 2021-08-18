@@ -16,9 +16,20 @@ export class UsuarioService {
     return new HttpHeaders().set('X-App-Token','h3hDtPFQzmsZpKk233KYxuGuM');
   }
 
+  getAllData(){
+   
+    return this.http.get<WebServiceResponse[]>(this.baseURL);
+  }
+
   byRegion(region:string):Observable<WebServiceResponse[]>{
     const url = `${this.baseURL}?`
     const params = new HttpParams().set('region',region);
+    return this.http.get<WebServiceResponse[]>(url,{headers:this.getHeaders,params});
+  }
+  
+  byDepartment(department:string):Observable<WebServiceResponse[]>{
+    const url = `${this.baseURL}?`
+    const params = new HttpParams().set('departamento',department);
     return this.http.get<WebServiceResponse[]>(url,{headers:this.getHeaders,params});
   }
 

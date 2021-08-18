@@ -1,0 +1,12 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 text-center text-muted font-weight-bold py-3">
+      In this section you can search by region, department dane code, department, municipality dane code, municipality
+      or any particular word, just type it in the search field and the matches will appear. If there are any!
+    </div>
+  </div>
+</div>
+
+
+<app-input  [listado]="listado" (onSendOptions)="filtrar($event)"></app-input>
+<app-tabla [options]="options" [title]="'Type what you want to search for' "></app-tabla>

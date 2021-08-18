@@ -15,6 +15,6 @@
         </div>
     </div>
 </div>
-<app-input [listado]="listado" (onSendOptions)="filtrar($event)"></app-input>
-<app-tabla [options]="options" [title]="'Searching by region'"></app-tabla>
+<app-input  [listado]="listado" (onSendOptions)="filtrar($event)"></app-input>
+<app-tabla [options]="options" [title]="'Searching in '+ regionActiva"></app-tabla>
 
