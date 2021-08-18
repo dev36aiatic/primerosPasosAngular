@@ -10,10 +10,10 @@ import { FormsModule  } from '@angular/forms';
 
 
 import { PrimengModule } from '../primeng/primeng.module';
-import { MunicipiosColombiaComponent } from './pages/municipios-colombia/municipios-colombia.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [HomeComponent, MainComponent, ProfileComponent, MunicipiosColombiaComponent],
+  declarations: [HomeComponent, MainComponent, ProfileComponent],
   exports: [
     MainComponent
   ],
@@ -22,7 +22,8 @@ import { MunicipiosColombiaComponent } from './pages/municipios-colombia/municip
     SharedModule,
     FormsModule,
     UsuariosRoutingModule,
-    PrimengModule
+    PrimengModule,
+    HttpClientModule
     
   ]
 })

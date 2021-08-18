@@ -13,6 +13,9 @@ const routes: Routes = [
     children:[
       { path:'', component:HomeComponent },
       { path:'profile', component:ProfileComponent},
+      { path:'web-service',
+        loadChildren: ()=> import ('./pages/web-service/web-service.module').then(m => m.WebServiceModule)  
+      },
       { path:'**', redirectTo:'' }
     ]
   }
