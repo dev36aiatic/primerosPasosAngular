@@ -1,1 +1,20 @@
-<p>por-region works!</p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center text-muted">
+            <h4>SELECT THE REGION</h4>
+        </div>
+    </div>
+    <div class="row border-bottom pt-4 border-top">
+        <div class="col-12 d-flex justify-content-center">
+            <form class="d-flex justify-content-center mb-3">
+                <p-selectButton class="mb-3" (onChange)="regionChanged()" 
+                [options]="regions" [(ngModel)]="regionActiva" optionLabel="label" optionValue="value"  
+                [ngModelOptions]="{standalone: true}"></p-selectButton>
+            </form>
+        </div>
+    </div>
+</div>
+<app-input [listado]="listado" (onSendOptions)="filtrar($event)"></app-input>
+<app-tabla [options]="options" [title]="'Searching by region'"></app-tabla>
+

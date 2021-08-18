@@ -1,4 +1,4 @@
-import { HttpParams, HttpClient } from '@angular/common/http';
+import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.prod';
 import { Observable } from 'rxjs';
@@ -12,11 +12,14 @@ export class UsuarioService {
   private baseURL:string = environment.baseMunicipios;
   constructor(private http: HttpClient) { }
 
-  byRegion(region:string = 'Región Eje Cafetero - Antioquia'):Observable<WebServiceResponse>{
-    const params = new HttpParams();
-    params.set('region',region);
-    console.log(`${this.baseURL}${params.toString()}`);
-    return this.http.get<WebServiceResponse>(this.baseURL,{params})
+  get getHeaders(){
+    return new HttpHeaders().set('X-App-Token','h3hDtPFQzmsZpKk233KYxuGuM');
+  }
+
+  byRegion(region:string):Observable<WebServiceResponse[]>{
+    const url = `${this.baseURL}?`
+    const params = new HttpParams().set('region',region);
+    return this.http.get<WebServiceResponse[]>(url,{headers:this.getHeaders,params});
   }
 
 }

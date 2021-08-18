@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { WebServiceResponse } from '../../interfaces/web-service.interface';
 
 @Component({
   selector: 'app-tabla',
@@ -8,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TablaComponent implements OnInit {
 
+  @Input() options: WebServiceResponse[] = [];
+  @Input() title: string = '';
   constructor() { }
 
   ngOnInit(): void {
   }
 
+
+ 
 }
