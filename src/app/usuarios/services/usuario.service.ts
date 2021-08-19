@@ -16,8 +16,7 @@ export class UsuarioService {
     return new HttpHeaders().set('X-App-Token','h3hDtPFQzmsZpKk233KYxuGuM');
   }
 
-  getAllData(){
-   
+  getAllData():Observable<WebServiceResponse[]>{
     return this.http.get<WebServiceResponse[]>(this.baseURL);
   }
 
