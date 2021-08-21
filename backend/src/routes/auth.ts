@@ -1,29 +1,15 @@
-//Importacion del Router para establecer las rutas
-import { Router } from 'express';
+import { response, Router } from "express";
+import AuthController from '../controller/AuthController';
 import { check } from 'express-validator';
-
-import { authController } from '../controllers/auth.mjs';
-import { MiddleWares } from '../middlewares/validate-fields.mjs';
-import { validateJWT } from '../middlewares/validate-jwt.mjs';
-
-/**Router de la app */
 const router = Router();
 
-const {
-    newUser,
-    userLogin,
-    renewToken,
-    authGoogle,
-    authFb,
-    updateProfile,
-    findUser
-} = authController;
-
+import  MiddleWares  from '../middlewares/validate-fields';
+import validateJWT from '../Middlewares/validate-jwt';
 
 /**
  * Peticion post para crear un nuevo usuario
  */
-router.post('/new', [
+ router.post('/new', [
     check('name', 'The min number of characters for the name is 2 and cannot be empty.')
     .not().isEmpty().isLength({
         min: 2
@@ -33,7 +19,7 @@ router.post('/new', [
         min: 6
     }),
     MiddleWares.validateFields
-], newUser);
+], AuthController.newUser);
 
 
 /**
@@ -46,24 +32,23 @@ router.post('/login',
             min: 6
         }),
         MiddleWares.validateFields
-    ], userLogin);
+    ], AuthController.userLogin);
 
 
 /** Peticion para actualizar información del usuario */
-router.put('/update/:id/:provider?',updateProfile)
+router.put('/update/:id/:provider?',AuthController.updateProfile)
 
 /** Peticion para conseguir información del usuario */
-router.get('/user/:id/:provider?',findUser)
+router.get('/user/:id/:provider?',AuthController.findUser)
 
 /**Peticion get para renovar el token */
-router.get('/renew', validateJWT, renewToken);
+router.get('/renew', validateJWT, AuthController.renewToken);
 
 /**Peticion get Validar autenticacion de google */
-router.get('/validateToken', authGoogle);
+router.get('/validateToken', AuthController.authGoogle);
 
 /**Peticion get para validar la autenticacion de facebook */
-router.get('/auth/facebook/token',authFb);
+router.get('/auth/facebook/token',AuthController.authFb);
 
-//Exportacion del router
 
-export { router as routes };
+export default router
