@@ -1,10 +1,11 @@
 
 import { User } from "../entity/User";
-export default function userInfo(dbUser:User){
+import { SocialUser } from "../entity/GoogleOrFbUser";
+export default function userInfo(dbUser:User | SocialUser){
     return {
-        id:dbUser.id ,
+        id:dbUser.user_id ,
         name:dbUser.name,
-        email:dbUser.email/* ,
-        profile?:dbUser.profile, */
+        email:dbUser.email,
+        profile:dbUser.profile,
     }
 }

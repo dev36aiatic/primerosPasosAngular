@@ -13,8 +13,8 @@ export class MainPageComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       {label: 'Region', icon: 'pi pi-fw pi-home', routerLink:'./web-service'},
-      {label: 'Department ', icon: 'pi pi-fw pi-calendar',routerLink:'./por-departamento'},
-      {label: 'Advanced Search', icon: 'pi pi-fw pi-pencil',routerLink:'./advanced-search'}
+      {label: 'Department ', icon: 'pi pi-fw pi-map',routerLink:'./por-departamento'},
+      {label: 'Advanced Search', icon: 'pi pi-fw pi-search',routerLink:'./advanced-search'}
   ];
   }
 

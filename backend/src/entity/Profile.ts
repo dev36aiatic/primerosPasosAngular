@@ -1,15 +1,19 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Unique } from 'typeorm';
 import { User } from './User';
+import { SocialUser } from './GoogleOrFbUser';
 
 @Entity()
+@Unique(['cc'])
 export class Profile {
 
     @PrimaryGeneratedColumn()
-    profileId:number;
+    profile_id:number;
 
     @Column({
         nullable:true,
-        default: null
+        default: null,
+        unique:true,
+        precision: 15
     })
     cc: number;
     
@@ -54,11 +58,10 @@ export class Profile {
         default:''
     })
     profession: string;
-    
-/*     @Column("text", {
-        array: true
-    })
-    skills: string[]; */
+
+    //TODO: VER LO DE LOS ARRAYS XD
+    @Column("simple-array")
+    skills: string[];
     
     @Column({
         nullable:true,
@@ -67,7 +70,9 @@ export class Profile {
     description: string;
 
     @OneToOne( () => User, user => user.profile)
-    @JoinColumn()
-    user:User;
+    user?:User;
+
+    @OneToOne(()=> SocialUser, socialUser => socialUser.profile)
+    social_user?:SocialUser;
     
 }

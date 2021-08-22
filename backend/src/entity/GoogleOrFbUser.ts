@@ -6,11 +6,14 @@ import {
 import { Profile } from './Profile';
 
 @Entity()
-@Unique(['email'])
-export class User {
+@Unique(['email','idFb'])
+export class SocialUser {
 
     @PrimaryGeneratedColumn()
     user_id: number;
+
+    @Column()
+    provider: string;
 
     @Column()
     name: string;
@@ -18,14 +21,18 @@ export class User {
     @Column()
     email: string;
 
-    @Column()
-    password: string;
+    @Column({
+        type: String,
+        default: '',
+        nullable: true
+    })
+    idFb?: string;
 
     //Al colocarle eager a usuario le digo que me cargue la informacion que tiene relacionadas
     //De esta forma me cargan los datos de la tabla profile relacioandas a este usuario
-    @OneToOne(() => Profile, profile => profile.user,{eager: true})
+    @OneToOne(() => Profile, profile => profile.social_user, { eager: true })
     @JoinColumn({ name: "profile_id" })
-    profile:Profile;
+    profile: Profile;
 
     @Column()
     @CreateDateColumn()
