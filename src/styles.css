@@ -160,9 +160,18 @@ body {
   display: block !important;
 }
 
+.input-search{
+  width: 35%;
+}
+
 @media screen and (max-width: 800px) {
   .dad {
     flex-direction: column;
+  }
+  
+  .input-search{
+    width: 80%;
+    margin: 0 auto;
   }
 
   .child-1 {
@@ -176,6 +185,12 @@ body {
     padding: 30px 10px;
     display: block;
   }
+  .p-datatable .p-datatable-thead > tr > th,
+  .p-datatable .p-datatable-tbody > tr > td {
+    font-size: 12px !important;
+    padding: 1rem 0px !important;
+    text-align: center !important;
+}
   
   .container {
     width: 95% !important;
@@ -185,7 +200,8 @@ body {
     width: 100% !important;
     padding: 0px ;
     padding-bottom: 30px;
-    margin: 30px 0px;
+    margin: 0px 0px;
+    margin-top: 100px;
   }
 
   .info-user {
