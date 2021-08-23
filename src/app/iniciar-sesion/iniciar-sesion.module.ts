@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MainComponent } from './pages/main/main.component';
 import { PrimengModule } from '../primeng/primeng.module';
 import { LogoUnabComponent } from './components/logo-unab/logo-unab.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { LogoUnabComponent } from './components/logo-unab/logo-unab.component';
     FormularioLoginComponent,
     FormularioRegistroComponent,
     MainComponent,
-    LogoUnabComponent
+    LogoUnabComponent,
+    SidebarComponent
   ],
   imports: [
     CommonModule,

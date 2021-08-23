@@ -27,7 +27,6 @@ export class FormularioRegistroComponent {
   
     this.authService.signup(name,email,password)
     .subscribe(resp => {
-      console.log(resp,'aaaaaaaaaa');
       if(resp.ok){
         this.router.navigateByUrl('/dashboard');
       }else{

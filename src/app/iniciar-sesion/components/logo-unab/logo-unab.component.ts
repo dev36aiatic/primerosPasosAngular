@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
     `
       .logo{
       position: absolute;
-      z-index: 999999;
+      z-index: 2;
       left:20px;
       top:5px;
     }

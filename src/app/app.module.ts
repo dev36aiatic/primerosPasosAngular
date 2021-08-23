@@ -20,10 +20,10 @@ import { appRoutingModule } from './app-routing.module';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     SocialLoginModule,
-    appRoutingModule,
-    BrowserAnimationsModule
+    appRoutingModule
   ],
   providers: [{
     provide: 'SocialAuthServiceConfig',

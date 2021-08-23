@@ -9,18 +9,18 @@ import { Router } from '@angular/router';
 })
 export class MainComponent implements OnInit {
 
-  get userOn(){
+  get userOn() {
     return !!localStorage.getItem('token');
   }
-  constructor(private authService: AuthService, private router: Router) { 
+  constructor(private authService: AuthService, private router: Router) {
     /**Condicion para redirigir al usuario si ya inicio sesion previamente*/
-    if(this.userOn){
+    if (this.userOn) {
       this.router.navigateByUrl('/dashboard');
     }
   }
 
   ngOnInit(): void {
-    
+
   }
 
 }

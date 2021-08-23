@@ -31,6 +31,40 @@ body {
   color: #fff;
   
 }
+/* Menu sidebar login y registro */
+.menu-main-home{
+  position: fixed;
+  bottom:50%;
+  left:0;
+}
+
+.menu-main-home .p-button {
+  background: orange !important;
+  padding: 6px 1rem !important;
+  border-radius: 0px !important;
+  border-top-right-radius: 3px !important;
+  border-bottom-right-radius: 3px !important;
+}
+.menu-main-home .p-button :hover{
+  background: rgba(255, 166, 0, 0.534) !important;
+}
+/* Sidebar login y registro */
+.p-sidebar {
+  background: #1e1e1e !important;
+  color: rgba(255, 255, 255, 0.87) !important;
+  border: 1px solid #383838 !important;
+  box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%) !important;
+}
+.p-sidebar .p-sidebar-header .p-sidebar-close, .p-sidebar .p-sidebar-header .p-sidebar-icon {
+  width: 2rem !important;
+  height: 2rem !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  border: 0 none !important;
+  background: transparent !important;
+  border-radius: 50% !important;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s !important;
+}
+/***********/
 
 .child-1 {
   position: relative;
@@ -165,6 +199,9 @@ body {
 }
 
 @media screen and (max-width: 800px) {
+  .menu-main-home{
+    bottom:0;
+  }
   .dad {
     flex-direction: column;
   }
@@ -215,6 +252,7 @@ body {
   .form-login {
     width: 100% !important;
     padding: 10px 5px;
+    margin-bottom: 30px;
   }
   
 }
