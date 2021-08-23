@@ -7,7 +7,6 @@ import {TabMenuModule} from 'primeng/tabmenu';
 import {MenuModule} from 'primeng/menu';
 
 
-
 @NgModule({
   exports:[
     CalendarModule,
@@ -16,7 +15,6 @@ import {MenuModule} from 'primeng/menu';
     SelectButtonModule,
     TabMenuModule,
     MenuModule,
-    
  ]
 })
 export class PrimengModule { }

@@ -17,7 +17,7 @@ export class UsuarioService {
   }
 
   getAllData():Observable<WebServiceResponse[]>{
-    return this.http.get<WebServiceResponse[]>(this.baseURL);
+    return this.http.get<WebServiceResponse[]>(this.baseURL,{headers:this.getHeaders});
   }
 
   byRegion(region:string):Observable<WebServiceResponse[]>{

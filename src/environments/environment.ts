@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:4000'
+  baseUrl: 'http://localhost:4000',
+  baseMunicipios:'https://www.datos.gov.co/resource/xdk5-pm3f.json'
 };
 
 /*
