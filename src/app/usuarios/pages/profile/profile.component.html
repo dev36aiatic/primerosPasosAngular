@@ -1,5 +1,4 @@
 <div class="container text-dark">
-
   <form class="form-profile" #formProfile="ngForm" (ngSubmit)="sendProfile(formProfile)">
     <div class="row mb-4">
       <div class="col-12 text-center">
@@ -62,8 +61,7 @@
       <label for="inputdob">Date of Birth <span class="mark">*</span></label>
       <p-calendar id="inputdob" class="d-block" [yearNavigator]="true" [showIcon]="true" [monthNavigator]="true"
         yearRange="1920:2021" required name="dateOfBirth" placeholder="Date of Birth" dataType="string"
-        [ngModel]="editProfile.dateOfBirth  " (ngModelChange)="onChangeDate($event)"
-        dateFormat="dd-mm-yy"></p-calendar>
+        [ngModel]="editProfile.dateOfBirth  " (ngModelChange)="onChangeDate($event)" dateFormat="dd-mm-yy"></p-calendar>
     </div>
     <hr>
 
@@ -85,7 +83,8 @@
       <div class="form-row w-100 mt-2">
         <hr>
         <div class="form-group col-12 ">
-          <label for="descriptionYourself">Description of yourself ( 500 characters maximum ) <span class="mark">*</span> </label>
+          <label for="descriptionYourself">Description of yourself ( 500 characters maximum ) <span
+              class="mark">*</span> </label>
           <textarea maxlength="500" ngModel required [(ngModel)]="editProfile.description" name="descriptionString"
             class="form-control" id="descriptionYourself" rows="3"
             [ngStyle]="{'min-height':'100px', 'max-height':'100px', 'flex':'auto'}"></textarea>
@@ -95,10 +94,9 @@
     <hr>
     <div class="row">
       <div class="col-12 text-center">
-        
-    <button type="submit" [disabled]="!formProfile.valid" class="btn-send">Save Changes</button>   
+
+        <button type="submit" [disabled]="!formProfile.valid" class="btn-send">Save Changes</button>
       </div>
     </div>
   </form>
-
 </div>
