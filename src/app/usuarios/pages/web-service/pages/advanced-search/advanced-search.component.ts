@@ -23,9 +23,9 @@ export class AdvancedSearchComponent implements OnInit {
     }, (error => console.log(error)))
 
   }
-  
+
   /**Metodo para buscar la informacion que el usuario escribe en el input */
-  filtrar(coincidencias: WebServiceResponse[]){
+  filtrar(coincidencias: WebServiceResponse[]) {
     this.options = coincidencias;
   }
 }

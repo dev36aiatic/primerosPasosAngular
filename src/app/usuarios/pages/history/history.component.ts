@@ -16,10 +16,10 @@ import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 export class HistoryComponent implements OnInit {
 
   /**Metodo que me devuelve la información del usuario */
-  get userInfo(){
+  get userInfo() {
     return this.authService.user;
   }
-  constructor(private authService:AuthService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }

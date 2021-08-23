@@ -1,7 +1,7 @@
 /**  Interfaz de la respuesta que me devuelve la base de datos */
 export interface AuthResponse {
     ok: boolean;
-    token:string;
+    token: string;
     user: User;
 }
 

@@ -27,6 +27,6 @@ import { AdvancedSearchComponent } from './pages/advanced-search/advanced-search
     PrimengModule,
     FormsModule
   ],
-  exports:[MainPageComponent]
+  exports: [MainPageComponent]
 })
 export class WebServiceModule { }

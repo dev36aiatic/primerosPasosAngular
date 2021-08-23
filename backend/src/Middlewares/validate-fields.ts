@@ -9,14 +9,17 @@ import { validationResult } from "express-validator";
  * @function validationResult - Metodo que recibe los datos de req y valida si tiene errores
  */
 const MiddleWares = {
-    validateFields : (req,res = response, next)=>{
+    validateFields: (req, res = response, next) => {
+
         const errors = validationResult(req);
-        if(!errors.isEmpty()){
+
+        if (!errors.isEmpty()) {
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 errors: errors.mapped()
             })
         }
+
         next();
     }
 }

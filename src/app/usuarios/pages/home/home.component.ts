@@ -10,15 +10,15 @@ import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 export class HomeComponent implements OnInit {
 
   /**Getter de la informacion de usuario */
-  get infoUser(){
+  get infoUser() {
     return this.authService.user.user;
   }
-  
-  constructor(private authService: AuthService) { 
+
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
-    
+
   }
 
 }

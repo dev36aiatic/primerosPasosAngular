@@ -25,13 +25,13 @@ export class SidebarComponent implements OnInit {
       this.authservice.logout();
       this.googleFbService.signOut();
     }
+
     this.authservice.logout();
     this.router.navigateByUrl('/auth');
   }
 
   /**Funcion para la animacion del sidebar **/
   toggleBtn(btnBurger) {
-
     let sidebar = document.querySelector(".sidebar");
     let decision = sidebar.classList.toggle('active');
     let texts = document.querySelectorAll('.links_name');
@@ -56,7 +56,7 @@ export class SidebarComponent implements OnInit {
     }
   }
   /**Funcion que me cambia el alto del sidebar cuando esta en dispositivos moviles */
-  toggleHidden(){
+  toggleHidden() {
     document.querySelector('.sidebar').classList.toggle('totalHeight');
   }
 }

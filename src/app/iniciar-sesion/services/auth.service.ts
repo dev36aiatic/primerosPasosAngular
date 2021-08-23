@@ -28,10 +28,11 @@ export class AuthService {
   get isLoggedIn() {
     return this.isLogged;
   }
+
   constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
+
   /**Metodo para iniciar sesion*/
   login(email: string, password: string) {
-
     const url = `${this.baseUrl}/login`;
     const body = { email, password }
 
@@ -47,7 +48,6 @@ export class AuthService {
   }
   /**Metodo para registrarse*/
   signup(name: string, email: string, password: string) {
-
     const url = `${this.baseUrl}/new`;
     const body = { name, email, password }
 
@@ -55,14 +55,13 @@ export class AuthService {
       .pipe(
         tap(resp => {
           this.setTokenAndUser(resp);
-          console.log(resp,'resp');
+          console.log(resp, 'resp');
         }),
         catchError(err => of(err.error.msg))
       )
   }
   /**Metodo para validar token creado utilizando jwt*/
   validateToken(): Observable<boolean> {
-
     const url = `${this.baseUrl}/renew`;
     const headers = new HttpHeaders().set('x-token', localStorage.getItem('token') || '');
 
@@ -77,7 +76,6 @@ export class AuthService {
   }
   /**Metodo para llenar el formulario de perfil de usuario */
   userProfile(user: ProfileData, id: string, provider: string = '') {
-
     const url = `${this.baseUrl}/update/${id}/${provider}`;
     const body = {
       name: user.name,
@@ -100,7 +98,6 @@ export class AuthService {
   }
   /**Metodo que me permite validar el token de google o facebook*/
   validateAuthGoogleFb(decision: string): Observable<boolean> {
-    //Esto se puede refactorizar con un Object Literal en el futuro
     let objectSocialAuth = {
       "GOOGLE": () => {
         const url = `${this.baseUrl}/validateToken`;
@@ -129,6 +126,7 @@ export class AuthService {
         return of(false, this.isLogged = false);
       }
     }
+    
     return objectSocialAuth[decision]() || objectSocialAuth["DEFAULT"]();
   }
 
@@ -143,17 +141,19 @@ export class AuthService {
       tap(user => {
         this._user = user;
         this.isLogged = (user != null);
+
         if ((user != null)) {
           if (user.provider == "GOOGLE") {
             localStorage.setItem('provider', 'GOOGLE');
             localStorage.setItem('token', user.idToken);
           }
+
           if (user.provider == "FACEBOOK") {
             localStorage.setItem('provider', 'FACEBOOK');
             localStorage.setItem('token', user.authToken);
           }
         }
-      }), catchError(err => of(false,this.isLogged = false))
+      }), catchError(err => of(false, this.isLogged = false))
     )
   }
 
@@ -163,5 +163,4 @@ export class AuthService {
     localStorage.setItem('token', resp.token!);
     this._user = resp;
   }
-
 }

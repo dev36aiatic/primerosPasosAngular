@@ -15,7 +15,6 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 /** Controlador de las funciones ejecutadas cuando se hacen peticiones http*/
 const authController = {
-
     /**Funcion para crear usuarios y guardarlos en la base de datos 
      * @param req - Informacion de la solicitud HTTP provocada
      * @param res - Permite devolver la respuesta HTTP 
@@ -26,6 +25,7 @@ const authController = {
         const userRepository = getRepository(User);
         const profileRepository = getRepository(Profile);
         const { name, email, password } = req.body;
+
         try {
             //Buscar si existe el usuario en la bd
             let dbUser = await userRepository.findOne({ email });
@@ -63,7 +63,6 @@ const authController = {
                 user: userInfo(findUser),
                 token
             })
-
         } catch (error) {
             console.log(error);
             res.status(500).json({
@@ -71,7 +70,6 @@ const authController = {
                 msg: 'Something went wrong'
             })
         }
-
     },
     /**
      * Funcion para añadir el perfil del usuario en la base de datos
@@ -85,12 +83,13 @@ const authController = {
         const { name, cc, address, dateOfBirth,
             city, department, country, ZIP,
             profession, skills, description } = req.body;
-        try {
 
+        try {
             const userRepository = getRepository(User);
             const socialUserRepository = getRepository(SocialUser);
             const profileRepository = getRepository(Profile);
             let dbUser: User | SocialUser;
+
             if (provider == "GOOGLE" || provider == "FACEBOOK") {
                 dbUser = await socialUserRepository.findOne({ user_id: id });
             } else {
@@ -114,22 +113,24 @@ const authController = {
             dbUser.profile = dbProfile;
 
             await profileRepository.save(dbProfile);
+
             if (provider == "GOOGLE" || provider == "FACEBOOK") {
                 await socialUserRepository.save(dbUser);
             } else {
                 await userRepository.save(dbUser);
             }
+
             return res.status(200).json({
                 ok: true,
                 user: userInfo(dbUser),
                 msg: 'Thanks for the registration.'
-            })
+            });
         } catch (error) {
             console.log(error);
             return res.status(500).json({
                 ok: false,
                 msg: 'Something went wrong.'
-            })
+            });
         }
     },
     /**Funcion iniciar sesion 
@@ -144,6 +145,7 @@ const authController = {
 
         try {
             const dbUser = await userRepository.findOne({ email: email });
+
             if (!dbUser) {
                 return res.status(400).json({
                     ok: false,
@@ -152,6 +154,7 @@ const authController = {
             }
 
             let compare = bcrypt.compareSync(password, dbUser.password);
+
             if (!compare) {
                 return res.status(400).json({
                     ok: false,
@@ -160,7 +163,7 @@ const authController = {
             }
 
             const token = await generateJWT(dbUser.user_id, dbUser.name);
-            console.log(dbUser, 'pa entrar');
+
             return res.status(200).json({
                 ok: true,
                 user: userInfo(dbUser),
@@ -174,7 +177,6 @@ const authController = {
                 msg: 'Something went wrong :('
             });
         }
-
     },
     /** Funcion para renovar el token
        * @param req - Informacion de la solicitud HTTP provocada
@@ -183,13 +185,13 @@ const authController = {
        * @returns - Información del usuario y token
        * */
     renewToken: async (req, res = response) => {
-
         const { uid, name } = req;
         const userRepository = getRepository(User);
 
         try {
             const dbUser = await userRepository.findOne({ user_id: uid });
             const token = await generateJWT(uid, name);
+
             return res.status(200).json({
                 ok: true,
                 user: userInfo(dbUser),
@@ -213,7 +215,6 @@ const authController = {
      *  */
     authFb: function (req, res) {
         passport.authenticate('facebook-token', function (error, user, info) {
-
             if (user) {
                 res.status(200).json({
                     ok: true,
@@ -221,6 +222,7 @@ const authController = {
                     token: info
                 });
             }
+
             if (error) {
                 return res.status(500).json({
                     ok: false,
@@ -245,38 +247,30 @@ const authController = {
      */
     authGoogle: async (req, res) => {
         async function verify() {
-
             const socialUserRepository = getRepository(SocialUser);
             const profileRepository = getRepository(Profile);
             const ticket = await client.verifyIdToken({
                 idToken: req.header('token-auth'),
                 audience: process.env.GOOGLE_CLIENT_ID
             });
-
             const payload = ticket.getPayload();
-
             const userDetails = {
                 email: payload['email'],
                 firstname: payload['given_name'],
                 lastname: payload['family_name']
             }
-
             let dbUser = await socialUserRepository.findOne({
                 email: userDetails.email
             });
-
+            /**
+            * Crea un nuevo perfil y Usuario Social
+            * @class
+            */
             if (dbUser == null) {
-                /**
-                 * Crea un nuevo perfil
-                 * @class
-                 */
                 let dbProfile = new Profile();
                 dbProfile.skills = [];
                 await profileRepository.save(dbProfile);
-                /**
-                 * Crea un nuevo Usuario Social
-                 * @class
-                 */
+
                 dbUser = new SocialUser();
                 dbUser.email = payload['email'];
                 dbUser.name = payload['name'];

@@ -57,7 +57,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   editProfile: ProfileData | any;
   disableAll: boolean = false;
   flag: number = 0;
-
   skills: string[] = [
     "Creativity",
     "Persuation",
@@ -148,6 +147,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     },
     true: (value: string) => {
       this.flag += 1;
+
       if (!this.editProfile.skills.includes(value)) {
         this.editProfile.skills.push(value)
       };
@@ -176,7 +176,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
           element.checked = true;
           this.contarChecks.true(element.value);
         }
-
       });
     },
     flagGuardian: () => {

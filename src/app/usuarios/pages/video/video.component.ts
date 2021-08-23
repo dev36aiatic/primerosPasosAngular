@@ -17,14 +17,16 @@ export class VideoComponent implements OnInit {
    * @param { string } url  - URL video de youtube
    * @returns URL del video a incrustar
    */
-  getVideoIframe(url:string) {
+  getVideoIframe(url: string) {
     let video, results;
+
     if (url === null) {
       return '';
     }
+    
     results = url.match('[\\?&]v=([^&#]*)');
     video = (results === null) ? url : results[1];
-    
+
     return this._sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/' + video);
   }
 

@@ -1,11 +1,11 @@
 
 /**Interfaz de la respuesta enviada por la API de los departamentos y municipios de colombia */
 export interface WebServiceResponse {
-    region:                       Region;
+    region: Region;
     c_digo_dane_del_departamento: string;
-    departamento:                 string;
-    c_digo_dane_del_municipio:    string;
-    municipio:                    string;
+    departamento: string;
+    c_digo_dane_del_municipio: string;
+    municipio: string;
 }
 
 export enum Region {

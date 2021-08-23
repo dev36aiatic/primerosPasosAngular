@@ -28,7 +28,7 @@ export class FormularioLoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private googleFacebookAuth: SocialAuthService) { }
-    
+
   ngOnInit(): void {
     /**Funcion que se subscribe y obtiene al usuario cuando este inicia sesion con facebook o google */
     this.authService.loginGoogle().subscribe(user => {
@@ -36,6 +36,7 @@ export class FormularioLoginComponent implements OnInit {
         localStorage.clear();
         this.router.navigateByUrl('/auth');
       }
+
       if ((user != null)) {
 
         this.router.navigateByUrl('/dashboard');
@@ -52,7 +53,9 @@ export class FormularioLoginComponent implements OnInit {
   }
   /**Funcion para iniciar sesion*/
   login() {
+
     const { email, password } = this.myLogin.value;
+
     this.authService.login(email, password).subscribe(resp => {
       if (resp.ok === true) {
         this.router.navigateByUrl('/dashboard');

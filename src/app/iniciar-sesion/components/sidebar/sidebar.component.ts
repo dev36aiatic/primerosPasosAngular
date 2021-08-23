@@ -35,7 +35,8 @@ import { Component, OnInit } from '@angular/core';
 export class SidebarComponent implements OnInit {
 
   visibleSidebar1;
-  title = 'Menu'
+  title = 'Menu';
+  
   constructor() { }
 
   ngOnInit(): void {

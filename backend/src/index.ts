@@ -37,7 +37,6 @@ createConnection().then(async () => {
     /**Leer peticiones de rutas */
     app.use(morgan('tiny'));
 
-
     /**
      * Verifica si el token enviado por Facebook es valido
      * @property {string} clientID - Identificador de la app para el login con facebook 
@@ -54,7 +53,8 @@ createConnection().then(async () => {
     }, async function (accessToken, refreshToken, profile, done) {
         const socialUserRepository = getRepository(SocialUser);
         const profileRepository = getRepository(Profile);
-        let dbUser = await socialUserRepository.findOne({ idFb: profile.id })
+        let dbUser = await socialUserRepository.findOne({ idFb: profile.id });
+
         if (dbUser == null) {
             const { name, email, id } = profile._json;
             let dbProfile = new Profile();
@@ -67,13 +67,13 @@ createConnection().then(async () => {
             dbUser.idFb = id;
             dbUser.profile = dbProfile;
             dbUser.provider = "FACEBOOK";
-            
             await socialUserRepository.save(dbUser);
         }
         return done((dbUser == null), dbUser, accessToken);
     }
     ));
 
+    /**Se le dice al servidor que use los archivos que estan en la carpeta public */
     app.use(express.static(path.join(__dirname + '/public')));
 
     /**La app de express toma las rutas establecidas en el modulo de router*/
@@ -83,6 +83,5 @@ createConnection().then(async () => {
     app.listen(app.get('port'), () => {
         console.log(`Servidor corriendo en el puerto ${app.get('port')}`);
     });
-
 
 }).catch(error => console.log(error));
