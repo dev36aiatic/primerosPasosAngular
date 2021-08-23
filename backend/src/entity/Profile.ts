@@ -16,7 +16,6 @@ export class Profile {
     @Column({
         nullable:true,
         default: null,
-        unique:true,
         precision: 15
     })
     cc: number;
