@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { HomeComponent } from './pages/home/home.component';
+import { HistoryComponent } from './pages/history/history.component';
 import { MainComponent } from './pages/main/main.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { HistoryComponent } from './pages/history/history.component';
 import { VideoComponent } from './pages/video/video.component';
 
 

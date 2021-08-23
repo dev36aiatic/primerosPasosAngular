@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+
 import { AuthService } from '../../../iniciar-sesion/services/auth.service';
-
-
-
 
 @Component({
   selector: 'app-home',

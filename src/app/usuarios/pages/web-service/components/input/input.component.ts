@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+
 import { WebServiceResponse } from '../../interfaces/web-service.interface';
 
 @Component({
@@ -17,8 +18,11 @@ export class InputComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  /**
+   * Funcion que toma el valor que busca el usuario en el input y busca coincidencias
+   * con los datos que posee la aplicacion de los municipios y departamentos de colombia
+   */
   filtrar(){
-
     this.coincidencias = this.listado.filter(element =>{
       return element.c_digo_dane_del_departamento.toLowerCase().indexOf(this.termino.toLowerCase()) > -1 ||
              element.c_digo_dane_del_municipio.toLowerCase().indexOf(this.termino.toLowerCase()) > -1 ||
@@ -26,7 +30,6 @@ export class InputComponent implements OnInit {
              element.municipio.toLowerCase().indexOf(this.termino.toLowerCase()) > -1 ||
              element.region.toLowerCase().indexOf(this.termino.toLowerCase()) > -1
     });
-    
     this.onSendOptions.emit(this.coincidencias);
   };
 

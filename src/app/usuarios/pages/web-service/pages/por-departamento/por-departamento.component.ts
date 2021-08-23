@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+
 import { UsuarioService } from '../../../../services/usuario.service';
 import { WebServiceResponse } from '../../interfaces/web-service.interface';
 @Component({
@@ -21,11 +22,14 @@ export class PorDepartamentoComponent implements OnInit {
     this.loadData(this.department);
 
   }
+  /**Metodo que se activa cuando el usuario hace click en un departamento */
   regionChanged() {
     this.loadData(this.department);
   }
 
-
+  /** Metodo que busca el departamento
+   * @param { string } department - Departamento
+    */
   loadData(department: string) {
     this.usuarioService.byDepartment(department).subscribe(data => {
       this.listado = data;
@@ -33,10 +37,14 @@ export class PorDepartamentoComponent implements OnInit {
     }, (error => console.log(error)))
   }
 
+  /**Metodo para buscar la informacion que el usuario escribe en el input */
   filtrar(coincidencias: WebServiceResponse[]) {
     this.options = coincidencias;
   }
 
+  /**Metodo que devuelve los departamentos de colombia
+   * @returns Departamentos de colombia
+   */
   getDepartments() {
     return [
       { label: "Amazonas", value: "Amazonas" },
@@ -72,6 +80,4 @@ export class PorDepartamentoComponent implements OnInit {
       { label: "Vichada", value: "Vichada" }
     ]
   }
-
-
 }

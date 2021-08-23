@@ -15,19 +15,19 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
-    LoginComponent, 
-    SignupComponent,
     FormularioLoginComponent,
     FormularioRegistroComponent,
     MainComponent,
     LogoUnabComponent,
+    LoginComponent, 
+    SignupComponent,
     SidebarComponent
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     IniciarSesionRoutingModule,
-    FormsModule,
     PrimengModule
   ],
   exports:[LoginComponent,SignupComponent]

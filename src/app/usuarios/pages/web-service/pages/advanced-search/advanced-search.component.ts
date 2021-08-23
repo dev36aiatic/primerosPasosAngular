@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+
 import { UsuarioService } from '../../../../services/usuario.service';
 import { WebServiceResponse } from '../../interfaces/web-service.interface';
+
 @Component({
   selector: 'app-advanced-search',
   templateUrl: './advanced-search.component.html',
@@ -22,7 +24,7 @@ export class AdvancedSearchComponent implements OnInit {
 
   }
   
-
+  /**Metodo para buscar la informacion que el usuario escribe en el input */
   filtrar(coincidencias: WebServiceResponse[]){
     this.options = coincidencias;
   }

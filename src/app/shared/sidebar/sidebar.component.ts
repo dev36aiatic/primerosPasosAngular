@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../iniciar-sesion/services/auth.service';
 
+import { AuthService } from '../../iniciar-sesion/services/auth.service';
 import { SocialAuthService } from "angularx-social-login";
 
 @Component({
@@ -54,14 +54,9 @@ export class SidebarComponent implements OnInit {
         element.classList.remove('hideTooltip');
       });
     }
-
-
   }
-
   /**Funcion que me cambia el alto del sidebar cuando esta en dispositivos moviles */
   toggleHidden(){
     document.querySelector('.sidebar').classList.toggle('totalHeight');
   }
-
- 
 }

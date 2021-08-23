@@ -1,3 +1,4 @@
+
 import {
     Entity, PrimaryGeneratedColumn, Column,
     Unique, CreateDateColumn, UpdateDateColumn,
@@ -5,6 +6,10 @@ import {
 } from "typeorm";
 import { Profile } from './Profile';
 
+//Ejemplo de clase
+/**
+ * Clase definida para crear un usuario (si no existe) cuando la persona ingrese por medio de Facebook o Google
+ */
 @Entity()
 @Unique(['email','idFb'])
 export class SocialUser {

@@ -1,13 +1,15 @@
-import { response, Router } from "express";
+import { Router } from "express";
 import AuthController from '../controller/AuthController';
 import { check } from 'express-validator';
-const router = Router();
 
 import  MiddleWares  from '../middlewares/validate-fields';
 import validateJWT from '../Middlewares/validate-jwt';
 
+/**Se establece el router de express */
+const router = Router();
+
 /**
- * Peticion post para crear un nuevo usuario
+ * Peticion HTTP para crear un nuevo usuario
  */
  router.post('/new', [
     check('name', 'The min number of characters for the name is 2 and cannot be empty.')
@@ -23,7 +25,7 @@ import validateJWT from '../Middlewares/validate-jwt';
 
 
 /**
- * Peticion post para iniciar sesion
+ * Peticion HTTP para iniciar sesion
  */
 router.post('/login',
     [
@@ -35,20 +37,17 @@ router.post('/login',
     ], AuthController.userLogin);
 
 
-/** Peticion para actualizar información del usuario */
+/** Peticion HTTP para actualizar información del usuario */
 router.put('/update/:id/:provider?',AuthController.updateProfile)
 
-/** Peticion para conseguir información del usuario */
-router.get('/user/:id/:provider?',AuthController.findUser)
 
-/**Peticion get para renovar el token */
+/**Peticion HTTP para renovar el token */
 router.get('/renew', validateJWT, AuthController.renewToken);
 
-/**Peticion get Validar autenticacion de google */
+/**Peticion HTTP para Validar autenticacion de google */
 router.get('/validateToken', AuthController.authGoogle);
 
-/**Peticion get para validar la autenticacion de facebook */
+/**Peticion HTTP para validar la autenticacion de facebook */
 router.get('/auth/facebook/token',AuthController.authFb);
-
 
 export default router

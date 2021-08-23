@@ -5,6 +5,10 @@ import {
 } from "typeorm";
 import { Profile } from './Profile';
 
+//Ejemplo de Usuario
+/**
+ * Clase definida para crear un Usuario ( si no existe ) cuando la persona se registre.
+ */
 @Entity()
 @Unique(['email'])
 export class User {

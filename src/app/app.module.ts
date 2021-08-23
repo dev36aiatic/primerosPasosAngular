@@ -2,14 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-
-
-
-//Sign in with facebook and google modules
+//Modulo de nicio de sesion con facebook y google
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 
-//
 import { AppComponent } from './app.component';
 import { appRoutingModule } from './app-routing.module';
 

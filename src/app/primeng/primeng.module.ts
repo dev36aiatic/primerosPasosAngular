@@ -1,25 +1,26 @@
 import { NgModule } from '@angular/core';
-import {CalendarModule} from 'primeng/calendar';
-import {ProgressSpinnerModule} from 'primeng/progressspinner';
-import {TableModule} from 'primeng/table';
-import {SelectButtonModule} from 'primeng/selectbutton';
-import {TabMenuModule} from 'primeng/tabmenu';
-import {MenuModule} from 'primeng/menu';
-import {SidebarModule} from 'primeng/sidebar';
+
 import { ButtonModule } from 'primeng/button';
-import {DividerModule} from 'primeng/divider';
+import { CalendarModule } from 'primeng/calendar';
+import { DividerModule } from 'primeng/divider';
+import { MenuModule } from 'primeng/menu';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SidebarModule } from 'primeng/sidebar';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TableModule } from 'primeng/table';
+import { TabMenuModule } from 'primeng/tabmenu';
 
 @NgModule({
-  exports:[
-    CalendarModule,
-    ProgressSpinnerModule,
-    TableModule,
-    SelectButtonModule,
-    TabMenuModule,
-    MenuModule,
-    SidebarModule,
+  exports: [
     ButtonModule,
-    DividerModule
- ]
+    CalendarModule,
+    DividerModule,
+    MenuModule,
+    ProgressSpinnerModule,
+    SidebarModule,
+    SelectButtonModule,
+    TableModule,
+    TabMenuModule
+  ]
 })
 export class PrimengModule { }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 
+import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 
 @Component({
   selector: 'app-history',
@@ -15,6 +15,7 @@ import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 })
 export class HistoryComponent implements OnInit {
 
+  /**Metodo que me devuelve la información del usuario */
   get userInfo(){
     return this.authService.user;
   }

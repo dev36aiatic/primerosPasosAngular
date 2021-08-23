@@ -11,17 +11,16 @@ import { OAuth2Client } from 'google-auth-library';
 import * as passport from 'passport';
 
 /** Creacion del OAuth2Client de google para autenticacion */
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);  
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 /** Controlador de las funciones ejecutadas cuando se hacen peticiones http*/
 const authController = {
 
     /**Funcion para crear usuarios y guardarlos en la base de datos 
-     * @constructor
-     * @param {string} nombre - Nombre del usuario
-     * @param {string} email - Correo del usuario
-     * @param {string} password - Contraseña del usuario
-     * @function getRepository - Funcion que me trae la tabla de la base de datos
+     * @param req - Informacion de la solicitud HTTP provocada
+     * @param res - Permite devolver la respuesta HTTP 
+     * @function getRepository - Funcion que trae la información de la tabla almacenada en la base de datos
+     * @returns - Información del usuario y token
      * */
     newUser: async (req, res = response) => {
         const userRepository = getRepository(User);
@@ -36,16 +35,21 @@ const authController = {
                     msg: 'A user with this email already exists.'
                 })
             }
-            //Crear perfil vacio para el usuario
+            /**
+             * Crea un nuevo perfil
+             * @class
+             */
             let profile = new Profile();
             profile.skills = [];
             await profileRepository.save(profile);
 
-            //Crear nuevo usuario
+            /**
+             * Crea un nuevo Usuario
+             * @class
+             */
             let newUser = new User();
             newUser.name = name;
             newUser.email = email;
-            //
             newUser.profile = profile;
             const salt = bcrypt.genSaltSync();
             newUser.password = bcrypt.hashSync(password, salt);
@@ -71,8 +75,9 @@ const authController = {
     },
     /**
      * Funcion para añadir el perfil del usuario en la base de datos
-     * @param req - informacion enviada por el body
-     * @param res - Informacion enviada por url
+     * @param req - Informacion de la solicitud HTTP provocada
+     * @param res - Permite devolver la respuesta HTTP 
+     * @function getRepository - Funcion que me trae la tabla de la base de datos
      * @returns - Usuario actualizado
      */
     updateProfile: async (req, res = response) => {
@@ -86,12 +91,12 @@ const authController = {
             const socialUserRepository = getRepository(SocialUser);
             const profileRepository = getRepository(Profile);
             let dbUser: User | SocialUser;
-            if(provider == "GOOGLE" || provider == "FACEBOOK"){
-                dbUser = await socialUserRepository.findOne({user_id:id});
-            }else{
+            if (provider == "GOOGLE" || provider == "FACEBOOK") {
+                dbUser = await socialUserRepository.findOne({ user_id: id });
+            } else {
                 dbUser = await userRepository.findOne({ user_id: id });
             }
-            
+
             let profile_id = dbUser.profile.profile_id;
             let dbProfile = await profileRepository.findOne({ profile_id });
 
@@ -109,15 +114,15 @@ const authController = {
             dbUser.profile = dbProfile;
 
             await profileRepository.save(dbProfile);
-            if(provider == "GOOGLE" || provider == "FACEBOOK"){
+            if (provider == "GOOGLE" || provider == "FACEBOOK") {
                 await socialUserRepository.save(dbUser);
-            }else{
+            } else {
                 await userRepository.save(dbUser);
             }
             return res.status(200).json({
                 ok: true,
                 user: userInfo(dbUser),
-                msg:'Thanks for the registration.'
+                msg: 'Thanks for the registration.'
             })
         } catch (error) {
             console.log(error);
@@ -127,23 +132,12 @@ const authController = {
             })
         }
     },
-
-    /**
-      * Funcion para buscar informacion de un usuario en la base de datos
-      * @param req - informacion enviada por el body
-      * @param res - Informacion enviada por url
-      * @returns - Usuario actualizado
-      */
-    findUser: async (req, res = response) => {
-        const userRepository = getRepository(User);
-    }
-    ,
-
-    /**Funcion para iniciar sesion del usuario
-     * @param {string} email - Correo del usuario
-     * @param {string} password - Contraseña del usuario
-     * @param {string} dbUser._id - Identificador del usuario
-     */
+    /**Funcion iniciar sesion 
+   * @param req - Informacion de la solicitud HTTP provocada
+   * @param res - Permite devolver la respuesta HTTP 
+   * @function getRepository - Funcion que trae la información de la tabla almacenada en la base de datos
+   * @returns - Información del usuario y token
+   * */
     userLogin: async (req, res = response) => {
         const userRepository = getRepository(User);
         const { email, password } = req.body;
@@ -166,7 +160,7 @@ const authController = {
             }
 
             const token = await generateJWT(dbUser.user_id, dbUser.name);
-            console.log(dbUser,'pa entrar');
+            console.log(dbUser, 'pa entrar');
             return res.status(200).json({
                 ok: true,
                 user: userInfo(dbUser),
@@ -182,33 +176,37 @@ const authController = {
         }
 
     },
-    /** Funcion para renovar el Token 
-     * @param {string} uid - Identificador del usuario
-     * @param {string} name- Nombre del usuario
-     */
+    /** Funcion para renovar el token
+       * @param req - Informacion de la solicitud HTTP provocada
+       * @param res - Permite devolver la respuesta HTTP 
+       * @function getRepository - Funcion que trae la información de la tabla almacenada en la base de datos
+       * @returns - Información del usuario y token
+       * */
     renewToken: async (req, res = response) => {
 
-        const {uid,name} = req;
-        const  userRepository = getRepository(User);
+        const { uid, name } = req;
+        const userRepository = getRepository(User);
 
         try {
-            const dbUser = await userRepository.findOne({user_id:uid});
-            const token = await generateJWT(uid,name);
+            const dbUser = await userRepository.findOne({ user_id: uid });
+            const token = await generateJWT(uid, name);
             return res.status(200).json({
                 ok: true,
                 user: userInfo(dbUser),
                 token
             });
         } catch (error) {
-           console.log(error);
-           return res.status(500).json({
-               ok:false,
-               msg:'Something went wrong'
-           })
+            console.log(error);
+            return res.status(500).json({
+                ok: false,
+                msg: 'Something went wrong'
+            })
         }
     },
     /** Funcion que me recibe el usuario de Facebook  verificado
      *  cuando el token es valido
+     * @param req - Informacion de la solicitud HTTP provocada
+     * @param res - Permite devolver la respuesta HTTP 
      * @param {error} error - Error
      * @param {Object} user - Inforamcion del usuario
      * @param {string} info - Token de facebook
@@ -217,83 +215,94 @@ const authController = {
         passport.authenticate('facebook-token', function (error, user, info) {
 
             if (user) {
-              res.status(200).json({
-                ok: true,
-                user:userInfo(user),
-                token: info
-              });
+                res.status(200).json({
+                    ok: true,
+                    user: userInfo(user),
+                    token: info
+                });
             }
             if (error) {
-              return res.status(500).json({
-                ok: false,
-                error
-              })
+                return res.status(500).json({
+                    ok: false,
+                    error
+                })
             }
-          })(req, res);
+        })(req, res);
     },
-    /** Funcion que Autentica el token enviado por Google y si es valido me devuelve el usuario
-     * @property {(string | string[])} idToken - El token enviado para ver si es valido
-     * @property {(string | string[])} audience - El id del cliente de la app creada en google console
-     * @property {string} email - Correo del usuario
-     * @property {string} firstname - Primer nombre del usuario
-     * @property {string} lastname - Segundo nombre del usuario
+    /** Funcion que Autentica el token enviado por Google
+     * @param req - Informacion de la solicitud HTTP provocada
+     * @param res - Permite devolver la respuesta HTTP 
+     * @property {object} - ticket
+     * @property {(string | string[])} idToken - El token enviado por el front-end a verificar si es valido
+     * @property {(string | string[])} audience - El id del cliente de la aplicacion creada en google console
+     * @property { object } userDetails - Objeto con el nombre completo del usuario y correo
+     * @property {string} userDetails.email - Correo del usuario
+     * @property {string} userDetails.firstname - Primer nombre del usuario
+     * @property {string} userDetails.lastname - Segundo nombre del usuario
      * @property {string} name- Nombre completo del usuario
-     * @param {Object} userDetails - Objeto con el nombre completo del usuario y correo
      * @param {string} process.env.SECRET_KEY - LLave secreta para crear el token
+     * @returns - Información del usuario y token
      */
     authGoogle: async (req, res) => {
         async function verify() {
+
             const socialUserRepository = getRepository(SocialUser);
             const profileRepository = getRepository(Profile);
-
             const ticket = await client.verifyIdToken({
-              idToken: req.header('token-auth'),
-              audience: process.env.GOOGLE_CLIENT_ID
+                idToken: req.header('token-auth'),
+                audience: process.env.GOOGLE_CLIENT_ID
             });
-      
+
             const payload = ticket.getPayload();
-      
+
             const userDetails = {
-              email: payload['email'],
-              firstname: payload['given_name'],
-              lastname: payload['family_name']
+                email: payload['email'],
+                firstname: payload['given_name'],
+                lastname: payload['family_name']
             }
-      
+
             let dbUser = await socialUserRepository.findOne({
-              email: userDetails.email
+                email: userDetails.email
             });
-      
+
             if (dbUser == null) {
+                /**
+                 * Crea un nuevo perfil
+                 * @class
+                 */
                 let dbProfile = new Profile();
                 dbProfile.skills = [];
                 await profileRepository.save(dbProfile);
-
+                /**
+                 * Crea un nuevo Usuario Social
+                 * @class
+                 */
                 dbUser = new SocialUser();
-                dbUser.email= payload['email'];
-                dbUser.name= payload['name'];
-                dbUser.provider="GOOGLE";
+                dbUser.email = payload['email'];
+                dbUser.name = payload['name'];
+                dbUser.provider = "GOOGLE";
                 dbUser.profile = dbProfile;
                 await socialUserRepository.save(dbUser);
             }
-      
+
             let token = jwt.sign(userDetails, process.env.SECRET_KEY, {
-              expiresIn: "24h"
+                expiresIn: "24h"
             });
-      
+
             res.status(200).json({
-              ok: true,
-              token: token,
-              user:userInfo(dbUser)
+                ok: true,
+                token: token,
+                user: userInfo(dbUser)
             })
-          }
-          verify().catch((error) => {
-            console.log(error,'Error con el token!');
+        }
+        verify().catch((error) => {
+            console.log(error, 'Error con el token!');
             res.status(400).json({
-              ok: false,
-              msg: 'Invalid Token',
-              error:error
+                ok: false,
+                msg: 'Invalid Token',
+                error: error
             })
-          });
+        });
     }
 }
 

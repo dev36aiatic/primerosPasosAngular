@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+
 import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 import { ProfileData } from '../../interfaces/user.interface';
 

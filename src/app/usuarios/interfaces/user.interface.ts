@@ -1,3 +1,4 @@
+/**Interfaz del perfil recibido desde la base de datos */
 export interface ProfileData {
     name:String,
     cc:String,

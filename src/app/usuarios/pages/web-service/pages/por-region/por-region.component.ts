@@ -30,11 +30,15 @@ export class PorRegionComponent implements OnInit {
     ];
 
   }
+  
+  /**Metodo que se activa cuando el usuario hace click en una region */
   regionChanged(){
     this.loadData(this.regionActiva);
   }
 
-    
+  /** Metodo que busca la region
+   * @param { string } region - Region
+  */
   loadData(region: string){
     this.usuarioService.byRegion(region).subscribe(data => {
       this.listado = data;
@@ -42,6 +46,7 @@ export class PorRegionComponent implements OnInit {
     }, (error => console.log(error)))
   }
 
+  /**Metodo para buscar la informacion que el usuario escribe en el input */
   filtrar(coincidencias: WebServiceResponse[]){
     this.options = coincidencias;
   }

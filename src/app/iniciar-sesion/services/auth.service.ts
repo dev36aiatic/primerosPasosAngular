@@ -28,10 +28,7 @@ export class AuthService {
   get isLoggedIn() {
     return this.isLogged;
   }
-
-
   constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
-
   /**Metodo para iniciar sesion*/
   login(email: string, password: string) {
 
@@ -48,7 +45,6 @@ export class AuthService {
         catchError(err => of(err.error.msg))
       );
   }
-
   /**Metodo para registrarse*/
   signup(name: string, email: string, password: string) {
 
@@ -64,7 +60,6 @@ export class AuthService {
         catchError(err => of(err.error.msg))
       )
   }
-
   /**Metodo para validar token creado utilizando jwt*/
   validateToken(): Observable<boolean> {
 
@@ -80,7 +75,6 @@ export class AuthService {
         catchError(err => of(false))
       );
   }
-
   /**Metodo para llenar el formulario de perfil de usuario */
   userProfile(user: ProfileData, id: string, provider: string = '') {
 
@@ -104,7 +98,6 @@ export class AuthService {
       catchError(err => of(err.error))
     )
   }
-  //TODO: DALE Z INDEX A LOS LI DEL MENU PARA QUE SE MUESTRNE POR ENCIMA DE TODOS
   /**Metodo que me permite validar el token de google o facebook*/
   validateAuthGoogleFb(decision: string): Observable<boolean> {
     //Esto se puede refactorizar con un Object Literal en el futuro
