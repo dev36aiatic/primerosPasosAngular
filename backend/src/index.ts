@@ -4,7 +4,6 @@ import * as express from "express";
 import * as dotenv from 'dotenv';
 import * as morgan from 'morgan';
 import * as cors from 'cors';
-import * as helmet from 'helmet';
 import router from './routes/auth';
 import * as passport from 'passport';
 import * as path from 'path';
@@ -21,9 +20,6 @@ createConnection().then(async () => {
 
     /**Leer archivo de variables de entorno .env */
     dotenv.config();
-
-    /**Modulo que ayuda a hacer la app mas segura a traves de http headers */
-    app.use(helmet());
 
     /**Configuracion de las peticiones http permitidas */
     app.use(cors());
