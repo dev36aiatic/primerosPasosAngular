@@ -5,61 +5,64 @@
         <h4>{{editProfile.name | titlecase}} Profile</h4>
       </div>
     </div>
-    <div class="row">
-      <div class="col-12">
+    <div class="row align-items-center">
+      <div class="col-6">
         <span class="warning">Fields marked with * are required</span>
+      </div>
+      <div class="col-6 text-right">
+        <button #btnEdit (click)="editFields(btnEdit)" class="btn-edit-profile"><i class="fas fa-edit"></i></button>
       </div>
     </div>
     <hr>
     <div class="form-group">
       <label for="fullName">Full Name <span class="mark">*</span></label>
-      <input type="text" ngModel required [(ngModel)]="editProfile.name" class="form-control" name="name" id="fullName"
+      <input type="text" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.name" class="form-control" name="name" id="fullName"
         placeholder="Full name">
     </div>
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputIdNumer">ID Number <span class="mark">*</span></label>
-        <input type="number" ngModel required [(ngModel)]="editProfile.cc" name="cc" class="form-control"
+        <input type="number" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.cc" name="cc" class="form-control"
           id="inputIdNumer" placeholder="ID Number">
       </div>
       <div class="form-group col-md-6">
         <label for="inputAddress">Address <span class="mark">*</span></label>
-        <input type="text" ngModel required [(ngModel)]="editProfile.address" name="address" class="form-control"
+        <input type="text" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.address" name="address" class="form-control"
           id="inputAddress" placeholder="Address">
       </div>
     </div>
     <div class="form-group">
       <label for="idCity">City <span class="mark">*</span></label>
-      <input type="text" ngModel required [(ngModel)]="editProfile.city" name="city" class="form-control" id="idCity"
+      <input type="text" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.city" name="city" class="form-control" id="idCity"
         placeholder="City">
     </div>
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputDepartment">Department <span class="mark">*</span></label>
-        <input type="text" ngModel required [(ngModel)]="editProfile.department" name="department" class="form-control"
+        <input type="text" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.department" name="department" class="form-control"
           id="inputDepartment" placeholder="Department">
       </div>
       <div class="form-group col-md-6">
         <label for="inputCountry">Country <span class="mark">*</span></label>
-        <input type="text" ngModel required [(ngModel)]="editProfile.country" name="country" class="form-control"
+        <input type="text" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.country" name="country" class="form-control"
           id="inputCountry" placeholder="Country">
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputZipCode">ZIP Code <span class="mark">*</span></label>
-        <input type="number" ngModel required [(ngModel)]="editProfile.ZIP" name="ZIP" class="form-control"
+        <input type="number" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.ZIP" name="ZIP" class="form-control"
           id="inputZipCode" placeholder="ZIP Code">
       </div>
       <div class="form-group col-md-6">
         <label for="inputProfession">Profession <span class="mark">*</span></label>
-        <input type="text" ngModel required [(ngModel)]="editProfile.profession" name="profession" class="form-control"
+        <input type="text" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.profession" name="profession" class="form-control"
           id="inputProfession" placeholder="Profession">
       </div>
     </div>
     <div class="form-group ">
       <label for="inputdob">Date of Birth <span class="mark">*</span></label>
-      <p-calendar id="inputdob" class="d-block" [yearNavigator]="true" [showIcon]="true" [monthNavigator]="true"
+      <p-calendar [disabled]="disabledItem" id="inputdob" class="d-block" [yearNavigator]="true" [showIcon]="true" [monthNavigator]="true"
         yearRange="1920:2021" required name="dateOfBirth" placeholder="Date of Birth" dataType="string"
         [ngModel]="editProfile.dateOfBirth  " (ngModelChange)="onChangeDate($event)" dateFormat="dd-mm-yy"></p-calendar>
     </div>
@@ -70,8 +73,9 @@
         <h6>Skills - Max 3</h6>
       </div>
       <div class="form-group col-12">
-        <div class="form-check" *ngFor="let skill of skills">
-          <input class="form-check-input" (click)="seleccionado($event)" type="checkbox" value="{{skill}}"
+        <div class="form-check cont" *ngFor="let skill of skills">
+          <div class="cover cover-select-class"></div>
+          <input  class="form-check-input " (click)="seleccionado($event)" type="checkbox" value="{{skill}}"
             id="flexCheck{{skill}}">
           <label class="form-check-label" for="flexCheck{{skill}}">
             {{skill}}
@@ -85,7 +89,7 @@
         <div class="form-group col-12 ">
           <label for="descriptionYourself">Description of yourself ( 500 characters maximum ) <span
               class="mark">*</span> </label>
-          <textarea maxlength="500" ngModel required [(ngModel)]="editProfile.description" name="descriptionString"
+          <textarea maxlength="500" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.description" name="descriptionString"
             class="form-control" id="descriptionYourself" rows="3"
             [ngStyle]="{'min-height':'100px', 'max-height':'100px', 'flex':'auto'}"></textarea>
         </div>
@@ -95,7 +99,7 @@
     <div class="row">
       <div class="col-12 text-center">
 
-        <button type="submit" [disabled]="!formProfile.valid" class="btn-send">Save Changes</button>
+        <button type="submit"  [ngClass]="formProfile.valid ? 'btn-send' : 'btn-send-disabled'" [disabled]="!formProfile.valid" >Save Changes</button>
       </div>
     </div>
   </form>

@@ -125,6 +125,75 @@ body {
 }
 
 
+/**Botones de profile*/
+.btn-send {
+  display:block;
+  margin:0 auto;
+  background:orange;
+  border: none !important;
+  outline: none !important;
+  padding: 8px 40px;
+  border-radius:6px;
+  color:#fff;
+  transition: all ease .3s;
+}
+.btn-send:hover{
+  background: rgba(255, 166, 0, 0.788);
+  transition: all ease .3s;
+}
+.btn-send-disabled {
+  display:block;
+  margin:0 auto;
+  background: rgba(201, 201, 201, 0.788);
+  border: none !important;
+  outline: none !important;
+  padding: 8px 40px;
+  border-radius:6px;
+  color:#fff;
+  transition: all ease .3s;
+  cursor: not-allowed;
+  
+}
+
+.cont{
+  position:relative !important;
+  display:block;
+}
+.cover{
+  width:100%;
+  height:100%;
+  background:transparent;
+  position:absolute !important;
+  z-index:2;
+  top:0;
+  left:0;
+  display:none;
+  cursor: not-allowed;
+  display:block;
+}
+
+.btn-edit-profile {
+  padding: 4px 10px;
+  outline: none !important;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 3px;
+  border: 1px solid rgb(195 195 195);
+  transition: all ease .5s;
+  text-align: center;
+  background: #eee;
+  padding-left: 13px;
+}
+.btn-edit-profile:hover{
+  transition: all ease .5s;
+}
+
+.btn-profile-active {
+  background: #561b1b;
+  color: #fff;
+}
+/**end btn profile*/
 .btn-s {
   width: 100%;
   padding: 12px;

@@ -55,6 +55,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   dbUser = this.authService.user.user;
   editProfile: ProfileData | any;
+  disabledItem: boolean = true;
   disableAll: boolean = false;
   flag: number = 0;
   skills: string[] = [
@@ -124,7 +125,16 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         }
       })
   }
-
+  /**Funcion para que los campos del perfil  sean editables */
+  editFields(btnEdit) {
+    btnEdit.classList.toggle('btn-profile-active');
+    //Funcion que me toma el div que cubre los skills y le togglea una clase para que sean editables o no
+    document.querySelectorAll('.cover-select-class').forEach(element => {
+      element.classList.toggle('cover');
+    });
+    this.disabledItem = !this.disabledItem;
+    return false;
+  }
   /**Funcion que toma la fecha del componente de primeng y se la establece al usuario a editar */
   onChangeDate(fecha) {
     this.editProfile.dateOfBirth = fecha;
@@ -147,7 +157,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     },
     true: (value: string) => {
       this.flag += 1;
-
       if (!this.editProfile.skills.includes(value)) {
         this.editProfile.skills.push(value)
       };
