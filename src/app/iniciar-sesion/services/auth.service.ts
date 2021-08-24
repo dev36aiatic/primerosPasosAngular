@@ -55,7 +55,6 @@ export class AuthService {
       .pipe(
         tap(resp => {
           this.setTokenAndUser(resp);
-          console.log(resp, 'resp');
         }),
         catchError(err => of(err.error.msg))
       )

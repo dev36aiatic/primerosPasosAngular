@@ -2,7 +2,7 @@ import { Router } from "express";
 import AuthController from '../controller/AuthController';
 import { check } from 'express-validator';
 
-import MiddleWares from '../middlewares/validate-fields';
+import MiddleWares from '../Middlewares/validate-fields';
 import validateJWT from '../Middlewares/validate-jwt';
 
 /**Se establece el router de express */

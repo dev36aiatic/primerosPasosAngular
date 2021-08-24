@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://dev36-auth.herokuapp.com',
+  baseUrl: 'http://localhost:4000',
   baseMunicipios:'https://www.datos.gov.co/resource/xdk5-pm3f.json'
 };
 
