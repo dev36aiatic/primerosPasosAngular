@@ -16,6 +16,7 @@ import { Component, OnInit } from '@angular/core';
      background-size: cover;
      background-attachment: fixed;
      overflow-y: scroll;
+     z-index; -1 !important;
    }
    `
   ]
