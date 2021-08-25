@@ -8,7 +8,7 @@
         <div class="contenedor-img-profile">
           <div class="cover cover-select-class"></div>
           <input type="file" class="d-none" (change)="onPhotoSelected($event)" #photoInput>
-          <img [src]="photoSelected || '../../../../assets/no-image.png'" alt="User Image" (click)="photoInput.click()">
+          <img [src]="photoSelected" alt="User Image" (click)="photoInput.click()">
         </div>
       </div>
     </div>
