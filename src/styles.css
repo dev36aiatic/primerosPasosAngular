@@ -195,14 +195,17 @@ body {
 }
 
 .contenedor-img-profile {
-  min-width: 300px;
+  min-width: 120px !important;
+  max-width: 120px !important;
   border-radius: 100%;
   border: 1px solid #eee;
+  position: relative;
 }
 
 .img-profile img {
   vertical-align: top;
-  width: 100%;
+  min-width: 100% !important;
+  max-width: 100% !important;
   border-radius: 100%;
   cursor: pointer;
 }

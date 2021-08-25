@@ -6,6 +6,7 @@ import MiddleWares from '../Middlewares/validate-fields';
 import validateJWT from '../Middlewares/validate-jwt';
 import * as multipart from 'connect-multiparty';
 import uploadImage from '../Middlewares/upload-image'
+import authController from '../controller/AuthController';
 
 /**Se establece el router de express */
 const router = Router();
@@ -41,7 +42,13 @@ router.post('/login',
     ], AuthController.userLogin);
 
 /** Peticion HTTP para actualizar información del usuario */
-router.put('/update/:id/:provider?',[multipartMiddleware,uploadImage], AuthController.updateProfile)
+router.put('/update/:id/:provider?', AuthController.updateProfile)
+
+/**Peticion para subir la imagen del usuario */
+router.post('/upload-image/:id/:provider?',[multipartMiddleware,uploadImage],authController.uploadImage);
+
+/** Peticion para cargar la imagen del usuario */
+router.get('/get-image/:imageFile',authController.getImageFile);
 
 /**Peticion HTTP para renovar el token */
 router.get('/renew', validateJWT, AuthController.renewToken);

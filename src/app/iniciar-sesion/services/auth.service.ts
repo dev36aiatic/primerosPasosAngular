@@ -95,6 +95,34 @@ export class AuthService {
       catchError(err => of(err.error))
     )
   }
+
+  /**
+   * Metodo que sube la imagen del usuario
+   * @param files - Datos de la imagen
+   */
+  uploadImage(id: string, files, provider: string = '') {
+    const url = `${this.baseUrl}/upload-image/${id}/${provider}`;
+    const formData = new FormData();
+    formData.append('image', files)
+
+    return this.httpClient.post<any>(url, formData).pipe(
+      catchError(err => of(err.error))
+    )
+  }
+
+  /**
+   * Metodo que busca en el backend la imagen del usuario para mostrarla
+   * @param fileName - Nombre de la imagen que tiene el usuario
+   * @returns 
+   */
+  getImageFile(fileName: string) {
+    const url = `${this.baseUrl}/get-image/${fileName}`;
+
+    return this.httpClient.get<any>(url, { responseType: 'Blob' as 'json' }).pipe(
+      catchError(err => of(err.error))
+    );
+  }
+
   /**Metodo que me permite validar el token de google o facebook*/
   validateAuthGoogleFb(decision: string): Observable<boolean> {
     let objectSocialAuth = {
@@ -125,7 +153,7 @@ export class AuthService {
         return of(false, this.isLogged = false);
       }
     }
-    
+
     return objectSocialAuth[decision]() || objectSocialAuth["DEFAULT"]();
   }
 

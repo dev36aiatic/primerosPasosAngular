@@ -10,7 +10,8 @@ import { Profile } from '../entity/Profile';
 import { OAuth2Client } from 'google-auth-library';
 import * as passport from 'passport';
 import deleteImage from '../helpers/delete-prev-image';
-
+import * as fs from 'fs'
+import * as path from 'path';
 /** Creacion del OAuth2Client de google para autenticacion */
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -101,12 +102,6 @@ const authController = {
             let profile_id = dbUser.profile.profile_id;
             let dbProfile = await profileRepository.findOne({ profile_id });
 
-            //Se captura el nombre y la ruta de la imagen a traves del middleware upload-image
-            const { fileName, filePath} = req;
-
-            //Se borra la imagen anterior
-            deleteImage(dbProfile,filePath);
-
             dbUser.name = name;
             dbProfile.cc = cc;
             dbProfile.address = address;
@@ -118,7 +113,6 @@ const authController = {
             dbProfile.profession = profession;
             dbProfile.skills = skills;
             dbProfile.description = description;
-            dbProfile.image = fileName;
             dbUser.profile = dbProfile;
 
             await profileRepository.save(dbProfile);
@@ -132,14 +126,76 @@ const authController = {
             return res.status(200).json({
                 ok: true,
                 user: userInfo(dbUser),
-                msg: 'Thanks for the registration.'
+                msg: 'The changes have been made.'
             });
+
         } catch (error) {
             console.log(error);
             return res.status(500).json({
                 ok: false,
                 msg: 'Something went wrong.'
             });
+        }
+    },
+    uploadImage: async (req, res) => {
+
+        const { id, provider } = req.params;
+
+        try {
+            const userRepository = getRepository(User);
+            const socialUserRepository = getRepository(SocialUser);
+            const profileRepository = getRepository(Profile);
+            let dbUser: User | SocialUser;
+
+            if (provider == "GOOGLE" || provider == "FACEBOOK") {
+                dbUser = await socialUserRepository.findOne({ user_id: id });
+            } else {
+                dbUser = await userRepository.findOne({ user_id: id });
+            }
+
+            let profile_id = dbUser.profile.profile_id;
+            let dbProfile = await profileRepository.findOne({ profile_id });
+
+            //Se captura el nombre y la ruta de la imagen a traves del middleware upload-image
+            const { fileName, filePath } = req;
+
+            //Se borra la imagen anterior si existe
+            deleteImage(dbProfile, filePath);
+
+            dbProfile.image = fileName || null;
+            dbUser.profile = dbProfile;
+
+            await profileRepository.save(dbProfile);
+
+            if (provider == "GOOGLE" || provider == "FACEBOOK") {
+                await socialUserRepository.save(dbUser);
+            } else {
+                await userRepository.save(dbUser);
+            }
+
+            return res.status(200).json({
+                ok: true,
+                user: userInfo(dbUser),
+                msg: 'Image changed.'
+            });
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                ok: false,
+                msg: 'Something went wrong.'
+            });
+        }
+    },
+    getImageFile: (req, res) => {
+        let imageFile = req.params.imageFile;
+        const pathFile = `src/user-images/${imageFile}`
+        const exist = fs.existsSync(pathFile);
+
+        if (exist) {
+            return res.sendFile(path.resolve(pathFile));
+        } else {
+            return res.sendFile(path.resolve('src/user-images/no-image.png'));
         }
     },
     /**Funcion iniciar sesion 

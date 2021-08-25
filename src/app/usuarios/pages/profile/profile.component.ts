@@ -89,9 +89,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       profession,
       description,
       skills,
-      image,
-      image_type
-       } = this.dbUser.profile;
+      image
+    } = this.dbUser.profile;
 
     //Asignacion de los valores desestructurados al usuario que se enviara a la base de datos
     this.editProfile = {
@@ -106,19 +105,26 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       profession,
       skills,
       description,
-      image,
-      image_type
+      image
     }
   }
 
   ngOnInit(): void {
-
   }
 
   /**Funciones que se activan al iniciar el contenido de las vistas */
   ngAfterViewInit(): void {
+    //Contar skills que ya tiene el usuario guardados
     this.contarChecks.putActiveFromBd(this.dbUser.profile.skills);
     this.contarChecks.flagGuardian();
+    //Cargar imagen
+    this.authService.getImageFile(this.dbUser.profile.image.trim()).subscribe(
+      image => {
+        const reader = new FileReader();
+        reader.onload = e => this.photoSelected = reader.result;
+        reader.readAsDataURL(image);
+      }
+    )
   }
 
   /** FUncion que me permite actualizar el perfil del usuario*/
@@ -128,33 +134,36 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         if (data.ok == false) {
           Swal.fire('Error', data.msg, 'error');
         } else {
-          Swal.fire('Changes Applied :)', data.msg, 'success');
+          Swal.fire('Everything is correct :)', data.msg, 'success');
         }
-      })
+      });
+
+    if (this.file != undefined) {
+      this.authService.uploadImage(this.dbUser.id, this.file, localStorage.getItem('provider') || '')
+        .subscribe(data => {
+          console.log('Imagen reemplazada.');
+        })
+    }
   }
 
   /**
-   * Funcion que recibe la foto que el usuario sube
+   * Funcion que recibe la foto que el usuario sube y da un preview
    * @param foto - Informacion de la foto subida por el usuario
    */
   onPhotoSelected(foto) {
-    if (foto.target.files && foto.target.files[0]) { 
-
+    if (foto.target.files && foto.target.files[0]) {
       const { size, type } = foto.target.files[0]
       const imageType = type.split('/')[1];
-      
-      if(size > 1000000 || imageType != 'jpg' && imageType != 'png'){
-        Swal.fire('Unable to upload your image','The image must be in jpg or png format and size less than 1 MB.','warning');
+
+      if (size > 1000000 || imageType != 'jpg' && imageType != 'png') {
+        Swal.fire('Unable to upload your image', 'The image must be in jpg or png format and size less than 1 MB.', 'warning');
         return false;
       }
-
       //Previsualizacion de la imagen
-      //La imagen preview es de tipo arrayBuffer porque cuando el navegador sube el archivo me lo da en ese tipo
       this.file = foto.target.files[0];
-      const reader =  new FileReader();
+      const reader = new FileReader();
       reader.onload = e => this.photoSelected = reader.result;
       reader.readAsDataURL(this.file);
-      
     }
   }
 
