@@ -185,6 +185,28 @@ body {
   background: #eee;
   padding-left: 13px;
 }
+
+.img-profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.contenedor-img-profile {
+  min-width: 300px;
+  border-radius: 100%;
+  border: 1px solid #eee;
+}
+
+.img-profile img {
+  vertical-align: top;
+  width: 100%;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
 .btn-edit-profile:hover{
   transition: all ease .5s;
 }

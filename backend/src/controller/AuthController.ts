@@ -9,6 +9,7 @@ import userInfo from '../helpers/user-info';
 import { Profile } from '../entity/Profile';
 import { OAuth2Client } from 'google-auth-library';
 import * as passport from 'passport';
+import deleteImage from '../helpers/delete-prev-image';
 
 /** Creacion del OAuth2Client de google para autenticacion */
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -79,6 +80,7 @@ const authController = {
      * @returns - Usuario actualizado
      */
     updateProfile: async (req, res = response) => {
+
         const { id, provider } = req.params;
         const { name, cc, address, dateOfBirth,
             city, department, country, ZIP,
@@ -99,6 +101,12 @@ const authController = {
             let profile_id = dbUser.profile.profile_id;
             let dbProfile = await profileRepository.findOne({ profile_id });
 
+            //Se captura el nombre y la ruta de la imagen a traves del middleware upload-image
+            const { fileName, filePath} = req;
+
+            //Se borra la imagen anterior
+            deleteImage(dbProfile,filePath);
+
             dbUser.name = name;
             dbProfile.cc = cc;
             dbProfile.address = address;
@@ -110,6 +118,7 @@ const authController = {
             dbProfile.profession = profession;
             dbProfile.skills = skills;
             dbProfile.description = description;
+            dbProfile.image = fileName;
             dbUser.profile = dbProfile;
 
             await profileRepository.save(dbProfile);

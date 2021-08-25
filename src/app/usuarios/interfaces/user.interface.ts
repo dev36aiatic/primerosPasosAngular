@@ -10,6 +10,13 @@ export interface ProfileData {
     ZIP: Number,
     profession: String,
     skills: String[],
-    description: String
+    description: String,
+    image: Photo
+}
+
+export interface Photo {
+    id:string;
+    tipo_imagen: string;
+    imagePath: string;
 }
 

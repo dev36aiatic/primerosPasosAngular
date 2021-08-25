@@ -4,9 +4,14 @@ import { check } from 'express-validator';
 
 import MiddleWares from '../Middlewares/validate-fields';
 import validateJWT from '../Middlewares/validate-jwt';
+import * as multipart from 'connect-multiparty';
+import uploadImage from '../Middlewares/upload-image'
 
 /**Se establece el router de express */
 const router = Router();
+
+/**Middleware para subir las imagenes */
+const multipartMiddleware = multipart({uploadDir:'src/user-images'});
 
 /**
  * Peticion HTTP para crear un nuevo usuario
@@ -36,7 +41,7 @@ router.post('/login',
     ], AuthController.userLogin);
 
 /** Peticion HTTP para actualizar información del usuario */
-router.put('/update/:id/:provider?', AuthController.updateProfile)
+router.put('/update/:id/:provider?',[multipartMiddleware,uploadImage], AuthController.updateProfile)
 
 /**Peticion HTTP para renovar el token */
 router.get('/renew', validateJWT, AuthController.renewToken);

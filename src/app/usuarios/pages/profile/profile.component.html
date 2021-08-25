@@ -4,6 +4,12 @@
       <div class="col-12 text-center">
         <h4>{{editProfile.name | titlecase}} Profile</h4>
       </div>
+      <div class="col-12 img-profile">
+        <div class="contenedor-img-profile">
+          <input type="file" class="d-none" (change)="onPhotoSelected($event)" #photoInput>
+          <img [src]="photoSelected || '../../../../assets/no-image.png'" alt="User Image" (click)="photoInput.click()">
+        </div>
+      </div>
     </div>
     <div class="row align-items-center">
       <div class="col-6">

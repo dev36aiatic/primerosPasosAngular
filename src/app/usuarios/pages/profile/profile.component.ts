@@ -57,6 +57,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   editProfile: ProfileData | any;
   disabledItem: boolean = true;
   disableAll: boolean = false;
+  file: File;
+  photoSelected: string | ArrayBuffer;
   flag: number = 0;
   skills: string[] = [
     "Creativity",
@@ -86,7 +88,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       ZIP,
       profession,
       description,
-      skills } = this.dbUser.profile;
+      skills,
+      image,
+      image_type
+       } = this.dbUser.profile;
 
     //Asignacion de los valores desestructurados al usuario que se enviara a la base de datos
     this.editProfile = {
@@ -100,7 +105,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       ZIP,
       profession,
       skills,
-      description
+      description,
+      image,
+      image_type
     }
   }
 
@@ -125,6 +132,32 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         }
       })
   }
+
+  /**
+   * Funcion que recibe la foto que el usuario sube
+   * @param foto - Informacion de la foto subida por el usuario
+   */
+  onPhotoSelected(foto) {
+    if (foto.target.files && foto.target.files[0]) { 
+
+      const { size, type } = foto.target.files[0]
+      const imageType = type.split('/')[1];
+      
+      if(size > 1000000 || imageType != 'jpg' && imageType != 'png'){
+        Swal.fire('Unable to upload your image','The image must be in jpg or png format and size less than 1 MB.','warning');
+        return false;
+      }
+
+      //Previsualizacion de la imagen
+      //La imagen preview es de tipo arrayBuffer porque cuando el navegador sube el archivo me lo da en ese tipo
+      this.file = foto.target.files[0];
+      const reader =  new FileReader();
+      reader.onload = e => this.photoSelected = reader.result;
+      reader.readAsDataURL(this.file);
+      
+    }
+  }
+
   /**Funcion para que los campos del perfil  sean editables */
   editFields(btnEdit) {
     btnEdit.classList.toggle('btn-profile-active');

@@ -72,6 +72,12 @@ export class Profile {
     })
     description: string;
 
+    @Column({
+        nullable:true,
+        default:null
+    })
+    image:string;
+
     @OneToOne( () => User, user => user.profile)
     user?:User;
 

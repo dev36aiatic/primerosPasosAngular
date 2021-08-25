@@ -11,6 +11,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SharedModule } from '../shared/shared.module';
 import { UsuariosRoutingModule } from './usuarios-routing.module';
 import { VideoComponent } from './pages/video/video.component';
+import { PhotoFormComponent } from './components/photo-form/photo-form.component';
+import { PhotoPreviewComponent } from './components/photo-preview/photo-preview.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { VideoComponent } from './pages/video/video.component';
     HistoryComponent,
     MainComponent,
     ProfileComponent,
-    VideoComponent
+    VideoComponent,
+    PhotoFormComponent,
+    PhotoPreviewComponent
   ],
   exports: [
     MainComponent
