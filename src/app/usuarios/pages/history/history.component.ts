@@ -24,7 +24,7 @@ export class HistoryComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.authService.getImageFile(this.userInfo.user.profile.image.trim()).subscribe(
+    this.authService.getImageFile(this.userInfo.user.profile.image).subscribe(
       image => {
         const reader = new FileReader();
         reader.onload = e => this.photoSelected = reader.result;

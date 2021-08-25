@@ -106,6 +106,7 @@ export class AuthService {
     formData.append('image', files)
 
     return this.httpClient.post<any>(url, formData).pipe(
+      tap(user => this._user = user),
       catchError(err => of(err.error))
     )
   }

@@ -118,7 +118,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.contarChecks.putActiveFromBd(this.dbUser.profile.skills);
     this.contarChecks.flagGuardian();
     //Cargar imagen
-    this.authService.getImageFile(this.dbUser.profile.image.trim()).subscribe(
+    this.authService.getImageFile(this.dbUser.profile.image).subscribe(
       image => {
         const reader = new FileReader();
         reader.onload = e => this.photoSelected = reader.result;
