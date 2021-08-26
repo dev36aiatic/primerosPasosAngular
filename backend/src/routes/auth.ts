@@ -12,7 +12,7 @@ import authController from '../controller/AuthController';
 const router = Router();
 
 /**Middleware para subir las imagenes */
-const multipartMiddleware = multipart({uploadDir:'src/user-images'});
+const multipartMiddleware = multipart({ uploadDir: 'src/user-images' });
 
 /**
  * Peticion HTTP para crear un nuevo usuario
@@ -45,10 +45,10 @@ router.post('/login',
 router.put('/update/:id/:provider?', AuthController.updateProfile)
 
 /**Peticion para subir la imagen del usuario */
-router.post('/upload-image/:id/:provider?',[multipartMiddleware,uploadImage],authController.uploadImage);
+router.post('/upload-image/:id/:provider?', [multipartMiddleware, uploadImage], authController.uploadImage);
 
 /** Peticion para cargar la imagen del usuario */
-router.get('/get-image/:imageFile',authController.getImageFile);
+router.get('/get-image/:imageFile', authController.getImageFile);
 
 /**Peticion HTTP para renovar el token */
 router.get('/renew', validateJWT, AuthController.renewToken);

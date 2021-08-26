@@ -2,7 +2,6 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Unique } 
 import { User } from './User';
 import { SocialUser } from './GoogleOrFbUser';
 
-//Ejemplo de Perfil
 /**
  * Clase definida para crear un Perfil cuando la persona se registre.
  */

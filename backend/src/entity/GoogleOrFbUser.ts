@@ -6,7 +6,6 @@ import {
 } from "typeorm";
 import { Profile } from './Profile';
 
-//Ejemplo de clase
 /**
  * Clase definida para crear un usuario (si no existe) cuando la persona ingrese por medio de Facebook o Google
  */

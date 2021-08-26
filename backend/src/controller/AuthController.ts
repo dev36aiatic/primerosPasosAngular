@@ -12,6 +12,7 @@ import * as passport from 'passport';
 import deleteImage from '../helpers/delete-prev-image';
 import * as fs from 'fs'
 import * as path from 'path';
+
 /** Creacion del OAuth2Client de google para autenticacion */
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -44,7 +45,7 @@ const authController = {
             let profile = new Profile();
             profile.skills = [];
             await profileRepository.save(profile);
-
+            
             /**
              * Crea un nuevo Usuario
              * @class
@@ -81,7 +82,6 @@ const authController = {
      * @returns - Usuario actualizado
      */
     updateProfile: async (req, res = response) => {
-
         const { id, provider } = req.params;
         const { name, cc, address, dateOfBirth,
             city, department, country, ZIP,
@@ -137,8 +137,14 @@ const authController = {
             });
         }
     },
+    /**
+     * Metodo para subir una imagen de perfil
+     * @param req - Informacion de la solicitud HTTP provocada
+     * @param res - Permite devolver la respuesta HTTP 
+     * @function getRepository - Funcion que trae la información de la tabla almacenada en la base de datos
+     * @returns - Usuario con los cambios realizados
+     */
     uploadImage: async (req, res) => {
-
         const { id, provider } = req.params;
 
         try {
@@ -157,12 +163,12 @@ const authController = {
             let dbProfile = await profileRepository.findOne({ profile_id });
 
             //Se captura el nombre y la ruta de la imagen a traves del middleware upload-image
-            const { fileName, filePath } = req;
+            const { fileName } = req;
 
             //Se borra la imagen anterior si existe
-            deleteImage(dbProfile, filePath);
+            deleteImage(dbProfile);
 
-            dbProfile.image = fileName || null;
+            dbProfile.image = fileName || dbProfile.image;
             dbUser.profile = dbProfile;
 
             await profileRepository.save(dbProfile);
@@ -187,6 +193,12 @@ const authController = {
             });
         }
     },
+    /**Metodo para buscar la imagen del usuario 
+    * @param req - Informacion de la solicitud HTTP provocada
+    * @param res - Permite devolver la respuesta HTTP 
+    * @function getRepository - Funcion que trae la información de la tabla almacenada en la base de datos
+    * @returns - Imagen de perfil del usuario
+    * */
     getImageFile: (req, res) => {
         let imageFile = req.params.imageFile;
         const pathFile = `src/user-images/${imageFile}`

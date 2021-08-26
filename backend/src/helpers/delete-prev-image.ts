@@ -4,21 +4,20 @@ import { Profile } from '../entity/Profile';
 /**
  * Metodo que permite borrar la imagen de perfil que tenia el usuario anteriormente
  * @param dbProfile - Perfil del usuario a borrar la imagen
- * @param existingFilePath - Ruta de donde se guardan las imagenes
  */
-const deleteImage = (dbProfile:Profile,existingFilePath:string)=>{
+const deleteImage = (dbProfile: Profile) => {
 
-    if(dbProfile.image != null){
-        let splitExisting = existingFilePath.split('\\');
-            splitExisting.splice(2);
-        let url = splitExisting.join('\\')+'\\'+dbProfile.image;
+    if (dbProfile.image != null) {
+        let pathFile = '/src/user-images/' + dbProfile.image;
+        const exist = fs.existsSync(pathFile);
 
-        fs.unlink(url,(err)=>{
-            if(err) throw err
-            console.log('File deleted');
-        });
+        if (exist) {
+            fs.unlink(pathFile, (err) => {
+                if (err) throw err
+                console.log('File deleted');
+            });
+        }
     }
 
 }
 export default deleteImage;
-         
