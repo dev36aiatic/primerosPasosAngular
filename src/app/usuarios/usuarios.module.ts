@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule  } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { HomeComponent } from './pages/home/home.component';
@@ -38,10 +38,10 @@ import { NuevoPostComponent } from './pages/nuevo-post/nuevo-post.component';
   imports: [
     CommonModule,
     HttpClientModule,
-    FormsModule,
     PrimengModule,
     SharedModule,
-    UsuariosRoutingModule
+    UsuariosRoutingModule,
+    ReactiveFormsModule,
   ]
 })
 export class UsuariosModule { }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
-import { UsuarioService } from '../../services/usuario.service';
+import { WordpressService } from '../../services/wordpress.service';
 
 @Component({
   selector: 'app-single-post',
@@ -13,13 +13,13 @@ export class SinglePostComponent implements OnInit {
   slug: string;
   post: any;
 
-  constructor(private usuarioService: UsuarioService, private route: ActivatedRoute) { }
+  constructor(private wpService: WordpressService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.route.params.pipe(
       switchMap(({ slug }) => {
         this.slug = slug
-        return this.usuarioService.getSinglePost(slug)
+        return this.wpService.getSinglePost(slug)
       })
     ).subscribe(post => this.post = post, (error) => console.log(error));
   }

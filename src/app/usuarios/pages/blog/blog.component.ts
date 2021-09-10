@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from '../../services/usuario.service';
+import { WordpressService } from '../../services/wordpress.service';
 
 @Component({
   selector: 'app-blog',
@@ -9,10 +9,10 @@ import { UsuarioService } from '../../services/usuario.service';
 export class BlogComponent implements OnInit {
 
   posts!: any;
-  constructor(private usuarioService: UsuarioService) { }
+  constructor(private wpService:WordpressService ) { }
 
   ngOnInit(): void {
-    this.usuarioService.getAll(20).subscribe(posts => this.posts = posts,
+    this.wpService.getAll(20).subscribe(posts => this.posts = posts,
       (error) => {
         console.log(error);
       });
