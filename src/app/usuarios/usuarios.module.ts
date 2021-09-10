@@ -16,6 +16,7 @@ import { PhotoPreviewComponent } from './components/photo-preview/photo-preview.
 import { BlogComponent } from './pages/blog/blog.component';
 import { SinglePostComponent } from './pages/single-post/single-post.component';
 import { IniciarSesionWpComponent } from './pages/iniciar-sesion-wp/iniciar-sesion-wp.component';
+import { NuevoPostComponent } from './pages/nuevo-post/nuevo-post.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { IniciarSesionWpComponent } from './pages/iniciar-sesion-wp/iniciar-sesi
     PhotoPreviewComponent,
     BlogComponent,
     SinglePostComponent,
-    IniciarSesionWpComponent
+    IniciarSesionWpComponent,
+    NuevoPostComponent
   ],
   exports: [
     MainComponent
