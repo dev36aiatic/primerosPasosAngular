@@ -1,7 +1,7 @@
 
 
 <div *ngIf="post else cargandoPosts">
-  <div class="container bg-white p-5">
+  <div [ngClass]="{'bg-white': post.length > 0 }" class="container  p-5">
     <div class="row">
       <div class="col-md-12" *ngFor="let f of post">
         <a class="d-block mb-3" [routerLink]="['/dashboard/blog']"><i class="fas fa-backward mr-2"></i> Regresar</a>
@@ -24,7 +24,7 @@
 </ng-template>
 
 <div *ngIf="post.length == 0">
-  <div class="cargando-posts">
+  <div class="cargando-posts" style="height: 60vh !important;">
     <h3><span class="rojo"><i class="fas fa-times mx-2"></i></span> El post <span class="rojo">{{ slug }}</span> no ha sido encontrado.<i
         class="fas rojo fa-times mx-2"></i> </h3>
   </div>
