@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   baseUrl: 'http://localhost:4000',
-  baseMunicipios:'https://www.datos.gov.co/resource/xdk5-pm3f.json'
+  baseMunicipios:'https://www.datos.gov.co/resource/xdk5-pm3f.json',
+  wpURL:'http://dev36.latiendasigueabierta.com/wp-json/wp/v2/posts'
 };
 
 /*

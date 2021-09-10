@@ -29,8 +29,8 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputIdNumer">ID Number <span class="mark">*</span></label>
-        <input type="number" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.cc" name="cc" class="form-control"
-          id="inputIdNumer" placeholder="ID Number">
+        <input  type="number" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.cc" name="cc" class="form-control"
+          id="inputIdNumer" placeholder="ID Number" onkeypress="return event.charCode >= 48" min="1" >
       </div>
       <div class="form-group col-md-6">
         <label for="inputAddress">Address <span class="mark">*</span></label>

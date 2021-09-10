@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.prod';
 import { Observable } from 'rxjs';
 import { WebServiceResponse } from '../pages/web-service/interfaces/web-service.interface';
+import { Post } from '../interfaces/post.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { WebServiceResponse } from '../pages/web-service/interfaces/web-service.
 export class UsuarioService {
 
   private baseURL: string = environment.baseMunicipios;
+  private urlWP: string = environment.wpURL;
   constructor(private http: HttpClient) { }
 
   /**Getter de los headers */
@@ -44,6 +46,23 @@ export class UsuarioService {
     const params = new HttpParams().set('departamento', department);
 
     return this.http.get<WebServiceResponse[]>(url, { headers: this.getHeaders, params });
+  }
+
+  
+  /**
+   * Numero de post a mostrar
+   * @param id
+   */  
+   getAll(id: number): Observable<Post[]> {
+    return this.http.get<Post[]>(`${this.urlWP}?_embed&per_page=${id}`);
+  }
+
+  /**
+   * Slug del post  a mostrar
+   * @param id
+   */
+  getSinglePost(id: string): Observable<Post> {
+    return this.http.get<Post>(`${this.urlWP}?_embed&slug=${id}`);
   }
 
 }

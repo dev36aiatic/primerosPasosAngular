@@ -41,6 +41,13 @@
         </a>
         <span class="tooltip">Watch video</span>
     </li>
+    <li (click)="toggleHidden()" [routerLink]="['./blog']">
+        <a>
+            <i class="fas fa-blog"></i>
+            <span class="links_name">Blog</span>
+        </a>
+        <span class="tooltip">See the Blog</span>
+    </li>
     <li (click)="toggleHidden()" (click)="logout()">
         <a >
             <i class="fas fa-sign-out-alt" id="log_out"></i>

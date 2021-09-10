@@ -13,6 +13,8 @@ import { UsuariosRoutingModule } from './usuarios-routing.module';
 import { VideoComponent } from './pages/video/video.component';
 import { PhotoFormComponent } from './components/photo-form/photo-form.component';
 import { PhotoPreviewComponent } from './components/photo-preview/photo-preview.component';
+import { BlogComponent } from './pages/blog/blog.component';
+import { SinglePostComponent } from './pages/single-post/single-post.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { PhotoPreviewComponent } from './components/photo-preview/photo-preview.
     ProfileComponent,
     VideoComponent,
     PhotoFormComponent,
-    PhotoPreviewComponent
+    PhotoPreviewComponent,
+    BlogComponent,
+    SinglePostComponent
   ],
   exports: [
     MainComponent
