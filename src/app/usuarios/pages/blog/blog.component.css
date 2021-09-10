@@ -1,0 +1,17 @@
+body,html{
+    height: 100% !important;
+}
+
+.rojo {
+    color:red;
+    font-weight: bold;
+}
+
+.cargando-posts{
+    height: 90vh;
+    margin-top: 0px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

@@ -1,0 +1,31 @@
+
+
+<div *ngIf="post else cargandoPosts">
+  <div class="container bg-white p-5">
+    <div class="row">
+      <div class="col-md-12" *ngFor="let f of post">
+        <a class="d-block mb-3" [routerLink]="['/dashboard/blog']"><i class="fas fa-backward mr-2"></i> Regresar</a>
+        <img class="img-fluid" style="width: 100%" [src]="f?._embedded['wp:featuredmedia']['0'].source_url"
+          alt="{{f.title.rendered}}">
+        <h2 class="text-center my-3">{{f.title.rendered }}</h2>
+        <p class="text-muted font-weight-bold">Autor: {{f?._embedded['author']['0'].name | titlecase}} </p>
+        <div [innerHTML]="f.content.rendered"></div>
+        <a class="d-block mt-3" [routerLink]="['/dashboard/blog']"><i class="fas fa-backward mr-2"></i> Regresar</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #cargandoPosts>
+  <div class="cargando-posts">
+    <p>Cargando el post... </p>
+  </div>
+</ng-template>
+
+<div *ngIf="post.length == 0">
+  <div class="cargando-posts">
+    <h3><span class="rojo"><i class="fas fa-times mx-2"></i></span> El post <span class="rojo">{{ slug }}</span> no ha sido encontrado.<i
+        class="fas rojo fa-times mx-2"></i> </h3>
+  </div>
+</div>
