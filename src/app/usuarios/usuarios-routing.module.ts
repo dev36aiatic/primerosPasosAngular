@@ -9,7 +9,6 @@ import { VideoComponent } from './pages/video/video.component';
 import { BlogComponent } from './pages/blog/blog.component';
 import { SinglePostComponent } from './pages/single-post/single-post.component';
 import { NuevoPostComponent } from './pages/nuevo-post/nuevo-post.component';
-import { SesionWpGuard } from '../guards/sesion-wp.guard';
 import { TokenWpGuard } from '../guards/token-wp.guard';
 import { IniciarSesionWpComponent } from './pages/iniciar-sesion-wp/iniciar-sesion-wp.component';
 
@@ -28,8 +27,8 @@ const routes: Routes = [
       { path: 'blog/iniciar-sesion-wp', component: IniciarSesionWpComponent },
       {
         path: 'blog/añadir-post', component: NuevoPostComponent,
-        canActivate: [SesionWpGuard, TokenWpGuard],
-        canLoad: [SesionWpGuard, TokenWpGuard],
+        canActivate: [TokenWpGuard],
+        canLoad: [TokenWpGuard],
       },
       { path: 'blog/:slug', component: SinglePostComponent },
       {

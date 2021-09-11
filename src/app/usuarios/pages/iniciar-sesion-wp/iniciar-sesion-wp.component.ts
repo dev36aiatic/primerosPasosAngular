@@ -12,17 +12,15 @@ import { Router } from '@angular/router';
 export class IniciarSesionWpComponent implements OnInit {
 
   myLogin: FormGroup = this.formBuilder.group({
-    username: ['', [Validators.required]],
-    password: ['', [Validators.required]]
+    username: ['lynross', [Validators.required]],
+    password: ['F64mqj8gXoqz8ai8zj', [Validators.required]]
   });
 
   loading: boolean = false;
 
   constructor(private wpService: WordpressService, private formBuilder: FormBuilder, private router: Router) { }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   iniciarSesionWp() {
     this.loading = true;
