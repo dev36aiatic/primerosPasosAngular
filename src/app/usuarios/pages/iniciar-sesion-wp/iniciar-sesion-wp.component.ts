@@ -21,6 +21,7 @@ export class IniciarSesionWpComponent implements OnInit {
   constructor(private wpService: WordpressService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
+    /**Si ya inicio sesion que me rediriga a la pagina de añadir post */
     if(localStorage.getItem('wp-token')){
       this.isWpLogged = true;
       this.router.navigateByUrl('dashboard/blog/añadir-post');
@@ -29,6 +30,9 @@ export class IniciarSesionWpComponent implements OnInit {
     this.isWpLogged = false;
   }
 
+  /**
+   * Funcion que se ejecuta cuando el usuario de click en iniciar sesion en wordpress
+   */
   iniciarSesionWp() {
     this.isWpLogged = true;
     const { username, password } = this.myLogin.value;
