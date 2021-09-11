@@ -1,2 +1,66 @@
-<p>nuevo-post works!</p>
+<div class="container bg-white p-4">
 
+  <div class="row">
+    <div class="col-12">
+      <h3 class="text-center">Añadir Post</h3>
+      <p-divider></p-divider>
+      <p class="text-muted text-center" style="font-size: 14px;">
+        Para crear un nuevo post completa los campos que están debajo. <br>
+        Los que están marcados con un <span class="rojo">*</span> son obligatorios
+      </p>
+      <p-divider></p-divider>
+    </div>
+  </div>
+
+  <form action="" class="form-post">
+    <div class="row py-3">
+      <div class="col-9">
+
+        <div class="row mb-4">
+          <div class="col-12">
+            <span class="p-float-label w-100">
+              <input id="title-input" class="border-none" type="text" pInputText>
+              <label for="title-input">Titulo <span class="rojo">*</span></label>
+            </span>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-6">
+            <span class="p-float-label w-100 span-drop">
+              <p-dropdown id="autor-input"  [options]="authors" [autofocus]="true" placeholder="Selecciona el autor" optionLabel="name" optionValue="id" 
+              [showClear]="true"></p-dropdown>
+              <label for="autor-input">Selecciona el autor <span class="rojo">*</span></label>
+            </span>
+          
+          </div>
+
+          <div class="col-6">
+            <span class="p-float-label w-100">
+              <input id="slug-input" class="border-none" type="text" pInputText>
+              <label for="slug-input">Slug <span class="rojo">*</span></label>
+            </span>
+          </div>
+        </div>
+
+        <div class="row mb-4">
+         
+        </div>
+
+      </div>
+      <div class="col-3">
+          <div class="row">
+            <div class="col-12">
+              <span class="p-float-label">
+                <textarea id="float-area" rows="5" cols="30" pInputTextarea></textarea>
+                <label for="float-area">Extracto</label>
+            </span>
+            </div>
+          </div>
+      </div>
+
+    </div>
+  </form>
+
+
+</div>

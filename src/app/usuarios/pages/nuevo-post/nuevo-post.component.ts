@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { switchMap } from 'rxjs/operators';
+import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
+import { WordpressService } from '../../services/wordpress.service';
 
 @Component({
   selector: 'app-nuevo-post',
@@ -7,9 +10,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NuevoPostComponent implements OnInit {
 
-  constructor() { }
+  loggedUser!:LoggedWpUser;
+  authors: object[];
+
+  constructor(private wpService: WordpressService) { }
 
   ngOnInit(): void {
+
+    this.wpService.getWPUser().subscribe(wpUser => this.loggedUser = wpUser);
+
+    this.authors = [
+      {
+        name: 'Lynross',
+        id:1
+      }
+    ]
+
+
   }
 
 }

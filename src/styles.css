@@ -12,7 +12,17 @@ body {
   font-family: 'Roboto', sans-serif !important;
 }
 
+.rojo {
+  color: red;
+}
 
+.p-dropdown .p-dropdown-label.p-placeholder{
+  color: rgba(255, 255, 255, 0) !important;
+}
+
+.p-dropdown {
+  width: 100% !important;
+}
 
 /* Estilos de la pantalla de inicio */
 

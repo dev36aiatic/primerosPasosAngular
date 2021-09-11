@@ -9,6 +9,10 @@ import { SidebarModule } from 'primeng/sidebar';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { InputTextModule } from 'primeng/inputtext';
+import {DropdownModule} from 'primeng/dropdown';
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import {EditorModule} from 'primeng/editor';
 
 @NgModule({
   exports: [
@@ -20,7 +24,11 @@ import { TabMenuModule } from 'primeng/tabmenu';
     SidebarModule,
     SelectButtonModule,
     TableModule,
-    TabMenuModule
+    TabMenuModule,
+    InputTextModule,
+    DropdownModule,
+    InputTextareaModule,
+    EditorModule
   ]
 })
 export class PrimengModule { }
