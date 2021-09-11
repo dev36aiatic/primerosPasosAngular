@@ -12,14 +12,14 @@
     </div>
   </div>
 
-  <form action="" class="form-post">
+  <form action="" class="form-post" (ngSubmit)="newPost()">
     <div class="row py-3">
-      <div class="col-9">
 
+      <div class="col-9">
         <div class="row mb-4">
           <div class="col-12">
             <span class="p-float-label w-100">
-              <input id="title-input" class="border-none" type="text" pInputText>
+              <input required id="title-input" class="border-none" type="text" pInputText>
               <label for="title-input">Titulo <span class="rojo">*</span></label>
             </span>
           </div>
@@ -28,37 +28,84 @@
         <div class="row mb-4">
           <div class="col-6">
             <span class="p-float-label w-100 span-drop">
-              <p-dropdown id="autor-input"  [options]="authors" [autofocus]="true" placeholder="Selecciona el autor" optionLabel="name" optionValue="id" 
-              [showClear]="true"></p-dropdown>
+              <p-dropdown required id="autor-input" [options]="authors" [autofocus]="true"
+                placeholder="Selecciona el autor" optionLabel="name" optionValue="id" [showClear]="true"></p-dropdown>
               <label for="autor-input">Selecciona el autor <span class="rojo">*</span></label>
             </span>
-          
-          </div>
 
+          </div>
           <div class="col-6">
             <span class="p-float-label w-100">
-              <input id="slug-input" class="border-none" type="text" pInputText>
+              <input id="slug-input" required class="border-none" type="text" pInputText>
               <label for="slug-input">Slug <span class="rojo">*</span></label>
             </span>
           </div>
         </div>
 
         <div class="row mb-4">
-         
+          <div class="col-12">
+            <span class="rojo d-block text-center">*</span>
+            <p-editor id="contenido-editor" required placeholder="Escribe el contenido del post"
+              [style]="{'height':'320px'}">
+            </p-editor>
+          </div>
         </div>
-
       </div>
-      <div class="col-3">
-          <div class="row">
-            <div class="col-12">
-              <span class="p-float-label">
-                <textarea id="float-area" rows="5" cols="30" pInputTextarea></textarea>
-                <label for="float-area">Extracto</label>
+
+      <div class="col-3 mb-4">
+        <div class="row">
+          <div class="col-12">
+            <span class="p-float-label">
+              <textarea required id="float-area" [ngStyle]="{'max-height':'100px','min-height':'100px'}" rows="5"
+                cols="30" pInputTextarea></textarea>
+              <label for="float-area">Extracto  <span class="rojo">*</span></label>
             </span>
+          </div>
+        </div>
+        <p-divider></p-divider>
+        <div class="row mt-4">
+          <div class="col-12">
+            <h6 class="text-muted mb-3">Foto principal</h6>
+            <img class="img-fluid mb-3" src="../../../../assets/mauricio_profile.jpg">
+            <input type="file" name="featured_image" class="d-none" id="featured_image" #featuredImage>
+            <button pButton label="Subir imagen" icon="pi pi-plus" class="mb-3 w-100 p-button-sm"
+              (click)="featuredImage.click()"></button>
+            <button pButton pRipple  class="float-right p-button-text p-button-sm"><span class="rojo">Borrar</span></button>
+          </div>
+        </div>
+        <p-divider></p-divider>
+        <div class="row mt-0">
+          <div class="col-12">
+            <span class="p-float-label w-100 span-drop">
+              <p-dropdown required id="status-input" [options]="status" [autofocus]="true"
+                placeholder="Selecciona el estado" optionLabel="status" optionValue="value" [showClear]="true">
+              </p-dropdown>
+              <label for="status-input">Estado <span class="rojo">*</span></label>
+            </span>
+          </div>
+        </div>
+        <p-divider></p-divider>
+
+        <div class="row mt-4">
+          <div class="col-12 overflow-auto" style="max-height: 200px; min-height: 200px;">
+            <h6 class="text-muted mb-3">Categorias</h6>
+            <div *ngFor="let category of categories" class="p-field-checkbox mb-2">
+              <p-checkbox name="group2" value="category" [value]="category" [(ngModel)]="selectedCategories"
+                [inputId]="category.key"></p-checkbox>
+              <label [for]="category.key"
+                style="margin-bottom: 0px !important; margin-left: 10px !important;">{{category.name}}</label>
             </div>
           </div>
+        </div>
       </div>
 
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-12 d-flex justify-content-center">
+        <button label="Enviar" class="p-button-sm w-50" iconPos="right" pButton [ngStyle]="{'width':'100% !important'}"
+          icon="pi pi-save" [loading]="loading" (onClick)="load()"></button>
+      </div>
     </div>
   </form>
 
