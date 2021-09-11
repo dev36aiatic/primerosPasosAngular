@@ -17,6 +17,7 @@ export class TokenWpGuard implements CanActivate {
       .pipe(
         tap(resp => {
           if (!resp) {
+            this.wpService.wpLogout();
             this.router.navigateByUrl('dashboard/blog/iniciar-sesion-wp');
           }
         })
