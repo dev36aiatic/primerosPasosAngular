@@ -27,8 +27,7 @@ const routes: Routes = [
       { path: 'blog/iniciar-sesion-wp', component: IniciarSesionWpComponent },
       {
         path: 'blog/añadir-post', component: NuevoPostComponent,
-        canActivate: [TokenWpGuard],
-        canLoad: [TokenWpGuard],
+        canActivate: [TokenWpGuard]
       },
       { path: 'blog/:slug', component: SinglePostComponent },
       {

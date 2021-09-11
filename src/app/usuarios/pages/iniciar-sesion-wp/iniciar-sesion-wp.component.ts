@@ -15,24 +15,30 @@ export class IniciarSesionWpComponent implements OnInit {
     username: ['lynross', [Validators.required]],
     password: ['F64mqj8gXoqz8ai8zj', [Validators.required]]
   });
-
+  isWpLogged: boolean = false;
   loading: boolean = false;
 
   constructor(private wpService: WordpressService, private formBuilder: FormBuilder, private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if(localStorage.getItem('wp-token')){
+      this.isWpLogged = true;
+      this.router.navigateByUrl('dashboard/blog/añadir-post');
+      return;
+    }
+    this.isWpLogged = false;
+  }
 
   iniciarSesionWp() {
-    this.loading = true;
+    this.isWpLogged = true;
     const { username, password } = this.myLogin.value;
 
     this.wpService.wordpressLogin(username, password).subscribe(data => {
       if (data.error) {
         Swal.fire('Oops', 'Parece que el usuario o contraseña son incorrectos, por favor cambialos e  intenta de nuevo.', 'error');
-        this.loading = false;
+        this.isWpLogged = false;
         return false;
       }
-      this.loading = false;
       this.router.navigateByUrl('dashboard/blog/añadir-post');
     });
   }
