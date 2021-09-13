@@ -7,6 +7,8 @@ import { Post } from '../interfaces/post.interface';
 import { UserWordpress } from '../interfaces/user-wp.interface';
 import { ValidateWPToken } from '../interfaces/wp-token.interface';
 import { LoggedWpUser } from '../interfaces/logged-wp-user.interface';
+import { WpCategory } from '../interfaces/wp-category.interface';
+import { NewPost } from '../interfaces/new-post-wp.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +25,7 @@ export class WordpressService {
     return new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('wp-token') || '');
   }
 
-  get getUserWp(){
+  get getUserWp() {
     return { ...this.wpUser }
   }
 
@@ -89,14 +91,77 @@ export class WordpressService {
    * Funcion que toma la informacion del usuario que inicio sesion
    * @returns Usuario de wordpress que inicio sesion
    */
-  getWPUser(): Observable<LoggedWpUser> {
+  getWPUser(): Observable<LoggedWpUser> | any {
     const url = `${this.urlWP}/users/me`;
-    
-    return this.http.post<LoggedWpUser>(url, null, { headers: this.wpHeaders })
-    .pipe(
-      tap(wpUser => this.wpUser = wpUser),
-      catchError(err => of(err.error))
+
+    return this.http.post<LoggedWpUser | any> (url, null, { headers: this.wpHeaders })
+      .pipe(
+        tap(wpUser => this.wpUser = wpUser),
+        catchError(err => of(err.error))
       );
+  }
+
+  /**
+   * Funcion para obtener las categorias que estan en wordpress
+   * @returns Categorias almacenadas en wordpress
+   */
+  getCategories(): Observable<WpCategory[]> {
+    const url = `${this.urlWP}/categories`;
+
+    return this.http.get<WpCategory[]>(url)
+      .pipe(
+        map(categories => {
+          let filterData: WpCategory[] = [];
+
+          categories.forEach(({ name, id }) => {
+            filterData.push({ name, id });
+          });
+
+          return filterData;
+        }),
+        catchError(err => of(err.error))
+      );
+  }
+
+  /**
+   * Funcion para añadir media a wordpress
+   * @param slug - Slug de la imagen
+   * @param title - Titulo de la imagen
+   * @param author - Id de la persona que subio la imagen
+   * @param file - Imagen
+   * @returns - Informacion de la imagen
+   */
+  uploadMedia(slug: string, title: string, author: any, file: any) {
+    const url = `${this.urlWP}/media`;
+    const formData = new FormData();
+
+    formData.append('slug', slug);
+    formData.append('status', 'publish');
+    formData.append('title', title);
+    formData.append('author', author);
+    formData.append('media_type', 'image');
+    formData.append('file', file);
+    formData.append('comment_status', 'closed');
+
+    return this.http.post(url, formData, { headers: this.wpHeaders })
+      .pipe(
+        tap(console.log),
+        catchError(err => of(err.error))
+      )
+  }
+
+  /**
+   * Funcion para crear un nuevo post en wordpress
+   * @param body - Datos basicos para crear un post
+   * @returns - Informacion del post creado
+   */
+  newPost(body: NewPost):Observable<NewPost>{
+    const url = `${this.urlWP}/posts`;
+
+    return this.http.post<NewPost>(url, body, {headers: this.wpHeaders}).pipe(
+      tap(console.log),
+      catchError(err => of(err.error))
+    ) 
   }
 
   /**
