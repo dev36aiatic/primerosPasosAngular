@@ -16,9 +16,13 @@
   <div class="container py-4 bg-white">
     <div class="row  justify-content-center">
       <div class="col-md-10 mb-5 border-bottom" *ngFor="let f of posts">
-        <a [routerLink]="['./',f.slug]">
-          <img class="img-fluid" style="width: 100%" [src]="f?._embedded['wp:featuredmedia']['0'].source_url"
+        <a *ngIf="f?._embedded['wp:featuredmedia'] != undefined" [routerLink]="['./',f.slug]">
+          <img  class="img-fluid" style="width: 100%" [src]="f?._embedded['wp:featuredmedia']['0'].source_url"
             alt="{{f.title.rendered}}">
+        </a>
+        <a  class="d-flex justify-content-center" style="background-color: #ccc;" *ngIf="f?._embedded['wp:featuredmedia'] == undefined" [routerLink]="['./',f.slug]">
+          <img  class="img-fluid" style="width: 60%" src="../../../../assets/no-post-image.jpg"
+          alt="Imagen no disponible">
         </a>
         <a [routerLink]="['./',f.slug]">
           <h2 class="text-center my-3">{{f.title.rendered }}</h2>
