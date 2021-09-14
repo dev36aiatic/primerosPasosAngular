@@ -105,9 +105,11 @@
     </div>
 
     <div class="row mt-3">
-      <div class="col-12 d-flex justify-content-center">
-        <button label="Enviar" type="submit" [disabled]="formPost.invalid" class="p-button-sm w-50" pButton
-          [ngStyle]="{'width':'100% !important'}" [loading]="loading" (onClick)="load()"></button>
+    
+      <div class="col-12 d-flex justify-content-center ">
+        <button label="Enviar"  icon="pi pi-save" type="submit" [disabled]="formPost.invalid" class="p-button-sm w-50" pButton
+          [ngStyle]="{'width':'100% !important'}"  [loading]="loading">
+        </button> 
       </div>
     </div>
   </form>

@@ -54,8 +54,9 @@ export class NuevoPostComponent implements OnInit {
     ]
   }
 
+  /**Funcion que se activa cuando el usuario crea un nuevo post */
   newPost() {
-
+    this.loading = true;
     if (this.file != undefined) {
       const title = this.file.name.split('.')[0];
       const slug = this.file.name.split('.')[0];
@@ -65,39 +66,41 @@ export class NuevoPostComponent implements OnInit {
         .pipe(
           switchMap(image => {
             this.formPost.get('featured_media').setValue(parseInt(image.id));
-            return this.wpService.newPost(this.formPost.value)
+            return this.wpService.newPost(this.formPost.value);
           })
         ).subscribe(post => {
-          console.log(post, 'uwu')
-          this.loading = false;
+          this.postStored();
+          this.deleteImage();
         })
-
     } else {
       this.wpService.newPost(this.formPost.value).subscribe(resp => {
-        console.log(resp, 'uwu')
-        this.loading = false;
+        this.postStored();
+        this.deleteImage();
       });
     }
-    console.log(this.formPost.value, 'asd');
   }
 
-  load() {
-    this.loading = true;
+ 
+  /**Funcion que se ejecuta cuando el post se guarda con exito */
+  postStored() {
+    this.loading = false;
+    Swal.fire('Todo en orden!', 'El post ha sido añadido correctamente!', 'success');
+    this.formPost.reset();
   }
 
+  /**Funcion que muestra una preview de la imagen principal del post */
   onPhotoSelected(e) {
     if (e.target.files && e.target.files[0] && e.target.files[0].type.includes("image")) {
-
       this.file = e.target.files[0];
       const reader = new FileReader();
       reader.onload = e => this.photoSelected = reader.result;
       reader.readAsDataURL(this.file);
-
     } else {
       Swal.fire('Error', 'Solo puedes subir imagenes.', 'error');
     }
   }
 
+  /**Funcion para borrar la imagen */
   deleteImage() {
     this.file = undefined;
     this.photoSelected = undefined;
