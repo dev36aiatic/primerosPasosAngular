@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { WordpressService } from '../usuarios/services/wordpress.service';
+import { WordpressService } from '../usuarios/pages/blog/services/wordpress.service';
 
 @Injectable({
   providedIn: 'root'

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { HomeComponent } from './pages/home/home.component';
@@ -13,10 +13,6 @@ import { UsuariosRoutingModule } from './usuarios-routing.module';
 import { VideoComponent } from './pages/video/video.component';
 import { PhotoFormComponent } from './components/photo-form/photo-form.component';
 import { PhotoPreviewComponent } from './components/photo-preview/photo-preview.component';
-import { BlogComponent } from './pages/blog/blog.component';
-import { SinglePostComponent } from './pages/single-post/single-post.component';
-import { IniciarSesionWpComponent } from './pages/iniciar-sesion-wp/iniciar-sesion-wp.component';
-import { NuevoPostComponent } from './pages/nuevo-post/nuevo-post.component';
 
 @NgModule({
   declarations: [
@@ -27,10 +23,6 @@ import { NuevoPostComponent } from './pages/nuevo-post/nuevo-post.component';
     VideoComponent,
     PhotoFormComponent,
     PhotoPreviewComponent,
-    BlogComponent,
-    SinglePostComponent,
-    IniciarSesionWpComponent,
-    NuevoPostComponent
   ],
   exports: [
     MainComponent
@@ -41,8 +33,7 @@ import { NuevoPostComponent } from './pages/nuevo-post/nuevo-post.component';
     PrimengModule,
     SharedModule,
     FormsModule,
-    UsuariosRoutingModule,
-    ReactiveFormsModule,
+    UsuariosRoutingModule
   ],
   providers:[
   ]

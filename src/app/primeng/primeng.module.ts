@@ -14,6 +14,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {InputTextareaModule} from 'primeng/inputtextarea';
 import {EditorModule} from 'primeng/editor';
 import {CheckboxModule} from 'primeng/checkbox';
+import {ProgressBarModule} from 'primeng/progressbar';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {CheckboxModule} from 'primeng/checkbox';
     DropdownModule,
     InputTextareaModule,
     EditorModule,
-    CheckboxModule
+    CheckboxModule,
+    ProgressBarModule
   ]
 })
 export class PrimengModule { }
