@@ -2,7 +2,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12 text-center text-muted">
-            <h4>SELECT THE DEPARTMENT</h4>
+            <h4>Selecciona el departamento</h4>
         </div>
     </div>
     <div class="row border-bottom pt-4 border-top">
@@ -16,4 +16,4 @@
     </div>
 </div>
 <app-input  [listado]="listado" (onSendOptions)="filtrar($event)"></app-input>
-<app-tabla [options]="options" [title]="'Searching in the department of ' + department"></app-tabla>
+<app-tabla [options]="options" [title]="'Buscando en el departamento de ' + department"></app-tabla>

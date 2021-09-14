@@ -9,7 +9,6 @@ import { FormularioRegistroComponent } from './components/formulario-registro/fo
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MainComponent } from './pages/main/main.component';
 import { PrimengModule } from '../primeng/primeng.module';
-import { LogoUnabComponent } from './components/logo-unab/logo-unab.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 
@@ -18,7 +17,6 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     FormularioLoginComponent,
     FormularioRegistroComponent,
     MainComponent,
-    LogoUnabComponent,
     LoginComponent, 
     SignupComponent,
     SidebarComponent

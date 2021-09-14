@@ -2,7 +2,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12 text-center text-muted">
-            <h4>SELECT THE REGION</h4>
+            <h4>Selecciona la región</h4>
         </div>
     </div>
     <div class="row border-bottom pt-4 border-top">
@@ -16,5 +16,5 @@
     </div>
 </div>
 <app-input  [listado]="listado" (onSendOptions)="filtrar($event)"></app-input>
-<app-tabla [options]="options" [title]="'Searching in '+ regionActiva"></app-tabla>
+<app-tabla [options]="options" [title]="'Buscando en '+ regionActiva"></app-tabla>
 

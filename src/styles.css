@@ -34,8 +34,10 @@ body {
   width: 100% !important;
 }
 .btn-login{
+  display: block;
   background: orange;
   color: #fff;
+  width: 100% important;
 }
 
 .btn-login:hover{
@@ -108,14 +110,15 @@ body {
 }
 
 .btn-signup {
-  background-color: rgb(110 68 255 / 86%);
+  background-color: rgb(104, 104, 104);
   color: #fff;
   transition: all ease .3s;
+  width: 100% !important;
 }
 
 .btn-signup:hover {
   color: #fff;
-  background-color: rgb(110 68 255 / 70%);
+  background-color: rgba(104, 104, 104, 0.795);
   transition: all ease .3s;
 }
 

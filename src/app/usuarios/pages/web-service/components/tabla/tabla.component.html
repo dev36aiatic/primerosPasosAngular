@@ -4,7 +4,7 @@
 <div class="card">
     <h5 class="text-center py-3 text-muted border-bottom">{{title}}</h5>
     <p-table [value]="options" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" 
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]">
+        currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} entradas" [rowsPerPageOptions]="[10,25,50]">
         <ng-template pTemplate="header">
             <tr>
                 <th>Region</th>

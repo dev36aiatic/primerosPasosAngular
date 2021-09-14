@@ -15,9 +15,9 @@ export class MainPageComponent implements OnInit {
   ngOnInit(): void {
     //Menu del webservice
     this.items = [
-      { label: 'Region', icon: 'pi pi-fw pi-home', routerLink: './web-service' },
-      { label: 'Department ', icon: 'pi pi-fw pi-map', routerLink: './por-departamento' },
-      { label: 'Advanced Search', icon: 'pi pi-fw pi-search', routerLink: './advanced-search' }
+      { label: 'Región', icon: 'pi pi-fw pi-home', routerLink: './web-service' },
+      { label: 'Departamento ', icon: 'pi pi-fw pi-map', routerLink: './por-departamento' },
+      { label: 'Busqueda Avanzada', icon: 'pi pi-fw pi-search', routerLink: './advanced-search' }
     ];
   }
 

@@ -15,6 +15,7 @@ export class MenuWpComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  /**Metodo para cerrar sesion en wordpress */
   signoutWP() {
     this.wpService.wpLogout();
     this.router.navigateByUrl('dashboard/blog');

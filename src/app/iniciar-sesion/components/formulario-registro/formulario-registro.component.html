@@ -1,38 +1,38 @@
 <form (ngSubmit)="signup()" [formGroup]="mySignup" class="form-login">
   <div class="row mb-4">
     <div class="col text-center text-dark">
-      <h4>Account Register</h4>
+      <h4>Registro de cuenta</h4>
     </div>
   </div>
   <a [ngStyle]="{'text-decoration':'none', 'font-weight':'bolder'}" routerLink="home"
     class="btn-link text-info mb-4 d-inline-block font-weight-bold">
-    <i class="fas fa-long-arrow-alt-left mx-2"></i> Home</a>
+    <i class="fas fa-long-arrow-alt-left mx-2"></i> Ir al inicio</a>
 
   <div class="col-auto">
     <div class="input-group mb-4">
       <div class="input-group-prepend ">
         <div class="input-group-text h-100"><i class="fas fa-user"></i></div>
       </div>
-      <input type="text" class="form-control" formControlName="name" placeholder="Name">
+      <input type="text" class="form-control" formControlName="name" placeholder="Nombre">
     </div>
     <div class="input-group mb-4">
       <div class="input-group-prepend ">
         <div class="input-group-text h-100"><i class="fas fa-envelope"></i></div>
       </div>
-      <input type="email" class="form-control" formControlName="email" id="inputEmail" placeholder="Email">
+      <input type="email" class="form-control" formControlName="email" id="inputEmail" placeholder="Correo">
     </div>
     <div class="input-group mb-4 ">
       <div class="input-group-prepend">
         <div class="input-group-text h-100"><i class="fas fa-key"></i></div>
       </div>
       <input type="password" class="form-control" formControlName="password"  id="inputPassword"
-        placeholder="Password">
+        placeholder="Contraseña">
 
     </div>
   </div>
 
   <div class="col-auto text-center">
-    <button type="submit" [disabled]="mySignup.invalid" class="btn  btn-login mb-2  w-100">Register</button>
+    <button type="submit" [disabled]="mySignup.invalid" class="btn  btn-login mb-2  w-100">Registrarse</button>
   </div>
 
 </form>

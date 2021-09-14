@@ -4,6 +4,7 @@ import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 import { ProfileData } from '../../interfaces/user.interface';
 
 import Swal from 'sweetalert2'
+import { switchMap } from 'rxjs/operators';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -61,16 +62,16 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   photoSelected: string | ArrayBuffer;
   flag: number = 0;
   skills: string[] = [
-    "Creativity",
-    "Persuation",
-    "Collaboration",
-    "Adaptability",
-    "Decision-Making",
-    "Assertive-Communication",
-    "Leadership",
-    "Self-knowledge",
-    "Critical-Thinking",
-    "Creative-Thinking"
+    "Creatividad",
+    "Persuasión",
+    "Colaboración",
+    "Adaptabilidad",
+    "Paciencia",
+    "Comunicación",
+    "Velocidad",
+    "Fortaleza",
+    "Proactividad",
+    "Sociabilidad"
   ]
 
   constructor(
@@ -120,8 +121,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     //Cargar imagen
     this.authService.getImageFile(this.dbUser.profile.image).subscribe(
       image => {
+        console.log(image);
         const reader = new FileReader();
-        reader.onload = e => this.photoSelected = reader.result;
+        reader.onload = e => this.photoSelected = reader.result
         reader.readAsDataURL(image);
       }
     )
@@ -129,20 +131,30 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   /** FUncion que me permite actualizar el perfil del usuario*/
   sendProfile(formulario) {
-    this.authService.userProfile(this.editProfile, this.dbUser.id, localStorage.getItem('provider') || '')
-      .subscribe(data => {
-        if (data.ok == false) {
-          Swal.fire('Error', data.msg, 'error');
-        } else {
-          Swal.fire('Everything is correct :)', data.msg, 'success');
-        }
-      });
 
     if (this.file != undefined) {
       this.authService.uploadImage(this.dbUser.id, this.file, localStorage.getItem('provider') || '')
+        .pipe(
+          switchMap(data => {
+            return this.authService.userProfile(this.editProfile, this.dbUser.id, localStorage.getItem('provider') || '')
+          })
+        ).subscribe(data => {
+          if (data.ok == false) {
+            Swal.fire('Error', data.msg, 'error');
+          } else {
+            Swal.fire('Todo en orden :)', data.msg, 'success');
+          }
+        });
+    } else {
+      this.authService.userProfile(this.editProfile, this.dbUser.id, localStorage.getItem('provider') || '')
         .subscribe(data => {
-          console.log('Imagen reemplazada.');
-        })
+          if (data.ok == false) {
+            Swal.fire('Error', data.msg, 'error');
+          } else {
+            Swal.fire('Todo en orden :)', data.msg, 'success');
+          }
+        });
+
     }
   }
 

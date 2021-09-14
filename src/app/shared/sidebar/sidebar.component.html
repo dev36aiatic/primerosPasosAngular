@@ -11,57 +11,57 @@
     <li>
             <i class="fas fa-search"  id="icon-search" (click)="toggleBtn(btnBurger)"></i>
             <input type="text"  class="text-white" name="search" id="searchBtn" placeholder="Search...">
-        <span class="tooltip">Search</span>
+        <span class="tooltip">Buscar</span>
     </li>
     <li (click)="toggleHidden()" [routerLink]="['./']">
         <a>
             <i class="fas fa-home"></i>
-            <span class="links_name">Home</span>
+            <span class="links_name">Inicio</span>
         </a>
-        <span class="tooltip">Go to Home</span>
+        <span class="tooltip">Ir al inicio</span>
     </li>
     <li (click)="toggleHidden()" [routerLink]="['./profile']">
         <a>
             <i class="fas fa-user-circle"></i>
-            <span class="links_name">Profile</span>
+            <span class="links_name">Perfil</span>
         </a>
-        <span class="tooltip">Go to profile</span>
+        <span class="tooltip">Ir al perfil</span>
     </li>
     <li (click)="toggleHidden()" [routerLink]="['./history']">
         <a>
             <i class="fas fa-history"></i>
-            <span class="links_name">Registers</span>
+            <span class="links_name">Registros</span>
         </a>
-        <span class="tooltip">See the registers</span>
+        <span class="tooltip">Ver los registros</span>
     </li>
     <li (click)="toggleHidden()" [routerLink]="['./video']">
         <a>
             <i class="fas fa-video"></i>
             <span class="links_name">Video</span>
         </a>
-        <span class="tooltip">Watch video</span>
+        <span class="tooltip">Ver video</span>
     </li>
     <li (click)="toggleHidden()" [routerLink]="['./blog']">
         <a>
             <i class="fas fa-blog"></i>
             <span class="links_name">Blog</span>
         </a>
-        <span class="tooltip">See the Blog</span>
+        <span class="tooltip">Ver el blog</span>
     </li>
     <li (click)="toggleHidden()" (click)="logout()">
         <a >
             <i class="fas fa-sign-out-alt" id="log_out"></i>
-            <span class="links_name" >Logout</span>
+            <span class="links_name" >Cerrar sesión</span>
         </a>
-        <span class="tooltip">Logout</span>
+        <span class="tooltip">Cerrar sesión</span>
     </li>
     
     <li [routerLink]="['./web-service']" class="web-service" (click)="toggleHidden()" >
         <a >
             <i class="fas fa-server"></i>
-            <span class="links_name" >Municipalities COL</span>
+            <span class="links_name" >Municipios COL</span>
         </a>
-        <span class="tooltip">Municipalities</span>
+        <span class="tooltip">Municipios</span>
     </li>
     
   </ul>

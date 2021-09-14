@@ -31,6 +31,7 @@ export class BlogComponent implements OnInit {
       });
   }
 
+  /**Funcion para cambiar ir a la pagina de agregar post */
   addPost() {
     if (this.isWPLogged) {
       this.load = true;
