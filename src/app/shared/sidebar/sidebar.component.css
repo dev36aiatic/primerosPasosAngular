@@ -217,7 +217,7 @@ li {
 }
 
 .totalHeight{
-    min-height: 97vh;
+    min-height: 100vh;
     height: 100%;
     transition: all ease .6s !important;
 }

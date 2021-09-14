@@ -320,6 +320,16 @@ body {
   width: 35%;
 }
 
+.btn-new-post {
+  width: 50% !important;
+}
+
+@media screen and(max-width:992px){
+  .btn-new-post{
+    width: 100% !important;
+  }
+}
+
 @media screen and (max-width: 800px) {
   .menu-main-home{
     bottom:0;
