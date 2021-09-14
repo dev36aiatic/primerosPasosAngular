@@ -1,0 +1,30 @@
+.user-logged {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .user-logged .info-user {
+    display: flex;
+    align-items: center;
+    display: inline-block;
+  }
+  
+  .user-logged .btn-exit-wp {
+    display: inline-block;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #3F51B5 !important;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all ease .5s;
+  }
+  
+  .user-logged .btn-exit-wp:hover {
+    transform: scale(1.1);
+    transition: all ease .5s;
+  }

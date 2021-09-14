@@ -1,0 +1,7 @@
+<div class="user-logged">
+    <span class="info-user">
+        <span class="text-muted  font-weight-bold mr-2">{{ wpUser.username | titlecase }}</span>
+        <img [src]="wpUser.avatar_urls['24']">
+      </span>
+      <a class="btn-exit-wp" (click)="signoutWP()">Cerrar sesión en WordPress</a>
+</div>
