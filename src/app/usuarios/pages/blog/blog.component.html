@@ -5,10 +5,14 @@
       <div class="col-12 my-3 text-muted text-center">
         <h2>Blog</h2>
       </div>
-      <div class="col-12 d-flex justify-content-between flex-wrap align-content-center align-items-center">
+      <div class="col-12 my-2 d-flex justify-content-between flex-wrap align-content-center align-items-center">
         <h6 class="text-center text-muted">Posts <small>({{posts.length}})</small></h6>
-        <button pButton type="button" label="Añadir nuevo post" class="p-button-link" icon="pi pi-plus"
-          [routerLink]="['./iniciar-sesion-wp']"></button>
+        <div class="d-flex align-items-center">
+          <button style="font-size: 14px !important;" pButton type="button" label="Iniciar sesión en Wordpress" class="p-button-link" icon="pi pi-sign-in"
+            [routerLink]="['./iniciar-sesion-wp']"></button>
+          <button style="font-size: 14px !important;" pButton type="button" label="Añadir nuevo post" class="p-button-link" icon="pi pi-plus"
+            [routerLink]="['./iniciar-sesion-wp']"></button>
+        </div>
       </div>
     </div>
   </div>
@@ -17,12 +21,13 @@
     <div class="row  justify-content-center">
       <div class="col-md-10 mb-5 border-bottom" *ngFor="let f of posts">
         <a *ngIf="f?._embedded['wp:featuredmedia'] != undefined" [routerLink]="['./',f.slug]">
-          <img  class="img-fluid" style="width: 100%" [src]="f?._embedded['wp:featuredmedia']['0'].source_url"
+          <img class="img-fluid" style="width: 100%" [src]="f?._embedded['wp:featuredmedia']['0'].source_url"
             alt="{{f.title.rendered}}">
         </a>
-        <a  class="d-flex justify-content-center" style="background-color: #ccc;" *ngIf="f?._embedded['wp:featuredmedia'] == undefined" [routerLink]="['./',f.slug]">
-          <img  class="img-fluid" style="width: 60%" src="../../../../assets/no-post-image.jpg"
-          alt="Imagen no disponible">
+        <a class="d-flex justify-content-center" style="background-color: #ccc;"
+          *ngIf="f?._embedded['wp:featuredmedia'] == undefined" [routerLink]="['./',f.slug]">
+          <img class="img-fluid" style="width: 60%" src="../../../../assets/no-post-image.jpg"
+            alt="Imagen no disponible">
         </a>
         <a [routerLink]="['./',f.slug]">
           <h2 class="text-center my-3">{{f.title.rendered }}</h2>

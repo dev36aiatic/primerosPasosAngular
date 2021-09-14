@@ -1,7 +1,8 @@
 <div class="container bg-white p-4">
 
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 position-relative">
+      <a class="btn-exit-wp" (click)="signoutWP()">Cerrar sesión en WordPress</a>
       <h3 class="text-center">Añadir Post</h3>
       <p-divider></p-divider>
       <p class="text-muted text-center" style="font-size: 14px;">
@@ -15,7 +16,7 @@
   <form action="" class="form-post" (ngSubmit)="newPost()" [formGroup]="formPost" autocomplete="off">
     <div class="row py-3">
 
-      <div class="col-9">
+      <div class="col-12 col-lg-9">
         <div class="row mb-4">
           <div class="col-12">
             <span class="p-float-label w-100">
@@ -26,7 +27,7 @@
         </div>
 
         <div class="row mb-4">
-          <div class="col-6">
+          <div class="col-12 col-md-6 mb-4 mb-md-0">
             <span class="p-float-label w-100 span-drop">
               <p-dropdown required id="autor-input" [options]="authors" [autofocus]="true"
                 placeholder="Selecciona el autor" optionLabel="name" optionValue="id" [showClear]="true"
@@ -35,7 +36,7 @@
             </span>
 
           </div>
-          <div class="col-6">
+          <div class="col-12 col-md-6">
             <span class="p-float-label w-100">
               <input id="slug-input" required class="border-none" type="text" pInputText formControlName="slug">
               <label for="slug-input">Slug <span class="rojo">*</span></label>
@@ -53,7 +54,7 @@
         </div>
       </div>
 
-      <div class="col-3 mb-4">
+      <div class="col-12 col-lg-3 mb-4">
         <div class="row">
           <div class="col-12">
             <span class="p-float-label">
@@ -107,7 +108,7 @@
     <div class="row mt-3">
     
       <div class="col-12 d-flex justify-content-center ">
-        <button label="Enviar"  icon="pi pi-save" type="submit" [disabled]="formPost.invalid" class="p-button-sm w-50" pButton
+        <button label="Añadir"  icon="pi pi-save" type="submit" [disabled]="formPost.invalid" class="p-button-sm w-100 w-lg-50" pButton
           [ngStyle]="{'width':'100% !important'}"  [loading]="loading">
         </button> 
       </div>

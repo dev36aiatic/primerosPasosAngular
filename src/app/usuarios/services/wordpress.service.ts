@@ -91,10 +91,10 @@ export class WordpressService {
    * Funcion que toma la informacion del usuario que inicio sesion
    * @returns Usuario de wordpress que inicio sesion
    */
-  getWPUser(): Observable<LoggedWpUser> | any {
+  getWPUser(): Observable<LoggedWpUser>  {
     const url = `${this.urlWP}/users/me`;
 
-    return this.http.post<LoggedWpUser | any> (url, null, { headers: this.wpHeaders })
+    return this.http.post<LoggedWpUser> (url, null, { headers: this.wpHeaders })
       .pipe(
         tap(wpUser => this.wpUser = wpUser),
         catchError(err => of(err.error))

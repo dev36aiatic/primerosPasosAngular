@@ -5,6 +5,7 @@ import { WordpressService } from '../../services/wordpress.service';
 import { WpCategory } from '../../interfaces/wp-category.interface';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nuevo-post',
@@ -28,13 +29,10 @@ export class NuevoPostComponent implements OnInit {
   authors: object[];
   status: object[];
   file: File;
-  uploadedFiles: any[] = [];
   categories: WpCategory[] = [];
-  selectedCategories: any[] = [];
   loading = false;
 
-
-  constructor(private formBuilder: FormBuilder, private wpService: WordpressService) { }
+  constructor(private formBuilder: FormBuilder, private wpService: WordpressService, private router:Router) { }
 
   ngOnInit(): void {
     this.wpService.getWPUser().subscribe(wpUser => this.loggedUser = wpUser);
@@ -80,7 +78,6 @@ export class NuevoPostComponent implements OnInit {
     }
   }
 
- 
   /**Funcion que se ejecuta cuando el post se guarda con exito */
   postStored() {
     this.loading = false;
@@ -104,6 +101,11 @@ export class NuevoPostComponent implements OnInit {
   deleteImage() {
     this.file = undefined;
     this.photoSelected = undefined;
+  }
+
+  signoutWP(){
+    this.wpService.wpLogout();
+    this.router.navigateByUrl('/dashboard/blog/iniciar-sesion-wp');
   }
 
 }
