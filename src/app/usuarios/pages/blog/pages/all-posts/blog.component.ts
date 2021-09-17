@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
-import { Post } from '../../interfaces/post.interface';
 import Swal from 'sweetalert2';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+
+import { Post } from '../../interfaces/post.interface';
 import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
 import { WordpressService } from '../../services/wordpress.service';
 
@@ -45,6 +45,10 @@ export class BlogComponent implements OnInit {
       });
   }
 
+  /**
+   * Función para borrar un post
+   * @param id - id del post a borrar
+   */
   postToDelete(id: number) {
     this.wpService.deleteSinglePost(id)
       .pipe(

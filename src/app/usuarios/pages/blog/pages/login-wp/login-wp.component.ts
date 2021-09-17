@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { WordpressService } from '../../services/wordpress.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import { WordpressService } from '../../services/wordpress.service';
 
 @Component({
   selector: 'login-wp',

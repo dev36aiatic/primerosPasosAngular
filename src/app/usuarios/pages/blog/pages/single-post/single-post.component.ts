@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+
 import { WordpressService } from '../../services/wordpress.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class SinglePostComponent implements OnInit {
   constructor(private wpService: WordpressService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    //Toma el slug de la url y busca el post en la api de wp
     this.route.params.pipe(
       switchMap(({ slug }) => {
         this.slug = slug

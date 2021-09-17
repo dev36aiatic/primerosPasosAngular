@@ -17,6 +17,7 @@ export class DeletePostComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**Funcion que se emite el id del post a borrar */
   deleteThisPost(id:number){
     this.onSendPostId.emit(id);
   }

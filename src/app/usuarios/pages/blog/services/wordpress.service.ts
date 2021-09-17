@@ -26,8 +26,8 @@ export class WordpressService {
   }
 
   /**
-   * Numero de post a mostrar
-   * @param id
+   * Funcion buscar posts
+   * @param id - numero de posts a mostrar
    */
   getAll(id: number): Observable<Post[]> {
     const url = `${this.urlWP}/posts`
@@ -35,8 +35,8 @@ export class WordpressService {
   }
 
   /**
-   * Slug del post  a mostrar
-   * @param id
+   * Funcion para buscar un post por su slug
+   * @param id - slug del post
    */
   getSinglePost(id: string): Observable<Post> {
     const url = `${this.urlWP}/posts`
@@ -44,10 +44,10 @@ export class WordpressService {
   }
 
   /**
-   * 
+   * Funcion para iniciar sesion en wordpress
    * @param username - nombre de usuario
    * @param password - contraseña
-   * @returns - Informacion del usuario y token
+   * @returns - Informacion del basica del usuario y token
    */
   wordpressLogin(username: string, password: string) {
     const body = { username, password }
@@ -65,7 +65,7 @@ export class WordpressService {
 
   /**
    * Funcion para validar el token de wordpress
-   * @returns observable true si el token es valido, si es falso observable false
+   * @returns - Observable true si el token es valido, de lo contrario observable false
    */
   validateWpToken(): Observable<boolean> {
     const url = `${this.urlWpToken}/validate`;

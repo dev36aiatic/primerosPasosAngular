@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { switchMap } from 'rxjs/operators';
-import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
-import { WordpressService } from '../../services/wordpress.service';
+import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { ActivatedRoute } from '@angular/router';
+
+import { WordpressService } from '../../services/wordpress.service';
+import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
 import { WpCategory } from '../../interfaces/wp-category.interface';
 import { Post } from '../../interfaces/post.interface';
 
@@ -42,7 +43,7 @@ export class UpdatePostComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-
+    //Toma el parametro de la url y busca el post
     this.route.params.pipe(
       switchMap(({ slug }) => {
         this.slug = slug;
@@ -50,13 +51,13 @@ export class UpdatePostComponent implements OnInit {
       })
     ).subscribe(post => {
       if (post[0]) {
-        // Expresión regular para quitar etiquetas html
+        // Expresión regular para quitar etiquetas html que vienen en el extracto
         const regex = /(<([^>]+)>)/ig;
 
         this.exist = true;
         this.post = post[0];
-        if(post[0].featured_media != 0){
-          this.wpService.getMedia(post[0].featured_media).subscribe(media =>{
+        if (post[0].featured_media != 0) {
+          this.wpService.getMedia(post[0].featured_media).subscribe(media => {
             this.photoSelected = media["guid"]["rendered"];
           })
         }
@@ -84,7 +85,6 @@ export class UpdatePostComponent implements OnInit {
         id: 1
       }
     ]
-
     this.status = [
       {
         status: 'Publicar',
@@ -130,7 +130,6 @@ export class UpdatePostComponent implements OnInit {
       Swal.fire('Todo en orden!', 'El post ha sido actualizado sin problemas!', 'success');
     }
   }
-
 
   /**Funcion que muestra una preview de la imagen principal del post */
   onPhotoSelected(e) {

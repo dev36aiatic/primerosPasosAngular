@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { switchMap } from 'rxjs/operators';
-import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
-import { WordpressService } from '../../services/wordpress.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+
+import { WordpressService } from '../../services/wordpress.service';
+import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
 import { WpCategory } from '../../interfaces/wp-category.interface';
 
 @Component({
@@ -35,9 +35,7 @@ export class NewPostComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private wpService: WordpressService) { }
 
   ngOnInit(): void {
-
     //Valida si el usuario inicio sesion  y el rol que tiene
-    
     this.wpService.getWPUser().subscribe(wpUser => this.loggedUser = wpUser);
     this.wpService.getCategories().subscribe(categories => this.categories = categories);
     this.authors = [
@@ -84,6 +82,10 @@ export class NewPostComponent implements OnInit {
     }
   }
 
+  /**
+   * Funcion que recibe un post analiza si hay errores o fue exitoso
+   * @param post - Post
+   */
   newPostHandleError(post: any) {
     if (post["error"]) {
       Swal.fire('Oops!', post["error"], 'error');
