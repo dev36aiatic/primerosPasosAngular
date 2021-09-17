@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
@@ -21,6 +21,7 @@ export class MenuWpComponent implements OnInit {
   isWPLogged: boolean = undefined;
   items: MenuItem[];
   load: boolean = false;
+  linkTo: string;
   displayResponsive: boolean = false;
   @Output() onUpdateCategories: EventEmitter<WpCategory[]> = new EventEmitter();
   formCategory: FormGroup = this.formBuilder.group({
@@ -29,9 +30,17 @@ export class MenuWpComponent implements OnInit {
     description: ['']
   });
 
-  constructor(private wpService: WordpressService, private router: Router, private formBuilder: FormBuilder) { }
+  constructor(private wpService: WordpressService, private router: Router, private formBuilder: FormBuilder, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+
+    this.route.params.subscribe(({ slug }) => {
+      if (slug) {
+        this.linkTo = '/dashboard/blog/iniciar-sesion-wp';
+      } else {
+        this.linkTo = './iniciar-sesion-wp';
+      }
+    });
 
     //Valida si el usuario inicio sesion
     this.wpService.validateWpToken()
