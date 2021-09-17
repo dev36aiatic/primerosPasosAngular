@@ -42,6 +42,7 @@ body {
   height: 500px !important;
 }
 
+
 /* Estilos de la pantalla de inicio */
 
 .dad {
@@ -425,6 +426,12 @@ body {
     margin-bottom: 30px;
   }
 
+}
+
+@media screen and (max-width: 768px){
+  .search-post .p-input-icon-left{
+    width: 100% !important;
+ }
 }
 
 @media screen and (max-width: 550px) {
