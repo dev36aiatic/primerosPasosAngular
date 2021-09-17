@@ -8,21 +8,25 @@ import { FormularioLoginComponent } from './components/formulario-login/formular
 import { FormularioRegistroComponent } from './components/formulario-registro/formulario-registro.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MainComponent } from './pages/main/main.component';
+import { PrimengModule } from '../primeng/primeng.module';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 
 @NgModule({
   declarations: [
-    LoginComponent, 
-    SignupComponent,
     FormularioLoginComponent,
     FormularioRegistroComponent,
-    MainComponent
+    MainComponent,
+    LoginComponent, 
+    SignupComponent,
+    SidebarComponent
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     IniciarSesionRoutingModule,
-    FormsModule
+    PrimengModule
   ],
   exports:[LoginComponent,SignupComponent]
   

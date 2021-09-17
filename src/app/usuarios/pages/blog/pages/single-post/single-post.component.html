@@ -1,0 +1,42 @@
+  <div *ngIf="post else cargandoPosts">
+
+    <div [ngClass]="{'bg-white': post.length > 0 }" class="container pb-5">
+      <div class="row">
+        <div class="col-12 bg-white">
+          <app-menu-wp></app-menu-wp>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 overflow-hidden" *ngFor="let f of post">
+          <span *ngIf="f?._embedded['wp:featuredmedia'] != undefined">
+            <img class="img-fluid" style="width: 100%" [src]="f?._embedded['wp:featuredmedia']['0'].source_url"
+              alt="{{f.title.rendered}}">
+          </span>
+          <span class="d-flex justify-content-center" style="background-color: #ccc;"
+            *ngIf="f?._embedded['wp:featuredmedia'] == undefined">
+            <img class="img-fluid" style="width: 60%" src="../../../../assets/no-post-image.jpg"
+              alt="Imagen no disponible">
+          </span>
+          <h2 class="text-center my-3">{{f.title.rendered }}</h2>
+          <p class="text-muted font-weight-bold">Autor: {{f?._embedded['author']['0'].name | titlecase}} </p>
+          <div [innerHTML]="f.content.rendered"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <ng-template #cargandoPosts>
+    <div class="cargando-posts w-100">
+      <p class="text-muted">Cargando post...
+        <p-progressBar mode="indeterminate" [style]="{'height': '10px'}"></p-progressBar>
+      </p>
+    </div>
+  </ng-template>
+
+  <div  *ngIf="post && post.length == 0">
+    <div class="cargando-posts" style="height: 60vh !important;">
+      <h3><span class="rojo"><i class="fas fa-times mx-2"></i></span> El post <span class="rojo">{{ slug }}</span> no ha
+        sido encontrado.<i class="fas rojo fa-times mx-2"></i> </h3>
+    </div>
+  </div>

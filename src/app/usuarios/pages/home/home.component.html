@@ -1,13 +1,31 @@
-<app-sidebar></app-sidebar>
-
-<div class=" container"  [ngStyle]="{'height': '100vh'}">
-    <div class="row justiy-content-center align-items-center" 
-    [ngStyle]="{'height': '100%'}">
-    
-        <div [ngStyle]="{'margin-left':'78px'}" class="col  rounded text-white p-5 presentation">
-            <h2>Hello World</h2>
-            <h6 *ngFor="let item of infoUser | keyvalue">
-                {{ item.key | titlecase}} : {{ item.value}}</h6>
-        </div>
+<div class="container home-page">
+  <div class="row">
+    <div class="col-12 py-4 text-center">
+      <h4 class="title">MINIONS UNAB</h4>
+      <hr>
     </div>
+  </div>
+  <div class="row d-flex justify-content-around">
+    <div class="card mb-4" style="width: 18rem;">
+        <img class="card-img-top" src="../../../../assets/mauricio_profile.jpg" alt="Card image cap">
+        <div class="card-body text-center">
+          <p class="card-text"><strong>Mauricio Barva</strong> <br> Estudiante Ingenieria de Sistemas <br> UNAB</p>
+        </div>
+      </div>
+      <div class="card mb-4 " style="width: 18rem;">
+        <img class="card-img-top" src="../../../../assets/daniel_profile.jpg" alt="Card image cap">
+        <div class="card-body text-center">
+          <p class="card-text"><strong>Daniel Pacheco</strong> <br> Estudiante Ingenieria de Sistemas <br> UNAB</p>
+        </div>
+      </div>
+  </div>
+
+  <div class="row ">
+      <div class="col-12 text-center ">
+            <img class="logo-u" src="../../../../assets/NARANJA.png" alt="LOGO UNAB">
+      </div>
+      <div class="col-12 text-center pb-4">
+          <h6><strong>Practicas Universitarias 2021-2</strong></h6>
+      </div>
+  </div>
 </div>

@@ -1,38 +1,46 @@
 <form (ngSubmit)="login()" class="form-login" [formGroup]="myLogin" autocomplete="off">
-  
+ 
+<div class="separacion">
+  <div class="row mb-4">
+    <div class="col text-center text-dark">
+      <h4>Acceso a la cuenta</h4>
+    </div>
+  </div>
   <div class="col-auto">
     <div class="input-group mb-4">
       <div class="input-group-prepend ">
         <div class="input-group-text h-100"><i class="fas fa-envelope"></i></div>
       </div>
-      <input type="email" formControlName="email" class="form-control" id="inputEmail" placeholder="Email">
+      <input type="email" formControlName="email" class="form-control" id="inputEmail" placeholder="Correo">
     </div>
     <div class="input-group mb-4">
       <div class="input-group-prepend">
         <div class="input-group-text h-100"><i class="fas fa-key"></i></div>
       </div>
-      <input type="password" formControlName="password" class="form-control" id="inputPassword" placeholder="Password">
+      <input type="password" formControlName="password" class="form-control " id="inputPassword" placeholder="Contraseña">
     </div>
   </div>
-  <div>
-  </div>
-
   <div class="col-auto">
-    <button type="submit" [disabled]="!myLogin.valid" class="btn btn-dark mb-2 ">Login</button>
-    <button type="button" class="btn  mx-3 mb-2" routerLink="signup"
-     [ngStyle]="{'background-color':'#ccc'}">Signup</button>
+    <button type="submit" [disabled]="!myLogin.valid" class="btn w-100 d-block btn-login mb-2 ">Iniciar sesión</button>
+    <button type="button" class="btn w-100 d-block btn-signup mb-2" routerLink="signup">Registrarse</button>
   </div>
   <div class="vl">
-    <span class="vl-innertext">or</span>
+    <span class="vl-innertext">o</span>
   </div>
-
-  <div class="col d-flex justify-content-around">
-    <a  [ngStyle]="{'cursor':'pointer'}" class="fb btn-s" (click)="signInWithFB()">
-      <i class="fab fa-facebook-f d-inline-block " style="font-size: 19px; " ></i> <span class="d-inline-block mx-2 px-2">Login with Facebook</span>
-    </a>
+  
+  <div class="row">
+    <div class="col-12">
+      <a  [ngStyle]="{'cursor':'pointer'}" class="fb btn-s" (click)="signInWithFB()">
+        <i class="fab fa-facebook-f d-inline-block " style="font-size: 19px; " ></i> <span class="d-inline-block mx-2 px-2">Iniciar sesión con Facebook</span>
+      </a>
+  
+    </div>
+  
+    <div class="col-12">
     <a  [ngStyle]="{'cursor':'pointer'}" class="google btn-s" (click)="signInWithGoogle()">
-      <i class="fab fa-google d-inline-block"  style="font-size: 17px;"></i> <span class="d-inline-block px-3">Login with Google+</span>
+      <i class="fab fa-google d-inline-block"  style="font-size: 17px;"></i> <span class="d-inline-block px-3">Iniciar sesión con Google</span>
     </a>
   </div>
-
+  </div>
+</div>
 </form>

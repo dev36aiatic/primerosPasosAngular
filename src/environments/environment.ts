@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:4000'
+  baseUrl: 'http://localhost:4000',
+  baseMunicipios:'https://www.datos.gov.co/resource/xdk5-pm3f.json',
+  wpURL:'https://dev36.latiendasigueabierta.com/wp-json/wp/v2',
+  wpToken:'https://dev36.latiendasigueabierta.com/wp-json/jwt-auth/v1/token'
 };
 
 /*

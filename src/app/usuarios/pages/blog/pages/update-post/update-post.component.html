@@ -1,0 +1,138 @@
+<div *ngIf="post">
+  <div class="container bg-white p-4" *ngIf="loggedUser else infoLoading">
+
+    <div *ngIf="loggedUser['capabilities']['administrator']  else infoLoading">
+
+      <div class="row position-relative">
+        <div class="col-12">
+          <app-menu-wp (onUpdateCategories)="updateCategories($event)" [wpUser]="loggedUser"></app-menu-wp>
+        </div>
+        <div class="col-12 position-relative">
+          <h3 class="text-center text-muted">Editando la entrada de {{this.formPost.get('title').value}} </h3>
+          <p-divider></p-divider>
+        </div>
+      </div>
+
+      <form action="" class="form-post" (ngSubmit)="updatePost()" [formGroup]="formPost" autocomplete="off">
+        <div class="row py-3 ">
+
+          <div class="col-12 col-lg-9  h-100 position-relative" style="height: 100% !important;">
+            <div class="row mb-4">
+              <div class="col-12">
+                <span class="p-float-label w-100">
+                  <input required formControlName="title" id="title-input" class="border-none" type="text" pInputText>
+                  <label for="title-input">Titulo <span class="rojo">*</span></label>
+                </span>
+              </div>
+            </div>
+
+            <div class="row mb-4">
+              <div class="col-12 col-md-6 mb-4 mb-md-0">
+                <span class="p-float-label w-100 span-drop">
+                  <p-dropdown required id="autor-input" [options]="authors" [autofocus]="true"
+                    placeholder="Selecciona el autor" optionLabel="name" optionValue="id" [showClear]="true"
+                    formControlName="author"></p-dropdown>
+                  <label for="autor-input">Selecciona el autor <span class="rojo">*</span></label>
+                </span>
+
+              </div>
+              <div class="col-12 col-md-6">
+                <span class="p-float-label w-100">
+                  <input id="slug-input" required class="border-none" type="text" pInputText formControlName="slug">
+                  <label for="slug-input">Slug <span class="rojo">*</span></label>
+                </span>
+              </div>
+            </div>
+
+            <div class="row mb-4 h-100">
+              <div class="col-12 h-100">
+                <span class="rojo d-block text-center">*</span>
+                <p-editor class="overflow-auto" formControlName="content" id="contenido-editor" required
+                  placeholder="Escribe el contenido del post" [style]="{'height':'500px'}">
+                </p-editor>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-3 mb-4">
+            <div class="row">
+              <div class="col-12">
+                <span class="p-float-label">
+                  <textarea formControlName="excerpt" required id="float-area"
+                    [ngStyle]="{'max-height':'100px','min-height':'100px'}" rows="5" cols="30"
+                    pInputTextarea></textarea>
+                  <label for="float-area">Extracto <span class="rojo">*</span></label>
+                </span>
+              </div>
+            </div>
+            <p-divider></p-divider>
+            <div class="row mt-4">
+              <div class="col-12">
+                <h6 class="text-muted mb-3">Foto principal</h6>
+                <img class="img-fluid mb-3" [src]="photoSelected">
+                <input type="file" (change)="onPhotoSelected($event)" name="featured_image" class="d-none"
+                  id="featured_image" #featuredImage>
+                <button pButton type="button" label="Subir imagen" icon="pi pi-plus" class="mb-3 w-100 p-button-sm"
+                  (click)="featuredImage.click()"></button>
+                <button type="button" *ngIf="file" (click)="deleteImage()" pButton pRipple
+                  class="float-right p-button-text p-button-sm"><span class="rojo">Borrar</span></button>
+              </div>
+            </div>
+            <p-divider></p-divider>
+            <div class="row mt-0">
+              <div class="col-12">
+                <h6 class="text-muted mb-3">Estado del post</h6>
+                <span class="p-float-label w-100 span-drop">
+                  <p-dropdown formControlName="status" required id="status-input" [options]="status" [autofocus]="true"
+                    placeholder="Selecciona el estado" optionLabel="status" optionValue="value" [showClear]="true">
+                  </p-dropdown>
+                  <label for="status-input">Estado <span class="rojo">*</span></label>
+                </span>
+              </div>
+            </div>
+            <p-divider></p-divider>
+
+            <div class="row mt-4">
+              <div class="col-12 overflow-auto" style="max-height: 200px; min-height: 200px;">
+                <h6 class="text-muted mb-3">Categorias</h6>
+                <div *ngFor="let category of categories" class="p-field-checkbox mb-2">
+                  <p-checkbox [formControl]="formPost.controls['categories']" name="group2" value="category"
+                    [value]="category.id" [inputId]="category.id"></p-checkbox>
+                  <label [for]="category.id"
+                    style="margin-bottom: 0px !important; margin-left: 10px !important;">{{category.name | titlecase}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row mt-3">
+
+          <div class="col-12 d-flex justify-content-center ">
+            <button label="Guardar cambios" icon="pi pi-save" type="submit" [disabled]="formPost.invalid"
+              class="p-button-sm btn-new-post" pButton [loading]="loading">
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="exist == false" class="bg-white">
+  <div class="col-12 pt-1">
+    <app-menu-wp (onUpdateCategories)="updateCategories($event)" [wpUser]="loggedUser"></app-menu-wp>
+  </div>
+  <div class="cargando-posts " style="height: 60vh !important;">
+    <p class="font-weight-bold">La entrada <span class="rojo">{{slug}}</span> que intentas actualizar no se ha podido
+      encontrar. Asegúrate que la url sea correcta. </p>
+  </div>
+</div>
+
+<ng-template #infoLoading>
+  <div class="cargando-posts">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+</ng-template>

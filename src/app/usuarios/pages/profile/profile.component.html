@@ -1,0 +1,121 @@
+<div class="container text-dark">
+  <form class="form-profile" #formProfile="ngForm" (ngSubmit)="sendProfile(formProfile)">
+    <div class="row mb-4">
+      <div class="col-12 text-center">
+        <h4>Perfil de {{editProfile.name | titlecase}}
+        </h4>
+      </div>
+      <div class="col-12 img-profile">
+        <div class="contenedor-img-profile">
+          <div class="cover cover-select-class"></div>
+          <input type="file" class="d-none" (change)="onPhotoSelected($event)" #photoInput>
+          <img [src]="photoSelected" alt="User Image" (click)="photoInput.click()">
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <div class="col-6">
+        <span class="warning">Los campos marcados con * son obligatorios</span>
+      </div>
+      <div class="col-6 text-right">
+        <button #btnEdit (click)="editFields(btnEdit)" class="btn-edit-profile"><i class="fas fa-edit"></i></button>
+      </div>
+    </div>
+    <hr>
+    <div class="form-group">
+      <label for="fullName">Nombre completo <span class="mark">*</span></label>
+      <input type="text" pInputText ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.name" 
+        name="name" id="fullName" placeholder="Nombre completo">
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputIdNumer">Cédula <span class="mark">*</span></label>
+        <input type="number" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.cc" name="cc"
+        pInputText  id="inputIdNumer" placeholder="Cédula" onkeypress="return event.charCode >= 48" min="1">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputAddress">Dirección <span class="mark">*</span></label>
+        <input type="text" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.address" name="address"
+        pInputText  id="inputAddress" placeholder="Dirección">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputDepartment">Departamento <span class="mark">*</span></label>
+        <p-dropdown (onChange)="selectedDepartment()" [options]="departments" required name="department"
+          id="inputDepartment" [disabled]="disabledItem" [(ngModel)]="editProfile.department"
+          placeholder="Selecciona el departamento" optionLabel="label" optionValue="value" [showClear]="true">
+        </p-dropdown>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="idCity">Ciudad <span class="mark">*</span></label>
+        <p-dropdown [options]="municipalities" required name="city" id="idCity" [disabled]="disabledItem"
+          [(ngModel)]="editProfile.city" placeholder="Selecciona la ciudad" optionLabel="municipio"
+          optionValue="municipio" [showClear]="true"></p-dropdown>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="inputCountry">País <span class="mark">*</span></label>
+      <p-dropdown [options]="countries" required name="country" id="inputCountry" [disabled]="disabledItem"
+        [(ngModel)]="editProfile.country" placeholder="Selecciona el país" optionLabel="country" optionValue="country"
+        [showClear]="true"></p-dropdown>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputZipCode">Código postal <span class="mark">*</span></label>
+        <input type="number" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.ZIP" name="ZIP"
+         pInputText  id="inputZipCode" placeholder="Código postal" onkeypress="return event.charCode >= 48"
+          min="1">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputProfession">Profesión <span class="mark">*</span></label>
+        <input type="text" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.profession"
+          name="profession" pInputText  id="inputProfession" placeholder="Profesión">
+      </div>
+    </div>
+    <div class="form-group ">
+      <label for="inputdob">Fecha de nacimiento <span class="mark">*</span></label>
+      <p-calendar [disabled]="disabledItem" id="inputdob" class="d-block" [yearNavigator]="true" [showIcon]="true"
+        [monthNavigator]="true" yearRange="1920:2021" required name="dateOfBirth" placeholder="Fecha de nacimiento"
+        dataType="string" [ngModel]="editProfile.dateOfBirth  " (ngModelChange)="onChangeDate($event)"
+        dateFormat="dd-mm-yy"></p-calendar>
+    </div>
+    <hr>
+
+    <div class="form-row">
+      <div class="col-12">
+        <h6>Habilidades - Máximo 3</h6>
+      </div>
+      <div class="form-group col-12">
+        <div class="form-check cont" *ngFor="let skill of skills">
+          <div class="cover cover-select-class"></div>
+          <input class="form-check-input " (click)="seleccionado($event)" type="checkbox" value="{{skill}}"
+            id="flexCheck{{skill}}">
+          <label class="form-check-label" for="flexCheck{{skill}}">
+            {{skill}}
+          </label>
+        </div>
+      </div>
+      <hr>
+      <hr>
+      <div class="form-row w-100 mt-2">
+        <hr>
+        <div class="form-group col-12 ">
+          <label for="descriptionYourself">Descripción de ti mismo ( Máximo 500 caracteres ) <span class="mark">*</span>
+          </label>
+          <textarea maxlength="500" ngModel required [disabled]="disabledItem" [(ngModel)]="editProfile.description"
+            name="descriptionString" pInputTextarea  id="descriptionYourself" rows="3"
+            [ngStyle]="{'min-height':'100px', 'max-height':'100px', 'flex':'auto'}"></textarea>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-12 text-center">
+
+        <button type="submit" [ngClass]="formProfile.valid ? 'btn-send' : 'btn-send-disabled'"
+          [disabled]="!formProfile.valid">Guardar cambios</button>
+      </div>
+    </div>
+  </form>
+</div>

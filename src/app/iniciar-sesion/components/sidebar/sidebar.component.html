@@ -1,0 +1,32 @@
+<p-sidebar [(visible)]="visibleSidebar1" [baseZIndex]="10000">
+    <h3>{{title}}</h3>
+    <ul >
+        <li  [routerLink]="['/auth']">
+            <a>
+                <i class="fas fa-sign-in-alt"></i>
+                <span class="links_name">Iniciar sesión</span>
+            </a>
+        </li>
+        <li  [routerLink]="['/auth/signup']">
+            <a>
+                <i class="fas fa-user-plus"></i>
+                <span class="links_name">Registrarse</span>
+            </a>
+        </li>
+        <li  [routerLink]="['/auth/home']">
+            <a>
+                <i class="fas fa-home"></i>
+                <span class="links_name">Portada</span>
+            </a>
+        </li>
+        <li  [routerLink]="['/auth/video']">
+            <a>
+                <i class="fas fa-video"></i>
+                <span class="links_name">Video</span>
+            </a>
+        </li>
+      </ul>
+</p-sidebar>
+<div class="menu-main-home">
+    <p-button  type="button"  pRipple class="p-button-help p-mr-2" (click)="visibleSidebar1 = true"  icon="pi pi-arrow-right"></p-button>
+</div>

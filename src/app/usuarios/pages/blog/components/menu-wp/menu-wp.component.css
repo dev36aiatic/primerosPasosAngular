@@ -1,0 +1,21 @@
+
+  .info-user {
+    display: flex;
+    align-items: center;
+    display: inline-block;
+  }
+  
+  .btn-exit-wp {
+    display: inline-block;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #3F51B5 !important;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all ease .5s;
+  }
+  
+  .btn-exit-wp:hover {
+    transform: scale(1.1);
+    transition: all ease .5s;
+  }

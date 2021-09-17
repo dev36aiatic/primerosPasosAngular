@@ -1,0 +1,60 @@
+  <p-menubar [model]="items">
+    <ng-template pTemplate="start">
+      <span class="info-user mr-2">
+        <i class="fab fa-wordpress" style="color:#21759b; font-size: 33px;"></i>
+      </span>
+    </ng-template>
+
+    <div *ngIf="loading == undefined">
+      <i class="pi pi-spin pi-spinner" style="font-size: 1.5rem; color: #21759b;"></i>
+    </div>
+    <div *ngIf="wpUser">
+      <span class="info-user ">
+        <span class="text-muted  font-weight-bold mr-2">{{ wpUser.username | titlecase }}</span>
+        <img [src]="wpUser.avatar_urls['24']">
+      </span>
+    </div>
+    <div *ngIf="isWPLogged == false ">
+      <a class="btn-log-wp" [routerLink]="['./iniciar-sesion-wp']">Iniciar sesión en wordpress</a>
+    </div>
+  </p-menubar>
+
+  <p-dialog header="Agregar nueva categoría" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}"
+    [style]="{width: '50vw'}" [draggable]="false" [resizable]="false">
+    <small class="text-muted">Para crear una nueva categoria completa los campos debajo <br> Campos marcados con <span
+        class="rojo">*</span> son obligatorios.</small>
+    <p-divider></p-divider>
+    <form (ngSubmit)="newCategory()" [formGroup]="formCategory" autocomplete="off">
+      <div class="row">
+        <div class="col-12 mb-3">
+          <span class="p-float-label w-100">
+            <input id="name-input" required class="border-none" type="text" pInputText formControlName="name">
+            <label for="name-input">Nombre <span class="rojo">*</span></label>
+          </span>
+        </div>
+        <div class="col-12 mb-3">
+          <span class="p-float-label w-100">
+            <input id="category-slug-input" required class="border-none" type="text" pInputText formControlName="slug">
+            <label for="category-slug-input">Slug <span class="rojo">*</span></label>
+          </span>
+        </div>
+        <div class="col-12 mb-3">
+          <span class="p-float-label">
+            <textarea formControlName="description" id="category-float-area"
+              [ngStyle]="{'max-height':'100px','min-height':'100px'}" rows="5" cols="30" pInputTextarea></textarea>
+            <label for="category-float-area">Descripción </label>
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 d-flex justify-content-end">
+          <button type="submit" [disabled]="formCategory.invalid" label="Añadir" pButton
+            class="p-button-sm mr-2"></button>
+          <button type="button" (click)="displayResponsive=false" label="Cancelar" pButton
+            class="p-button-sm p-button-text"></button>
+        </div>
+      </div>
+
+    </form>
+  </p-dialog>

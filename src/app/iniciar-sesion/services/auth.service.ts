@@ -7,6 +7,7 @@ import { of, Observable, pipe } from 'rxjs';
 
 import { SocialAuthService } from "angularx-social-login";
 import { SocialUser } from "angularx-social-login";
+import { ProfileData } from 'src/app/usuarios/interfaces/user.interface';
 
 
 @Injectable({
@@ -15,7 +16,7 @@ import { SocialUser } from "angularx-social-login";
 export class AuthService {
 
   private baseUrl: string = environment.baseUrl;
-  private _user!: (User | SocialUser);
+  private _user!: (AuthResponse | SocialUser | any);
   private isLogged: boolean = false;
 
   /**Getter del usuario*/
@@ -28,13 +29,10 @@ export class AuthService {
     return this.isLogged;
   }
 
-
   constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
-
 
   /**Metodo para iniciar sesion*/
   login(email: string, password: string) {
-
     const url = `${this.baseUrl}/login`;
     const body = { email, password }
 
@@ -48,10 +46,8 @@ export class AuthService {
         catchError(err => of(err.error.msg))
       );
   }
-
   /**Metodo para registrarse*/
   signup(name: string, email: string, password: string) {
- 
     const url = `${this.baseUrl}/new`;
     const body = { name, email, password }
 
@@ -62,58 +58,104 @@ export class AuthService {
         }),
         catchError(err => of(err.error.msg))
       )
-
   }
-
   /**Metodo para validar token creado utilizando jwt*/
   validateToken(): Observable<boolean> {
-
     const url = `${this.baseUrl}/renew`;
     const headers = new HttpHeaders().set('x-token', localStorage.getItem('token') || '');
 
     return this.httpClient.get<AuthResponse>(url, { headers })
       .pipe(
         map(resp => {
-
           this.setTokenAndUser(resp);
           return resp.ok;
         }),
         catchError(err => of(false))
       );
   }
+  /**Metodo para llenar el formulario de perfil de usuario */
+  userProfile(user: ProfileData, id: string, provider: string = '') {
+    const url = `${this.baseUrl}/update/${id}/${provider}`;
+    const body = {
+      name: user.name,
+      cc: user.cc,
+      address: user.address,
+      dateOfBirth: user.dateOfBirth,
+      city: user.city,
+      department: user.department,
+      country: user.country,
+      ZIP: user.ZIP,
+      profession: user.profession,
+      skills: user.skills,
+      description: user.description
+    }
 
+    return this.httpClient.put<AuthResponse>(url, body).pipe(
+      tap(user => this._user = user),
+      catchError(err => of(err.error))
+    )
+  }
 
-/**Metodo que me permite validar el token de google o facebook*/
+  /**
+   * Metodo que sube la imagen del usuario
+   * @param files - Datos de la imagen
+   */
+  uploadImage(id: string, files, provider: string = '') {
+    const url = `${this.baseUrl}/upload-image/${id}/${provider}`;
+    const formData = new FormData();
+    formData.append('image', files)
+
+    return this.httpClient.post<any>(url, formData).pipe(
+      tap(user => this._user = user),
+      catchError(err => of(err.error))
+    )
+  }
+
+  /**
+   * Metodo que busca en el backend la imagen del usuario para mostrarla
+   * @param fileName - Nombre de la imagen que tiene el usuario
+   * @returns 
+   */
+  getImageFile(fileName: string) {
+    const url = `${this.baseUrl}/get-image/${fileName}`;
+
+    return this.httpClient.get<any>(url, { responseType: 'Blob' as 'json' }).pipe(
+      catchError(err => of(err.error))
+    );
+  }
+
+  /**Metodo que me permite validar el token de google o facebook*/
   validateAuthGoogleFb(decision: string): Observable<boolean> {
-
-    if (decision == 'GOOGLE') {
-      const url = `${this.baseUrl}/validateToken`;
-      const headers = new HttpHeaders().set('token-auth', localStorage.getItem('social-token') || '');
-
-      return this.httpClient.get<AuthResponse>(url, { headers })
-        .pipe(
-          map(resp => {
-
-            this._user = resp;
-            return resp.ok;
-          }),
-          catchError(err => of(false, this.isLogged = false))
-        );
-    } else
-      if (decision == 'FACEBOOK') {
-        const url = `${this.baseUrl}/auth/facebook/token?access_token=${localStorage.getItem('social-token') || ''}`;
-
-        return this.httpClient.get<AuthResponse>(url)
+    let objectSocialAuth = {
+      "GOOGLE": () => {
+        const url = `${this.baseUrl}/validateToken`;
+        const headers = new HttpHeaders().set('token-auth', localStorage.getItem('token') || '');
+        return this.httpClient.get<AuthResponse>(url, { headers })
           .pipe(
             map(resp => {
-
               this._user = resp;
               return resp.ok;
             }),
             catchError(err => of(false, this.isLogged = false))
           );
+      },
+      "FACEBOOK": () => {
+        const url = `${this.baseUrl}/auth/facebook/token?access_token=${localStorage.getItem('token') || ''}`;
+        return this.httpClient.get<AuthResponse>(url)
+          .pipe(
+            map(resp => {
+              this._user = resp;
+              return resp.ok;
+            }),
+            catchError(err => of(false, this.isLogged = false))
+          );
+      },
+      "DEFAULT": () => {
+        return of(false, this.isLogged = false);
       }
+    }
 
+    return objectSocialAuth[decision]() || objectSocialAuth["DEFAULT"]();
   }
 
   /**Metodo para borrar los tokens (cerrar sesion)*/
@@ -125,36 +167,28 @@ export class AuthService {
   loginGoogle() {
     return this.authService.authState.pipe(
       tap(user => {
-
         this._user = user;
         this.isLogged = (user != null);
-        if ((user != null)) {
 
+        if ((user != null)) {
           if (user.provider == "GOOGLE") {
             localStorage.setItem('provider', 'GOOGLE');
-            localStorage.setItem('social-token', user.idToken);
+            localStorage.setItem('token', user.idToken);
           }
+
           if (user.provider == "FACEBOOK") {
             localStorage.setItem('provider', 'FACEBOOK');
-            localStorage.setItem('social-token', user.authToken);
+            localStorage.setItem('token', user.authToken);
           }
         }
-
-
-      }), catchError(err => of(err))
+      }), catchError(err => of(false, this.isLogged = false))
     )
-
   }
-
 
   /**Metodo para colocar el token que me devuelve jwt para validar el inicio de sesion*/
   setTokenAndUser(resp: AuthResponse) {
+    localStorage.setItem('provider', 'ownLogin');
     localStorage.setItem('token', resp.token!);
-    this._user = {
-      name: resp.name!,
-      uid: resp.uid!,
-      email: resp.email
-    }
+    this._user = resp;
   }
-
 }

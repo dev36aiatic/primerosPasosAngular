@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="row">
+
+    <div class="col-12 text-center py-3">
+      <h3>Información del usuario</h3>
+    </div>
+
+    <div class="col-12 img-profile mb-5">
+      <div class="contenedor-img-profile">
+        <img [src]="photoSelected || '../../../../assets/no-image.png'" alt="User Image" [ngStyle]="{'cursor':'auto'}">
+      </div>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center table-responsive ">
+      <table class="table table-striped table-bordered table-hover text-center">
+        <thead class="thead-dark w-100">
+          <tr>
+            <th scope="col">ID_Usuario</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Correo</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <tr>
+            <td scope="row">{{userInfo.user.id}}</td>
+            <td>{{userInfo.user.name}}</td>
+            <td>{{userInfo.user.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-12 text-center py-3">
+      <h3>Perfil</h3>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center table-responsive">
+      <table class="table table-striped table-bordered  table-hover text-center table-responsive">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Código Postal</th>
+            <th scope="col">Dirección</th>
+            <th scope="col">Cédula</th>
+            <th scope="col">Ciudad</th>
+            <th scope="col">País</th>
+            <th scope="col">Fecha de Nacimiento</th>
+            <th scope="col">Departamento</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Imagen</th>
+            <th scope="col">Profesión</th>
+            <th scope="col">ID_Perfil</th>
+            <th scope="col">Habilidades</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white ">
+          <tr>
+            <td *ngFor="let item of userInfo.user.profile | keyvalue">{{item.value}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>

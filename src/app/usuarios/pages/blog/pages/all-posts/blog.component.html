@@ -1,0 +1,71 @@
+<div *ngIf="posts">
+
+  <div class="container bg-white">
+    <div class="row ">
+      <div class="col-12">
+        <app-menu-wp (onLoading)="onLoading($event)"></app-menu-wp>
+      </div>
+
+      <div class="col-12 my-1 text-muted text-center">
+        <h2>Blog</h2>
+      </div>
+      <div class="col-12 pb-3 my-2" style="border-bottom: 1px solid #eee;">
+        <h6 class="text-center text-muted">Posts <small>({{posts.length}})</small></h6>
+      </div>
+      <div class="col-12 search-post d-flex justify-content-end py-2 pb-3" style="border-bottom: 1px solid #eee;">
+        <span class="p-input-icon-left d-flex align-items-center">
+          <i class="pi pi-search"></i>
+          <input class="pl-3" type="text" pInputText placeholder="Buscar" #searchInput
+            (input)="searchPost(searchInput.value)" />
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container py-4 bg-white">
+    <div class="row  justify-content-center">
+      <div class="col-md-10 mb-5 border-bottom overflow-hidden" *ngFor="let f of posts">
+
+        <div *ngIf="wpUser">
+          <div *ngIf="wpUser['capabilities']['administrator']" class="w-100 d-flex justify-content-end mb-3">
+            <button type="button" label="Editar" [routerLink]="['./editar-post/',f.slug]" icon="pi pi-book" pButton
+              class="p-button-sm mr-2"></button>
+            <app-delete-post [post]="f" (onSendPostId)="postToDelete($event)"></app-delete-post>
+          </div>
+        </div>
+
+        <a *ngIf="f?._embedded['wp:featuredmedia'] != undefined" [routerLink]="['./',f.slug]">
+          <img class="img-fluid" style="width: 100%" [src]="f?._embedded['wp:featuredmedia']['0'].source_url"
+            alt="{{f.title.rendered}}">
+        </a>
+        <a class="d-flex justify-content-center" style="background-color: #ccc;"
+          *ngIf="f?._embedded['wp:featuredmedia'] == undefined" [routerLink]="['./',f.slug]">
+          <img class="img-fluid" style="width: 60%" src="../../../../assets/no-post-image.jpg"
+            alt="Imagen no disponible">
+        </a>
+        <a [routerLink]="['./',f.slug]">
+          <h2 class="text-center my-3">{{f.title.rendered }}</h2>
+        </a>
+        <p class="text-muted font-weight-bold">Autor: {{f?._embedded['author']['0'].name | titlecase}} </p>
+        <p [innerHTML]="f.excerpt.rendered"> </p>
+      </div>
+
+      <div *ngIf="posts.length == 0" class="overflow-hidden">
+        <div class="row">
+          <div class="col-12 text-center ">
+            <p class="tex-muted">No se encontraron resultados con la busqueda de <span
+                class="rojo">{{ searchInput.value }}</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div *ngIf="!posts">
+  <div class="cargando-posts">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+</div>

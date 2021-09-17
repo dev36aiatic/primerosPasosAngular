@@ -1,0 +1,52 @@
+<div *ngIf="isWpLogged" class="cargando-posts d-flex justify-content-center align-items-center" style="height: 90vh;">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
+<section style="height: 90vh;" *ngIf="!isWpLogged">
+  <div class="container ">
+    <div class="row   d-flex justify-content-center align-items-center " style="height: 90vh;">
+      <div class="col  col-xl-10">
+        <div class="card" style="border-radius: 1rem;">
+          <div class="row ">
+
+            <div class="col-12 my-auto mx-auto d-flex align-items-center ">
+              <div class="card-body p-4 p-lg-4 text-black">
+
+                <form (ngSubmit)="iniciarSesionWp()" [formGroup]="myLogin" autocomplete="off">
+
+
+                  <div class="d-flex  justify-content-center align-items-center mb-3 pb-1">
+                    <i class="fab fa-wordpress" style="color:#21759b; font-size: 64px;"></i>
+                  </div>
+
+                  <h5 class="fw-normal mb-3 pb-3 text-center" style="letter-spacing: 1px;">Inicia sesión en tu cuenta de
+                    WordPress</h5>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="form2Example17">Usuario</label>
+                    <input type="text" formControlName="username" placeholder="Escribe tu usuario" id="form2Example17"
+                      class="form-control form-control-lg" style="font-size: 14px;" />
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="form2Example27">Contraseña</label>
+                    <input type="password" formControlName="password" placeholder="Escribe tu contraseña"
+                      id="form2Example27" class="form-control form-control-lg" style="font-size: 14px;" />
+                  </div>
+
+                  <div class="pt-1 mb-4">
+                    <button class="btn btn-dark btn-lg btn-block" type="submit">Iniciar sesión</button>
+                  </div>
+
+                </form>
+                <small class="text-muted d-block text-center">Para añadir posts, categorias, tags, etc, desde Angular a
+                  WordPress primero debes autenticarte.</small>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

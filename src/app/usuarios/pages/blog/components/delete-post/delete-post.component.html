@@ -1,0 +1,25 @@
+<button type="button" label="Borrar" icon="pi pi-trash" pButton class="p-button-sm p-button-help" data-toggle="modal"
+[attr.data-target]="'#somestring' + post.id"></button>
+<div class="modal fade" [id]="'somestring'+post.id" tabindex="-1" role="dialog" aria-labelledby="deletePostTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"><span class="text-warning">Aviso</span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted">
+          ¿Estás seguro que deseas borrar la entrada?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary"  data-dismiss="modal" (click)="deleteThisPost(post.id)">Borrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
