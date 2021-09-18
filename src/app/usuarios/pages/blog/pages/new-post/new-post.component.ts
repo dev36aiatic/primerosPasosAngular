@@ -128,7 +128,7 @@ export class NewPostComponent implements OnInit {
    * Funcion que recibe del hijo menu-wp las categorias mas recientes 
    * @param categories - Categorias actualizadas
    */
-  updateCategories(categories:WpCategory[]){
+  updateCategories(categories: WpCategory[]) {
     this.categories = categories;
   }
 

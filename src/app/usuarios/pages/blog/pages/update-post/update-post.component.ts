@@ -78,7 +78,7 @@ export class UpdatePostComponent implements OnInit {
     });
 
     //Valida si el usuario inicio sesion  y el rol que tiene
-    this.wpService.getWPUser().subscribe(user =>{
+    this.wpService.getWPUser().subscribe(user => {
       if (user["error"]) {
         this.isWPLogged = false;
         this.wpService.wpLogout();
@@ -131,6 +131,11 @@ export class UpdatePostComponent implements OnInit {
     }
   }
 
+  /**
+   * Función para saber si manejar el post si existe
+   * @param post - Post
+   * @returns - Mensaje de error si el post no existe, de lo contrario mensaje de todo correcto
+   */
   newPostHandleError(post: any) {
     if (post["error"]) {
       Swal.fire('Oops!', post["error"], 'error');

@@ -144,11 +144,11 @@ export class WordpressService {
       )
   }
 
-/**
- * Metodo que devuelve media guardada en wordpress
- * @param id - identificador de la media
- * @returns - Información de la media
- */
+  /**
+   * Metodo que devuelve media guardada en wordpress
+   * @param id - identificador de la media
+   * @returns - Información de la media
+   */
   getMedia(id: number) {
     const url = `${this.urlWP}/media/${id}`;
 

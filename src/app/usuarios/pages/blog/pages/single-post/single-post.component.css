@@ -1,13 +1,12 @@
-
-.cargando-posts{
-    height: 90vh;
-    margin-top: 0px !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+.cargando-posts {
+  height: 90vh;
+  margin-top: 0px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-.rojo{
-    color:red;
+.rojo {
+  color: red;
 }
