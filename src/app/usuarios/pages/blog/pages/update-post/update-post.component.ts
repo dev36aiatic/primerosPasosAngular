@@ -28,7 +28,7 @@ export class UpdatePostComponent implements OnInit {
   });
   post!: Post;
   photoSelected: string | ArrayBuffer;
-  loggedUser!: LoggedWpUser;
+  wpUser!: LoggedWpUser;
   authors: object[];
   status: object[];
   file: File;
@@ -36,6 +36,7 @@ export class UpdatePostComponent implements OnInit {
   loading = false;
   slug: string;
   exist: boolean = true;
+  isWPLogged: boolean;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -77,7 +78,15 @@ export class UpdatePostComponent implements OnInit {
     });
 
     //Valida si el usuario inicio sesion  y el rol que tiene
-    this.wpService.getWPUser().subscribe(wpUser => this.loggedUser = wpUser);
+    this.wpService.getWPUser().subscribe(user =>{
+      if (user["error"]) {
+        this.isWPLogged = false;
+        this.wpService.wpLogout();
+      } else {
+        this.wpUser = user;
+        this.isWPLogged = true;
+      }
+    });
     this.wpService.getCategories().subscribe(categories => this.categories = categories);
     this.authors = [
       {
@@ -99,7 +108,7 @@ export class UpdatePostComponent implements OnInit {
     if (this.file != undefined) {
       const title = this.file.name.split('.')[0];
       const slug = this.file.name.split('.')[0];
-      const author = this.loggedUser.id;
+      const author = this.wpUser.id;
 
       this.wpService.uploadMedia(slug, title, author, this.file)
         .pipe(

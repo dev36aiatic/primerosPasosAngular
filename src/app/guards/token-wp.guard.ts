@@ -26,7 +26,6 @@ export class TokenWpGuard implements CanActivate {
               }
             })
           }
-
         })
       )
   }

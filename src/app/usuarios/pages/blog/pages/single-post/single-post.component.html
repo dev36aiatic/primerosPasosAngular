@@ -3,7 +3,7 @@
     <div [ngClass]="{'bg-white': post.length > 0 }" class="container pb-5">
       <div class="row">
         <div class="col-12 bg-white">
-          <app-menu-wp></app-menu-wp>
+          <app-menu-wp [isWPLogged]="isWPLogged" [wpUser]="wpUser"></app-menu-wp>
         </div>
       </div>
       <div class="row">

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 
 import { WordpressService } from '../../services/wordpress.service';
+import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
 
 @Component({
   selector: 'app-single-post',
@@ -13,6 +14,8 @@ export class SinglePostComponent implements OnInit {
 
   slug: string;
   post: any;
+  wpUser!: LoggedWpUser;
+  isWPLogged: boolean;
 
   constructor(private wpService: WordpressService, private route: ActivatedRoute) { }
 
@@ -24,6 +27,20 @@ export class SinglePostComponent implements OnInit {
         return this.wpService.getSinglePost(slug)
       })
     ).subscribe(post => this.post = post, (error) => console.log(error));
+
+    if (localStorage.getItem('wp-token')) {
+      this.wpService.getWPUser().subscribe(user => {
+        if (user["error"]) {
+          this.isWPLogged = false;
+          this.wpService.wpLogout();
+        } else {
+          this.wpUser = user;
+          this.isWPLogged = true;
+        }
+      });
+    } else {
+      this.isWPLogged = false;
+    }
   }
 
 }

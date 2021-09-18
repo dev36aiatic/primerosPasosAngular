@@ -91,7 +91,7 @@ export class WordpressService {
 
     return this.http.post<LoggedWpUser>(url, null, { headers: this.wpHeaders })
       .pipe(
-        catchError(err => of(err.error))
+        catchError(err => of(err))
       );
   }
 
@@ -114,7 +114,7 @@ export class WordpressService {
 
           return filterData;
         }),
-        catchError(err => of(err.error))
+        catchError(err => of(err))
       );
   }
 

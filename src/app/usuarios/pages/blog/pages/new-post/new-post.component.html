@@ -1,8 +1,8 @@
-<div class="container bg-white p-4" *ngIf="loggedUser else infoLoading">
-  <div *ngIf="loggedUser['capabilities']['administrator'] else infoLoading">
+<div class="container bg-white p-4" *ngIf="wpUser else infoLoading">
+  <div *ngIf="wpUser['capabilities']['administrator'] else infoLoading">
     <div class="row position-relative">
       <div class="col-12">
-        <app-menu-wp (onUpdateCategories)="updateCategories($event)" [wpUser]="loggedUser"></app-menu-wp>
+        <app-menu-wp (onUpdateCategories)="updateCategories($event)"  [isWPLogged]="isWPLogged" [wpUser]="wpUser"></app-menu-wp>
       </div>
       <div class="col-12 position-relative">
         <h3 class="text-center text-muted">Añadir Post</h3>

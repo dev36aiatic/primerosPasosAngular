@@ -15,26 +15,28 @@ import { WordpressService } from '../../services/wordpress.service';
 export class BlogComponent implements OnInit {
 
   posts!: Post[];
-  filterPosts!: any;
+  filterPosts!: Post[];
   isLoading: boolean = undefined;
+  wpUser: LoggedWpUser;
   isWPLogged: boolean;
-  wpUser: LoggedWpUser | any;
 
   constructor(private wpService: WordpressService) { }
 
   ngOnInit(): void {
     //Valida si el usuario inicio sesion
-    this.wpService.validateWpToken()
-      .pipe(
-        switchMap(logged => {
-          this.isWPLogged = logged;
-          return (logged) ? this.wpService.getWPUser() : of(false)
-        })
-      ).subscribe(user => {
-        if (user != false) {
+    if (localStorage.getItem('wp-token')) {
+      this.wpService.getWPUser().subscribe(user => {
+        if (user["error"]) {
+          this.isWPLogged = false;
+          this.wpService.wpLogout();
+        } else {
           this.wpUser = user;
+          this.isWPLogged = true;
         }
       });
+    } else {
+      this.isWPLogged = false;
+    }
 
     this.wpService.getAll(50).subscribe(posts => {
       this.posts = posts;
@@ -74,7 +76,7 @@ export class BlogComponent implements OnInit {
 
     this.posts = this.filterPosts.filter(post => {
       return post.title.rendered.toLowerCase().includes(query) ||
-        post._embedded['author']['0'].name.toLowerCase().includes(query) ||
+        post['_embedded']['author']['0'].name.toLowerCase().includes(query) ||
         post.excerpt.rendered.toLowerCase().includes(query)
     });
   }
