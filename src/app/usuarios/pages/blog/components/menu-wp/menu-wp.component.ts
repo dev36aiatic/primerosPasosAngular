@@ -129,7 +129,7 @@ export class MenuWpComponent implements OnInit {
         ]
       },
       {
-        label: 'Opciones',
+        label: 'Ajustes',
         icon: 'pi pi-cog',
         items: [
           {
@@ -160,7 +160,7 @@ export class MenuWpComponent implements OnInit {
         routerLink: '/dashboard/blog'
       },
       {
-        label: 'Opciones',
+        label: 'Ajustes',
         icon: 'pi pi-cog',
         items: [
           {
