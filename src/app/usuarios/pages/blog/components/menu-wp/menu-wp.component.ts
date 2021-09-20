@@ -46,7 +46,7 @@ export class MenuWpComponent implements OnInit {
     if (changes.isWPLogged.currentValue != undefined) {
       this.loading = false;
     }
-    
+
     if (changes.wpUser.currentValue != undefined) {
       this.loading = false;
       if (this.wpUser["capabilities"]["administrator"]) {
@@ -118,11 +118,22 @@ export class MenuWpComponent implements OnInit {
           }
         },
         {
-          label: 'Añadir categoría',
+          label: 'Categorías',
           icon: 'pi pi-external-link',
-          command: () => {
-            this.showResponsiveDialog();
-          }
+          items: [
+            {
+              label: 'Añadir',
+              icon: 'pi pi-fw pi-plus',
+              command: () => {
+                this.showResponsiveDialog();
+              }
+            },
+            {
+              label: 'Administrar',
+              icon: 'pi i pi-cog',
+              routerLink: '/dashboard/blog/manage-categories'
+            }
+          ]
         }
         ]
       },
@@ -136,6 +147,9 @@ export class MenuWpComponent implements OnInit {
             command: () => {
               Swal.fire('Empanadas', 'Por el momento esta opcion es solo decoración!', 'info')
             }
+          },
+          {
+            separator: true
           },
           {
             label: 'Cerrar sesión',
@@ -167,6 +181,9 @@ export class MenuWpComponent implements OnInit {
             command: () => {
               Swal.fire('Empanadas', 'Por el momento esta opcion es solo decoración!', 'info')
             }
+          },
+          {
+            separator: true
           },
           {
             label: 'Cerrar sesión',
