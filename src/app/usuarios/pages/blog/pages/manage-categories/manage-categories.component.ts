@@ -81,7 +81,7 @@ export class ManageCategoriesComponent implements OnInit {
         this.savingChanges = false;
         setTimeout(() => {
           this.savingChanges = undefined;
-        }, 60000);
+        }, 30000);
       });
   }
   /**
@@ -101,6 +101,34 @@ export class ManageCategoriesComponent implements OnInit {
     this.categories = [];
     categories.forEach(({ id, name, description, slug }) => {
       this.categories.push({ id, name, description, slug });
+    });
+  }
+
+  /**
+   * Funcioón que permite borrar una categoria
+   * @param category - Información de la categoría
+   */
+  onDeleteCategory(category: WpCategory) {
+    this.savingChanges = true;
+    this.wpService.deleteCategory(category.id).pipe(
+      switchMap(category => {
+        if (category["error"]) {
+          Swal.fire('Ha ocurrido un error', category["error"]["message"], 'error');
+          return;
+        } else {
+          return this.wpService.getCategories();
+        }
+      })
+    ).subscribe(categories => {
+      this.categories = [];
+      categories.forEach(({ id, name, description, slug }) => {
+        this.categories.push({ id, name, description, slug });
+      });
+      this.isEditingRow = false;
+      this.savingChanges = false;
+      setTimeout(() => {
+        this.savingChanges = undefined;
+      }, 30000);
     });
   }
 }

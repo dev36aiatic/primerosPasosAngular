@@ -70,6 +70,9 @@
                   <button *ngIf="editing" [disabled]="formCategory.invalid" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
                     (click)="onRowEditSave(category)"
                     class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-trash"
+                    (click)="onDeleteCategory(category)"
+                    class="p-button-rounded p-button-text p-button-danger p-mr-2"></button>
                   <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
                     (click)="onRowEditCancel(category, ri)"
                     class="p-button-rounded p-button-text p-button-danger"></button>

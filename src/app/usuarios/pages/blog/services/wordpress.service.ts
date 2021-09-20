@@ -178,6 +178,21 @@ export class WordpressService {
   }
 
   /**
+   * Función que permite borrar una categoria
+   * @param id - Id de la categoría a borrar
+   * @returns - Categoria borrada
+   */
+  deleteCategory(id: number): Observable<WpCategory> {
+    const params = new HttpParams().set('force', true);
+    const url = `${this.urlWP}/categories/${id}`;
+
+    return this.http.delete<WpCategory>(url, { headers: this.wpHeaders, params })
+      .pipe(
+        catchError(error => of(error))
+      );
+  }
+
+  /**
    * Función para crear una nueva categoria
    * @param body - Objeto con la información de la nueva categoria
    * @returns - Información de la categoria creada
