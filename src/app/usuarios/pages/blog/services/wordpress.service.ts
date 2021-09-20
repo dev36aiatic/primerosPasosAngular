@@ -21,6 +21,7 @@ export class WordpressService {
 
   constructor(private http: HttpClient) { }
 
+  /**Getter de los headers */
   get wpHeaders() {
     return new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('wp-token') || '');
   }
@@ -215,7 +216,7 @@ export class WordpressService {
   }
 
   /**
-   * Funcion para cerrar sesion
+   * Funcion para cerrar sesion en wordpress
    */
   wpLogout() {
     if (localStorage.getItem('wp-token')) {
