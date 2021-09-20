@@ -10,13 +10,13 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { InputTextModule } from 'primeng/inputtext';
-import {DropdownModule} from 'primeng/dropdown';
-import {InputTextareaModule} from 'primeng/inputtextarea';
-import {EditorModule} from 'primeng/editor';
-import {CheckboxModule} from 'primeng/checkbox';
-import {ProgressBarModule} from 'primeng/progressbar';
-import {DialogModule} from 'primeng/dialog';
-import {MenubarModule} from 'primeng/menubar';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { EditorModule } from 'primeng/editor';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { DialogModule } from 'primeng/dialog';
+import { MenubarModule } from 'primeng/menubar';
 
 
 @NgModule({
@@ -38,8 +38,8 @@ import {MenubarModule} from 'primeng/menubar';
     ProgressBarModule,
     DialogModule,
     MenubarModule
-    
+
   ],
-  providers:[]
+  providers: []
 })
 export class PrimengModule { }

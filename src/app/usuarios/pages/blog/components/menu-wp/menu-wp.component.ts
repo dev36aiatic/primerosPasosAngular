@@ -29,7 +29,12 @@ export class MenuWpComponent implements OnInit {
     description: ['']
   });
 
-  constructor(private wpService: WordpressService, private router: Router, private formBuilder: FormBuilder, private route: ActivatedRoute) { }
+  constructor(
+    private wpService: WordpressService,
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(({ slug }) => {
@@ -87,7 +92,11 @@ export class MenuWpComponent implements OnInit {
         Swal.fire('Oops', category["msg"], 'error');
         return false;
       }
-      if (this.router.url == '/dashboard/blog/anadir-post' || this.router.url.indexOf('editar-post') > -1) {
+      if (
+        this.router.url == '/dashboard/blog/anadir-post'
+        || this.router.url.indexOf('editar-post') > -1
+        || this.router.url.indexOf('manage-categories') > -1
+      ) {
         this.wpService.getCategories().subscribe(categories => this.onUpdateCategories.emit(categories));
       }
       Swal.fire('Todo en orden!', 'La categoria ha sido añadida con exito!', 'success');

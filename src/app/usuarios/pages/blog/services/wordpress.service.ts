@@ -152,7 +152,7 @@ export class WordpressService {
    * Funcion para obtener las categorias que estan en wordpress
    * @returns Categorias almacenadas en wordpress 
    */
-   getCategories(): Observable<WpCategory[]> {
+  getCategories(): Observable<WpCategory[]> {
     const params = new HttpParams().set('per_page', 100);
     const url = `${this.urlWP}/categories?`;
 
@@ -160,6 +160,21 @@ export class WordpressService {
       .pipe(
         catchError(err => of(err))
       );
+  }
+
+  /**
+   * Función que permite actualizar una categoria
+   * @param body - Información nueva de la categoria
+   * @param id - Identificador único de la categoria
+   * @returns - Categoria actualizada
+   */
+  updateCategory(body: WpCategory, id: number): Observable<WpCategory> {
+    const url = `${this.urlWP}/categories/${id}`;
+
+    return this.http.put<WpCategory>(url, body, { headers: this.wpHeaders })
+      .pipe(
+        catchError(error => of(error))
+      )
   }
 
   /**
@@ -219,7 +234,7 @@ export class WordpressService {
       .pipe(
         map(users => {
           let filteredUsers = [];
-          
+
           users.forEach(({ name, id }) => filteredUsers.push({ name, id }));
           return filteredUsers;
         }),

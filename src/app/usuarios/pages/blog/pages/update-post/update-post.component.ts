@@ -161,7 +161,10 @@ export class UpdatePostComponent implements OnInit {
    * @param categories - Categorias actualizadas
    */
   updateCategories(categories: WpCategory[]) {
-    this.categories = categories;
+    this.categories = [];
+    categories.forEach(({ name, id }) => {
+      this.categories.push({ name, id });
+    })
   }
 
   /**Funcion para borrar la imagen */

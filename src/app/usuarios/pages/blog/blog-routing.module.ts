@@ -24,7 +24,8 @@ const routes: Routes = [
       },
       {
         path: 'manage-categories',
-        component: ManageCategoriesComponent
+        component: ManageCategoriesComponent,
+        canActivate: [TokenWpGuard]
       },
       {
         path: 'anadir-post',
