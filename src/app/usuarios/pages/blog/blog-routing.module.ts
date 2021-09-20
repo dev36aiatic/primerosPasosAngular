@@ -7,6 +7,7 @@ import { SinglePostComponent } from './pages/single-post/single-post.component';
 import { TokenWpGuard } from '../../../guards/token-wp.guard';
 import { MainPageComponent } from './pages/main-page/main-page.component';
 import { UpdatePostComponent } from './pages/update-post/update-post.component';
+import { ManageCategoriesComponent } from './pages/manage-categories/manage-categories.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
       {
         path: 'iniciar-sesion-wp',
         component: LoginWpComponent
+      },
+      {
+        path: 'manage-categories',
+        component: ManageCategoriesComponent
       },
       {
         path: 'anadir-post',
