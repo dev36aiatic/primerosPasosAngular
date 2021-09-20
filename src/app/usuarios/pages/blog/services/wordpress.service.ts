@@ -215,8 +215,10 @@ export class WordpressService {
       );
   }
 
-  getUsers(){
-    
+  getAllUsers(): Observable<WordpressUser[]> {
+    const url = `${this.urlWP}/users`;
+
+    return this.http.get<WordpressUser[]>(url, { headers: this.wpHeaders });
   }
 
   /**
