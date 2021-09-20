@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs'
 import { environment } from 'src/environments/environment';
+
 import { WordpressUser } from '../interfaces/logged-wp-user.interface';
 import { NewPost } from '../interfaces/new-post-wp.interface';
 import { Post } from '../interfaces/post.interface';
@@ -96,7 +97,6 @@ export class WordpressService {
         catchError(err => of(err))
       );
   }
-
 
   /**
    * Funcion para añadir media a wordpress
