@@ -65,7 +65,7 @@ export class MenuWpComponent implements OnInit {
   /**Funcion que permite o no ir a la pagina de agregar post */
   addPost() {
     if (this.wpUser["capabilities"]["administrator"]) {
-      this.router.navigateByUrl('dashboard/blog/anadir-post');
+      this.router.navigateByUrl('dashboard/blog/anadir-entrada');
     }
     else if (!this.wpUser) {
       this.router.navigateByUrl('dashboard/blog/iniciar-sesion-wp');
@@ -93,9 +93,9 @@ export class MenuWpComponent implements OnInit {
         return false;
       }
       if (
-        this.router.url == '/dashboard/blog/anadir-post'
-        || this.router.url.indexOf('editar-post') > -1
-        || this.router.url.indexOf('manage-categories') > -1
+        this.router.url == '/dashboard/blog/anadir-entrada'
+        || this.router.url.indexOf('editar-entrada') > -1
+        || this.router.url.indexOf('administrar-categorias') > -1
       ) {
         this.wpService.getCategories().subscribe(categories => this.onUpdateCategories.emit(categories));
       }
@@ -140,7 +140,7 @@ export class MenuWpComponent implements OnInit {
             {
               label: 'Administrar',
               icon: 'pi i pi-cog',
-              routerLink: '/dashboard/blog/manage-categories'
+              routerLink: '/dashboard/blog/administrar-categorias'
             }
           ]
         }

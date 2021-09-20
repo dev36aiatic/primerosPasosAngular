@@ -10,7 +10,7 @@
         <h2>Blog</h2>
       </div>
       <div class="col-12 pb-3 my-2" style="border-bottom: 1px solid #eee;">
-        <h6 class="text-center text-muted">Posts <small>({{posts.length}})</small></h6>
+        <h6 class="text-center text-muted">Entradas <small>({{posts.length}})</small></h6>
       </div>
       <div class="col-12 search-post d-flex justify-content-md-end py-2 pb-3" style="border-bottom: 1px solid #eee;">
         <span class="p-input-icon-left d-flex align-items-center">
@@ -28,7 +28,7 @@
 
         <div *ngIf="wpUser">
           <div *ngIf="wpUser['capabilities']['administrator']" class="w-100 d-flex justify-content-end mb-3">
-            <button type="button" label="Editar" [routerLink]="['./editar-post/',f.slug]" icon="pi pi-book" pButton
+            <button type="button" label="Editar" [routerLink]="['./editar-entrada/',f.slug]" icon="pi pi-book" pButton
               class="p-button-sm mr-2"></button>
             <app-delete-post [post]="f" (onSendPostId)="postToDelete($event)"></app-delete-post>
           </div>

@@ -122,14 +122,16 @@
   </div>
 </div>
 
-<div *ngIf="exist == false" class="bg-white">
-  <div class="col-12 pt-1">
-    <app-menu-wp (onUpdateCategories)="updateCategories($event)" [isWPLogged]="isWPLogged" [wpUser]="wpUser">
-    </app-menu-wp>
-  </div>
-  <div class="cargando-posts " style="height: 60vh !important;">
-    <p class="font-weight-bold">La entrada <span class="rojo">{{slug}}</span> que intentas actualizar no se ha podido
-      encontrar. Asegúrate que la url sea correcta. </p>
+<div *ngIf="wpUser">
+  <div *ngIf="exist == false && wpUser['capabilities']['administrator']" class="bg-white">
+    <div class="col-12 pt-1">
+      <app-menu-wp (onUpdateCategories)="updateCategories($event)" [isWPLogged]="isWPLogged" [wpUser]="wpUser">
+      </app-menu-wp>
+    </div>
+    <div class="cargando-posts " style="height: 60vh !important;">
+      <p class="font-weight-bold">La entrada <span class="rojo">{{slug}}</span> que intentas actualizar no se ha podido
+        encontrar. Asegúrate que la url sea correcta. </p>
+    </div>
   </div>
 </div>
 
