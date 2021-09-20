@@ -29,6 +29,7 @@ export class WordpressService {
   /**
    * Funcion buscar posts
    * @param id - numero de posts a mostrar
+   * @returns - Todas las entradas con el numero indicado ( si existen )
    */
   getAll(id: number): Observable<Post[]> {
     const url = `${this.urlWP}/posts`
@@ -96,28 +97,6 @@ export class WordpressService {
       );
   }
 
-  /**
-   * Funcion para obtener las categorias que estan en wordpress
-   * @returns Categorias almacenadas en wordpress
-   */
-  getCategories(): Observable<WpCategory[]> {
-    const params = new HttpParams().set('per_page', 30);
-    const url = `${this.urlWP}/categories?`;
-
-    return this.http.get<WpCategory[]>(url, { params })
-      .pipe(
-        map(categories => {
-          let filterData: WpCategory[] = [];
-
-          categories.forEach(({ name, id }) => {
-            filterData.push({ name, id });
-          });
-
-          return filterData;
-        }),
-        catchError(err => of(err))
-      );
-  }
 
   /**
    * Funcion para añadir media a wordpress
@@ -167,6 +146,20 @@ export class WordpressService {
     return this.http.post<NewPost>(url, body, { headers: this.wpHeaders }).pipe(
       catchError(err => of(err))
     )
+  }
+
+  /**
+   * Funcion para obtener las categorias que estan en wordpress
+   * @returns Categorias almacenadas en wordpress 
+   */
+   getCategories(): Observable<WpCategory[]> {
+    const params = new HttpParams().set('per_page', 100);
+    const url = `${this.urlWP}/categories?`;
+
+    return this.http.get<WpCategory[]>(url, { params })
+      .pipe(
+        catchError(err => of(err))
+      );
   }
 
   /**

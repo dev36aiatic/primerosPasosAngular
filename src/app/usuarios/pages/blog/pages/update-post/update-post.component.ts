@@ -87,7 +87,11 @@ export class UpdatePostComponent implements OnInit {
         this.isWPLogged = true;
       }
     });
-    this.wpService.getCategories().subscribe(categories => this.categories = categories);
+    this.wpService.getCategories().subscribe(categories => {
+      categories.forEach(({ name, id }) => {
+        this.categories.push({ name, id });
+      })
+    });
     this.wpService.getAllUsers().subscribe(users => this.authors = users);
     this.status = [
       {
