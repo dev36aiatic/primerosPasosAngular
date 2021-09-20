@@ -215,10 +215,23 @@ export class WordpressService {
       );
   }
 
+  /**
+   * Funcion que devuelve los usuarios de wordpress
+   * @returns - Nombre e id de los usuarios
+   */
   getAllUsers(): Observable<WordpressUser[]> {
     const url = `${this.urlWP}/users`;
 
-    return this.http.get<WordpressUser[]>(url, { headers: this.wpHeaders });
+    return this.http.get<WordpressUser[]>(url, { headers: this.wpHeaders })
+      .pipe(
+        map(users => {
+          let filteredUsers = [];
+          
+          users.forEach(({ name, id }) => filteredUsers.push({ name, id }));
+          return filteredUsers;
+        }),
+        catchError(error => of(error))
+      );
   }
 
   /**

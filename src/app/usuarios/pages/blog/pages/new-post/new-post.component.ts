@@ -47,12 +47,7 @@ export class NewPostComponent implements OnInit {
       }
     });
     this.wpService.getCategories().subscribe(categories => this.categories = categories);
-    this.authors = [
-      {
-        name: 'Lynross',
-        id: 1
-      }
-    ]
+    this.wpService.getAllUsers().subscribe(users => this.authors = users);
 
     this.status = [
       {
