@@ -1,4 +1,4 @@
-export interface LoggedWpUser {
+export interface WordpressUser {
     id:                 number;
     username:           string;
     name:               string;

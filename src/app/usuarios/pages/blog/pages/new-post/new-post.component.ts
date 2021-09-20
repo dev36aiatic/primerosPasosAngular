@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 import { WordpressService } from '../../services/wordpress.service';
-import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
 import { WpCategory } from '../../interfaces/wp-category.interface';
 
 @Component({
@@ -25,7 +25,7 @@ export class NewPostComponent implements OnInit {
     featured_media: [undefined]
   });
   photoSelected: string | ArrayBuffer;
-  wpUser!: LoggedWpUser;
+  wpUser!: WordpressUser;
   isWPLogged: boolean;
   authors: object[];
   status: object[];

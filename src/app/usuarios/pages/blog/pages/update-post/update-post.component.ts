@@ -5,7 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 import { WordpressService } from '../../services/wordpress.service';
-import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
 import { WpCategory } from '../../interfaces/wp-category.interface';
 import { Post } from '../../interfaces/post.interface';
 
@@ -28,7 +28,7 @@ export class UpdatePostComponent implements OnInit {
   });
   post!: Post;
   photoSelected: string | ArrayBuffer;
-  wpUser!: LoggedWpUser;
+  wpUser!: WordpressUser;
   authors: object[];
   status: object[];
   file: File;

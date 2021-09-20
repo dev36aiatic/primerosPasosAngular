@@ -4,7 +4,7 @@ import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import { Post } from '../../interfaces/post.interface';
-import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
 import { WordpressService } from '../../services/wordpress.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class BlogComponent implements OnInit {
   posts!: Post[];
   filterPosts!: Post[];
   isLoading: boolean = undefined;
-  wpUser: LoggedWpUser;
+  wpUser: WordpressUser;
   isWPLogged: boolean;
 
   constructor(private wpService: WordpressService) { }

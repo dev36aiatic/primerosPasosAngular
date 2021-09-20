@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs'
 import { environment } from 'src/environments/environment';
-import { LoggedWpUser } from '../interfaces/logged-wp-user.interface';
+import { WordpressUser } from '../interfaces/logged-wp-user.interface';
 import { NewPost } from '../interfaces/new-post-wp.interface';
 import { Post } from '../interfaces/post.interface';
 import { UserWordpress } from '../interfaces/user-wp.interface';
@@ -87,10 +87,10 @@ export class WordpressService {
    * Funcion que toma la informacion del usuario que inicio sesion
    * @returns Usuario de wordpress que inicio sesion
    */
-  getWPUser(): Observable<LoggedWpUser> {
+  getWPUser(): Observable<WordpressUser> {
     const url = `${this.urlWP}/users/me`;
 
-    return this.http.post<LoggedWpUser>(url, null, { headers: this.wpHeaders })
+    return this.http.post<WordpressUser>(url, null, { headers: this.wpHeaders })
       .pipe(
         catchError(err => of(err))
       );
@@ -213,6 +213,10 @@ export class WordpressService {
       .pipe(
         catchError(err => of(err))
       );
+  }
+
+  getUsers(){
+    
   }
 
   /**

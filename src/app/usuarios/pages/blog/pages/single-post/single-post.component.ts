@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 
 import { WordpressService } from '../../services/wordpress.service';
-import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
 
 @Component({
   selector: 'app-single-post',
@@ -14,7 +14,7 @@ export class SinglePostComponent implements OnInit {
 
   slug: string;
   post: any;
-  wpUser!: LoggedWpUser;
+  wpUser!: WordpressUser;
   isWPLogged: boolean;
 
   constructor(private wpService: WordpressService, private route: ActivatedRoute) { }

@@ -3,11 +3,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 import { WordpressService } from '../../services/wordpress.service';
-import { LoggedWpUser } from '../../interfaces/logged-wp-user.interface';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
 import { WpCategory } from '../../interfaces/wp-category.interface';
 
 @Component({
@@ -17,7 +15,7 @@ import { WpCategory } from '../../interfaces/wp-category.interface';
 })
 export class MenuWpComponent implements OnInit {
 
-  @Input() wpUser: LoggedWpUser;
+  @Input() wpUser: WordpressUser;
   @Input() isWPLogged: boolean;
   loading: boolean = undefined;
   items: MenuItem[];
