@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 import { Post } from '../../interfaces/post.interface';
 import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
@@ -37,7 +36,6 @@ export class BlogComponent implements OnInit {
     } else {
       this.isWPLogged = false;
     }
-
     this.wpService.getAll(50).subscribe(posts => {
       this.posts = posts;
       this.filterPosts = posts;
@@ -46,7 +44,6 @@ export class BlogComponent implements OnInit {
         console.log(error);
       });
   }
-
   /**
    * Función para borrar un post
    * @param id - id del post a borrar
@@ -81,7 +78,6 @@ export class BlogComponent implements OnInit {
         post.excerpt.rendered.toLowerCase().includes(query)
     });
   }
-
   /**
    * Funcion hija del componente app-menu-wp la cual avisa cuando informacion relacionada con el usuario
    * termina de cargarse
@@ -90,6 +86,4 @@ export class BlogComponent implements OnInit {
   onLoading(loading: boolean) {
     this.isLoading = loading;
   }
-
-
 }

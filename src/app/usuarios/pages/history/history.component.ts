@@ -21,6 +21,7 @@ export class HistoryComponent implements OnInit {
   get userInfo() {
     return this.authService.user;
   }
+  
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {

@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2'
+import { switchMap } from 'rxjs/operators';
 
 import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 import { ProfileData } from '../../interfaces/user.interface';
 import getDepartments from '../../functions/departments';
-
-import Swal from 'sweetalert2'
-import { switchMap } from 'rxjs/operators';
 import { UsuarioService } from '../../services/usuario.service';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -83,7 +83,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private userService: UsuarioService
   ) {
-
     //Desestructuracion de la informacion del usuario traida de la base de datos 
     let {
       cc,
@@ -98,7 +97,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       skills,
       image
     } = this.dbUser.profile;
-
     //Asignacion de los valores desestructurados al usuario que se enviara a la base de datos
     this.editProfile = {
       name: this.dbUser.name,
@@ -172,7 +170,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
     }
   }
-
   /**
    * Funcion que recibe la foto que el usuario sube y da un preview
    * @param foto - Informacion de la foto subida por el usuario
@@ -193,7 +190,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       reader.readAsDataURL(this.file);
     }
   }
-
   /**Funcion para que los campos del perfil  sean editables */
   editFields(btnEdit) {
     btnEdit.classList.toggle('btn-profile-active');
@@ -208,7 +204,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   onChangeDate(fecha) {
     this.editProfile.dateOfBirth = fecha;
   }
-
   /**Objeto literal que me permite controlar los checkbox
    * @property { function } url - Funcion retorna un array con los checkbox
    * @property { function } true - Funcion suma una habilidad al array de habilidades de usuario
@@ -263,11 +258,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     },
     null: () => this.flag = this.flag
   }
-
   /**Funcion que se ejecuta cada vez que se selecciona un checkbox */
   seleccionado(checkbox) {
     this.contarChecks[checkbox.target.checked](checkbox.target.value);
     return (this.flag < 3) ? this.contarChecks['active']() : this.contarChecks['disable']()
   }
-
 }

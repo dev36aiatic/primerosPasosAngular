@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -9,7 +8,9 @@ import { MenuItem } from 'primeng/api';
   ]
 })
 export class MainPageComponent implements OnInit {
+  
   items: MenuItem[];
+
   constructor() { }
 
   ngOnInit(): void {
@@ -20,5 +21,4 @@ export class MainPageComponent implements OnInit {
       { label: 'Busqueda Avanzada', icon: 'pi pi-fw pi-search', routerLink: './advanced-search' }
     ];
   }
-
 }

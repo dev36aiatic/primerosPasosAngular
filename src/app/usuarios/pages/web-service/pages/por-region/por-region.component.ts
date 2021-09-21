@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+
 import { UsuarioService } from '../../../../services/usuario.service';
 import { WebServiceResponse } from '../../interfaces/web-service.interface';
 
@@ -15,11 +16,9 @@ export class PorRegionComponent implements OnInit {
   regions!: any[];
   regionActiva: string = "Región Caribe";
 
-
   constructor(private usuarioService: UsuarioService) { }
   ngOnInit(): void {
     this.loadData(this.regionActiva);
-
     this.regions = [
       { label: 'Región Caribe', value: 'Región Caribe' },
       { label: 'Región Centro Oriente', value: 'Región Centro Oriente' },
@@ -28,14 +27,11 @@ export class PorRegionComponent implements OnInit {
       { label: 'Región Llano', value: 'Región Llano' },
       { label: 'Región Pacífico', value: 'Región Pacífico' },
     ];
-
   }
-
   /**Metodo que se activa cuando el usuario hace click en una region */
   regionChanged() {
     this.loadData(this.regionActiva);
   }
-
   /** Metodo que busca la region
    * @param { string } region - Region
   */
@@ -45,7 +41,6 @@ export class PorRegionComponent implements OnInit {
       this.options = data;
     }, (error => console.log(error)))
   }
-
   /**Metodo para buscar la informacion que el usuario escribe en el input */
   filtrar(coincidencias: WebServiceResponse[]) {
     this.options = coincidencias;

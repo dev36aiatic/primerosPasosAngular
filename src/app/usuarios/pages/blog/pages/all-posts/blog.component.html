@@ -25,7 +25,6 @@
   <div class="container py-4 bg-white">
     <div class="row  justify-content-center">
       <div class="col-md-10 mb-5 border-bottom overflow-hidden" *ngFor="let f of posts">
-
         <div *ngIf="wpUser">
           <div *ngIf="wpUser['capabilities']['administrator']" class="w-100 d-flex justify-content-end mb-3">
             <button type="button" label="Editar" [routerLink]="['./editar-entrada/',f.slug]" icon="pi pi-book" pButton
@@ -62,7 +61,6 @@
   </div>
 
 </div>
-
 
 <div *ngIf="!posts">
   <div class="cargando-posts">

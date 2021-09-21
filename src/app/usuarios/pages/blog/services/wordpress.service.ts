@@ -21,12 +21,10 @@ export class WordpressService {
   private urlWpToken: string = environment.wpToken;
 
   constructor(private http: HttpClient) { }
-
   /**Getter de los headers */
   get wpHeaders() {
     return new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('wp-token') || '');
   }
-
   /**
    * Funcion buscar posts
    * @param id - numero de posts a mostrar
@@ -36,7 +34,6 @@ export class WordpressService {
     const url = `${this.urlWP}/posts`
     return this.http.get<Post[]>(`${url}?_embed&per_page=${id}`);
   }
-
   /**
    * Funcion para buscar un post por su slug
    * @param id - slug del post
@@ -45,7 +42,6 @@ export class WordpressService {
     const url = `${this.urlWP}/posts`
     return this.http.get<Post>(`${url}?_embed&slug=${id}`);
   }
-
   /**
    * Funcion para iniciar sesion en wordpress
    * @param username - nombre de usuario
@@ -65,7 +61,6 @@ export class WordpressService {
         catchError(error => of(error))
       );
   }
-
   /**
    * Funcion para validar el token de wordpress
    * @returns - Observable true si el token es valido, de lo contrario observable false
@@ -84,7 +79,6 @@ export class WordpressService {
         catchError(err => of(false))
       );
   }
-
   /**
    * Funcion que toma la informacion del usuario que inicio sesion
    * @returns Usuario de wordpress que inicio sesion
@@ -97,7 +91,6 @@ export class WordpressService {
         catchError(err => of(err))
       );
   }
-
   /**
    * Funcion para añadir media a wordpress
    * @param slug - Slug de la imagen
@@ -123,7 +116,6 @@ export class WordpressService {
         catchError(err => of(err))
       )
   }
-
   /**
    * Metodo que devuelve media guardada en wordpress
    * @param id - identificador de la media
@@ -134,7 +126,6 @@ export class WordpressService {
 
     return this.http.get(url).pipe(catchError(err => of(err)));
   }
-
   /**
    * Funcion para crear un nuevo post en wordpress
    * @param body - Datos basicos para crear un post
@@ -147,7 +138,6 @@ export class WordpressService {
       catchError(err => of(err))
     )
   }
-
   /**
    * Funcion para obtener las categorias que estan en wordpress
    * @returns Categorias almacenadas en wordpress 
@@ -161,7 +151,6 @@ export class WordpressService {
         catchError(err => of(err))
       );
   }
-
   /**
    * Función que permite actualizar una categoria
    * @param body - Información nueva de la categoria
@@ -176,7 +165,6 @@ export class WordpressService {
         catchError(error => of(error))
       )
   }
-
   /**
    * Función que permite borrar una categoria
    * @param id - Id de la categoría a borrar
@@ -191,7 +179,6 @@ export class WordpressService {
         catchError(error => of(error))
       );
   }
-
   /**
    * Función para crear una nueva categoria
    * @param body - Objeto con la información de la nueva categoria
@@ -210,7 +197,6 @@ export class WordpressService {
         })
       )
   }
-
   /**
    * Función para actualizar un post
    * @param body - Data del post para actualizar
@@ -223,7 +209,6 @@ export class WordpressService {
     return this.http.post<NewPost>(url, body, { headers: this.wpHeaders })
       .pipe(catchError(err => of(err)));
   }
-
   /**
    * Funcion parar borrar un post
    * @param id - Identificador único del post
@@ -237,7 +222,6 @@ export class WordpressService {
         catchError(err => of(err))
       );
   }
-
   /**
    * Funcion que devuelve los usuarios de wordpress
    * @returns - Nombre e id de los usuarios
@@ -256,7 +240,6 @@ export class WordpressService {
         catchError(error => of(error))
       );
   }
-
   /**
    * Funcion para cerrar sesion en wordpress
    */

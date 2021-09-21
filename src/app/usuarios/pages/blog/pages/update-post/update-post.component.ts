@@ -76,7 +76,6 @@ export class UpdatePostComponent implements OnInit {
         this.exist = false;
       }
     });
-
     //Valida si el usuario inicio sesion  y el rol que tiene
     this.wpService.getWPUser().subscribe(user => {
       if (user["error"]) {
@@ -100,8 +99,7 @@ export class UpdatePostComponent implements OnInit {
       }
     ]
   }
-
-  /**Funcion para crear un nuevo post */
+  /**Funcion para actualizar un post */
   updatePost() {
     this.loading = true;
     if (this.file != undefined) {
@@ -129,7 +127,6 @@ export class UpdatePostComponent implements OnInit {
       });
     }
   }
-
   /**
    * Función para saber si manejar el post si existe
    * @param post - Post
@@ -143,7 +140,6 @@ export class UpdatePostComponent implements OnInit {
       Swal.fire('Todo en orden!', 'El post ha sido actualizado sin problemas!', 'success');
     }
   }
-
   /**Funcion que muestra una preview de la imagen principal del post */
   onPhotoSelected(e) {
     if (e.target.files && e.target.files[0] && e.target.files[0].type.includes("image")) {
@@ -155,7 +151,6 @@ export class UpdatePostComponent implements OnInit {
       Swal.fire('Error', 'Solo puedes subir imagenes.', 'error');
     }
   }
-
   /**
    * Funcion que recibe del hijo menu-wp las categorias mas recientes 
    * @param categories - Categorias actualizadas
@@ -166,7 +161,6 @@ export class UpdatePostComponent implements OnInit {
       this.categories.push({ name, id });
     })
   }
-
   /**Funcion para borrar la imagen */
   deleteImage() {
     this.file = undefined;

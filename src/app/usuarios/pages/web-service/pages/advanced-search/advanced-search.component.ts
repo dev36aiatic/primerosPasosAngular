@@ -14,16 +14,13 @@ export class AdvancedSearchComponent implements OnInit {
   listado: WebServiceResponse[] = [];
   options: WebServiceResponse[] = [];
 
-
   constructor(private usuarioService: UsuarioService) { }
   ngOnInit(): void {
     this.usuarioService.getAllData().subscribe(data => {
       this.listado = data;
       this.options = data;
     }, (error => console.log(error)))
-
   }
-
   /**Metodo para buscar la informacion que el usuario escribe en el input */
   filtrar(coincidencias: WebServiceResponse[]) {
     this.options = coincidencias;

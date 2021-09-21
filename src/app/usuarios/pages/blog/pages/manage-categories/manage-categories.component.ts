@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
-import { WordpressService } from '../../services/wordpress.service';
-import { WpCategory } from '../../interfaces/wp-category.interface';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { switchMap } from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { WordpressService } from '../../services/wordpress.service';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
+import { WpCategory } from '../../interfaces/wp-category.interface';
 
 @Component({
   selector: 'app-manage-categories',

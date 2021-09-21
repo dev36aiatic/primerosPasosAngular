@@ -42,5 +42,4 @@ export class SinglePostComponent implements OnInit {
       this.isWPLogged = false;
     }
   }
-
 }

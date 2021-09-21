@@ -53,7 +53,6 @@ export class FormularioLoginComponent implements OnInit {
   }
   /**Funcion para iniciar sesion*/
   login() {
-
     const { email, password } = this.myLogin.value;
 
     this.authService.login(email, password).subscribe(resp => {

@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from '@angular/router';
+
 import { MainPageComponent } from './pages/main-page/main-page.component';
 import { PorRegionComponent } from './pages/por-region/por-region.component';
 import { PorDepartamentoComponent } from './pages/por-departamento/por-departamento.component';
 import { AdvancedSearchComponent } from './pages/advanced-search/advanced-search.component';
-
 
 const routes: Routes = [
     {
