@@ -1,89 +1,94 @@
-<div class="container bg-white" *ngIf="categories else noCategories">
-  <div class="row">
-    <div class="col-12">
-      <app-menu-wp (onUpdateCategories)="updateCategories($event)" [isWPLogged]="isWPLogged" [wpUser]="wpUser"></app-menu-wp>
-    </div>
-  </div>
-  <div class="row">
-      <div class="col-12 text-center  pt-3 pb-4">
-          <h4>Administrar categorias</h4>
-      </div>
-  </div>
-  <span *ngIf="savingChanges" class="d-block mb-2" >
-    <i class="pi pi-spin pi-spinner" style="font-size: 1.5rem; color: #21759b;"></i>
-  </span>
-  <span *ngIf="savingChanges === false"  class="d-block mb-2 d-flex align-items-center" >
-    <i class="pi pi-check mr-1" style="font-size: 1.5rem; color: #45ff3e;"></i> <span>¡Los cambios han sido añadidos!</span>
-  </span>
-  <div class="row">
-    <div class="col-12">
 
-      <div class="card" >
-        <form [formGroup]="formCategory">
-          <p-table [value]="categories" dataKey="id" editMode="row" responsiveLayout="scroll">
-            <ng-template pTemplate="header">
-              <tr>
-                <th>Nombre</th>
-                <th>Slug</th>
-                <th>Descripción</th>
-                <th style="width:8rem"></th>
-              </tr>
-            </ng-template>
-            <ng-template  pTemplate="body" let-category let-editing="editing" let-ri="rowIndex">
-              <tr [pEditableRow]="category">
-                <td>
-                  <p-cellEditor >
-                    <ng-template pTemplate="input">
-                      <input pInputText type="text" required formControlName="name">
+<div *ngIf="wpUser else noCategories">
+    <div *ngIf="wpUser['capabilities']['administrator'] else noCategories">
+        <div class="container bg-white" *ngIf="categories else noCategories">
+          <div class="row">
+            <div class="col-12">
+              <app-menu-wp (onUpdateCategories)="updateCategories($event)" [isWPLogged]="isWPLogged" [wpUser]="wpUser"></app-menu-wp>
+            </div>
+          </div>
+          <div class="row">
+              <div class="col-12 text-center  pt-3 pb-4">
+                  <h4>Administrar categorias</h4>
+              </div>
+          </div>
+          <span *ngIf="savingChanges" class="d-block mb-2" >
+            <i class="pi pi-spin pi-spinner" style="font-size: 1.5rem; color: #21759b;"></i>
+          </span>
+          <span *ngIf="savingChanges === false"  class="d-block mb-2 d-flex align-items-center" >
+            <i class="pi pi-check mr-1" style="font-size: 1.5rem; color: #45ff3e;"></i> <span>¡Los cambios han sido añadidos!</span>
+          </span>
+          <div class="row">
+            <div class="col-12">
+        
+              <div class="card" >
+                <form [formGroup]="formCategory">
+                  <p-table [value]="categories" dataKey="id" editMode="row" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Slug</th>
+                        <th>Descripción</th>
+                        <th style="width:8rem"></th>
+                      </tr>
                     </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ category.name }}
+                    <ng-template  pTemplate="body" let-category let-editing="editing" let-ri="rowIndex">
+                      <tr [pEditableRow]="category">
+                        <td>
+                          <p-cellEditor >
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" required formControlName="name">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ category.name }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" required formControlName="slug" required>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ category.slug }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <textarea formControlName="description" id="float-area"
+                                [ngStyle]="{'max-height':'100px'}" rows="5" cols="30"
+                                pInputTextarea></textarea>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ category.description }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+        
+                        <td style="text-align:center">
+                          <button *ngIf="!editing" [disabled]="isEditingRow" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                            (click)="onRowEditInit(category)" class="p-button-rounded p-button-text"></button>
+                          <button *ngIf="editing" [disabled]="formCategory.invalid" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                            (click)="onRowEditSave(category)"
+                            class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
+                          <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-trash"
+                            (click)="onDeleteCategory(category)"
+                            class="p-button-rounded p-button-text p-button-danger p-mr-2"></button>
+                          <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                            (click)="onRowEditCancel(category, ri)"
+                            class="p-button-rounded p-button-text p-button-danger"></button>
+                        </td>
+                      </tr>
                     </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <input pInputText type="text" required formControlName="slug" required>
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ category.slug }}
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-                <td>
-                  <p-cellEditor>
-                    <ng-template pTemplate="input">
-                      <textarea formControlName="description" id="float-area"
-                        [ngStyle]="{'max-height':'100px'}" rows="5" cols="30"
-                        pInputTextarea></textarea>
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                      {{ category.description }}
-                    </ng-template>
-                  </p-cellEditor>
-                </td>
-
-                <td style="text-align:center">
-                  <button *ngIf="!editing" [disabled]="isEditingRow" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                    (click)="onRowEditInit(category)" class="p-button-rounded p-button-text"></button>
-                  <button *ngIf="editing" [disabled]="formCategory.invalid" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                    (click)="onRowEditSave(category)"
-                    class="p-button-rounded p-button-text p-button-success p-mr-2"></button>
-                  <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-trash"
-                    (click)="onDeleteCategory(category)"
-                    class="p-button-rounded p-button-text p-button-danger p-mr-2"></button>
-                  <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                    (click)="onRowEditCancel(category, ri)"
-                    class="p-button-rounded p-button-text p-button-danger"></button>
-                </td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </form>
-      </div>
+                  </p-table>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <ng-template #noCategories>

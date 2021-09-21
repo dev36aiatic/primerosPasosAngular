@@ -65,6 +65,7 @@ export class BlogComponent implements OnInit {
       ).subscribe(posts => {
         Swal.fire('Y ser marchó ♫ 𝄞 🎶', 'La entrada ha sido borrada.', 'success');
         this.posts = posts;
+        this.filterPosts = posts;
       })
   }
   /**
