@@ -8,25 +8,27 @@ en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la par
 
 ## Contenido
 
-* Frontend 
-    * Introducción
-    * Páginas publicas
-        * Iniciar sesión
-        * Registrarse
-        * Interfaces Involucradas
-    * Páginas privadas
-        * Inicio
-        * Perfil
-        * Registros
-        * Video
-        * Blog
-        * Municipios COL
-        * Interfaces Involucradas
-    * Menús
-        * Menú Publico
-        * Menú de Dashboard
-        * Menú de WordPress
-        * Interfaces Involucradas
+* [Frontend](frontend.md) 
+    * [Introducción](frontend#introducción)
+    * [Versión de Angular](frontend#version-de-angular)
+        * [Versión de los paquetes](frontend#version-de-los-paquetes)
+    * [Páginas publicas](frontend#paginas-publicas)
+        * [Iniciar sesión](frontend#iniciar-sesion)
+        * [Registrarse](frontend#registrarse)
+        * [Interfaces Involucradas](frontend#interfaces-involucradas)
+    * [Páginas privadas](frontend#paginas-privadas)
+        * [Inicio](frontend#inicio)
+        * [Perfil](frontend#perfil)
+        * [Registros](frontend#registros)
+        * [Video](frontend#videos)
+        * [Blog](frontend#blog)
+        * [Municipios COL](frontend#municipios-col)
+        * [Interfaces Involucradas](frontend#interfaces-involucradas)
+    * [Menús](frontend#menus)
+        * [Menú Publico](frontend#menu-publico)
+        * [Menú de Dashboard](frontend#menu-de-dashboard)
+        * [Menú de WordPress](frontend#menu-de-wordpress)
+        * [Interfaces Involucradas](frontend#interfaces-involucradas)
 <br/>
 * Backend
     * Introducción
@@ -46,7 +48,7 @@ en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la par
         * Validar JWT
     * Carpeta Public
     * Rutas
-    * Carpeta de imagenes de los perfiles
+    * Carpeta de imágenes de los perfiles
     
 
 ## Repositorio
@@ -63,6 +65,7 @@ Pasos para levantar el servidor de desarrollo de Angular:
 2. `npm install`  - Instala las dependecias del proyecto de Angular
 3. `ng serve -o` - Abre el proyecto una vez esté listo
 
+#### Build de producción
 Para generar la build de producción debes abrir la consola de comandos sobre la carpeta del proyecto de angular
 y ejecutar el comando `ng build --configuration production`. Esto creará los archivos en la siguiente ruta.
 

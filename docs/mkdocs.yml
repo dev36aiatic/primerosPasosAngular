@@ -3,6 +3,5 @@ theme: readthedocs
 nav: 
     - 'CONTENIDO:':
       - Documentación: 'index.md'
-    - 'Manual de usuario':
-      - 'Sistema de autenticación': 'authenticated.md'
-    - Acerca de: 'about.md'
+      - Frontend: 'frontend.md'
+      - Backend: 'backend.md'
