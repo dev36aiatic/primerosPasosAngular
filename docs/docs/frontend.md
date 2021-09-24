@@ -880,8 +880,6 @@ import { Injectable } from '@angular/core';
 import { catchError, tap } from 'rxjs/operators';
 import { of, pipe } from 'rxjs';
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -889,12 +887,12 @@ export class AuthService {
 
   private baseUrl: string = 'https://dev36-auth.herokuapp.com';
 
-  constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
+  constructor(private httpClient: HttpClient) { }
   
   /**
    * Metodo que busca en el backend la imagen del usuario para mostrarla
    * @param fileName - Nombre de la imagen que tiene el usuario
-   * @returns 
+   * @returns - Imagen del usuario
    */
   getImageFile(fileName: string) {
     const url = `${this.baseUrl}/get-image/${fileName}`;
@@ -938,8 +936,9 @@ export class HistoryComponent implements OnInit {
         reader.onload = e => this.photoSelected = reader.result;
         reader.readAsDataURL(image);
       }
-    )
+    );
   }
+
 }
 
 ```
