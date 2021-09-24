@@ -36,6 +36,12 @@ en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la par
     * [Rest Web Services](frontend#rest-web-services)
         * [Municipios y departamentos de Colombia](frontend#municipios-y-departamentos-de-colombia)
         * [WordPress](frontend#wordpress)
+    * [Guards](frontend#guards)
+        *[Token aplicación](frontend#token-aplicacion)
+            *[Validar token creado por la aplicación](frontend#validar-token-creado-por-la-aplicacion)
+            *[Validar token creado por Google o Facebook](frontend#validar-token-creado-por-google-o-facebook)
+        *[Token enviado por WordPress](frontend#token-enviado-por-wordpress)
+
 * Backend
     * Introducción
     * Controladores

@@ -103,7 +103,7 @@ export class AuthService {
 }
 ```
 
-**Utilización del servicio en el frontend para crear un nuevo usuario en el backend**
+**Implementación del servicio en el frontend para crear un nuevo usuario en el backend**
 
 ```Typescript
 import { Component } from '@angular/core';
@@ -220,7 +220,7 @@ export class AuthService {
     }
 }
 ```
-**Utilización del servicio  en el frontend para iniciar sesión por medio de la aplicación**
+**Implementación del servicio  en el frontend para iniciar sesión por medio de la aplicación**
 
 ```Typescript
 import { Component } from '@angular/core';
@@ -552,10 +552,367 @@ En esta página se encuentra un formulario por medio del cual se puede editar la
 
 </center>
 
-Código utilizado en la página del perfil
+**Código utilizado en la página del perfil**
+
+Definición del servicio para subir una guardar el perfil del usuario en el backend
+
+```Typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { AuthResponse, User } from '../interfaces/auth.interface';
+import { catchError, tap } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
+
+import { ProfileData } from 'src/app/usuarios/interfaces/user.interface';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  private baseUrl: string = 'https://dev36-auth.herokuapp.com';
+  private _user!: (AuthResponse | SocialUser | any );
+
+  /**Getter del usuario*/
+  get user() {
+    return { ... this._user }
+  }
+
+  constructor(private httpClient: HttpClient) { }
+
+  /**Metodo para llenar el formulario de perfil de usuario */
+  userProfile(user: ProfileData, id: string, provider: string = '') {
+    const url = `${this.baseUrl}/update/${id}/${provider}`;
+    const body = {
+      name: user.name,
+      cc: user.cc,
+      address: user.address,
+      dateOfBirth: user.dateOfBirth,
+      city: user.city,
+      department: user.department,
+      country: user.country,
+      ZIP: user.ZIP,
+      profession: user.profession,
+      skills: user.skills,
+      description: user.description
+    }
+
+    return this.httpClient.put<AuthResponse>(url, body).pipe(
+      tap(user => this._user = user),
+      catchError(err => of(err.error))
+    )
+  }
+
+  /**
+   * Metodo que sube la imagen del usuario
+   * @param files - Datos de la imagen
+   */
+  uploadImage(id: string, files, provider: string = '') {
+    const url = `${this.baseUrl}/upload-image/${id}/${provider}`;
+    const formData = new FormData();
+    formData.append('image', files)
+
+    return this.httpClient.post<any>(url, formData).pipe(
+      tap(user => this._user = user),
+      catchError(err => of(err.error))
+    )
+  }
+ 
+}
+
+
+```
+
+Implementación del servicio para subir guardar el perfil del usuario en el backend
+
+```Typescript
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2'
+import { switchMap } from 'rxjs/operators';
+
+import { AuthService } from '../../../iniciar-sesion/services/auth.service';
+import { ProfileData } from '../../interfaces/user.interface';
+import getDepartments from '../../functions/departments';
+import { UsuarioService } from '../../services/usuario.service';
+
+@Component({
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styles: []
+})
+export class ProfileComponent implements OnInit, AfterViewInit {
+
+  dbUser = this.authService.user.user;
+  editProfile: ProfileData | any;
+  disabledItem: boolean = true;
+  disableAll: boolean = false;
+  file: File;
+  photoSelected: string | ArrayBuffer;
+  flag: number = 0;
+  departments: object[] = [];
+  municipalities: object[] = [];
+  countries: object[] = [];
+  skills: string[] = [
+    "Creatividad",
+    "Persuasión",
+    "Colaboración",
+    "Adaptabilidad",
+    "Paciencia",
+    "Comunicación",
+    "Velocidad",
+    "Fortaleza",
+    "Proactividad",
+    "Sociabilidad"
+  ]
+
+  constructor(
+    private authService: AuthService,
+    private userService: UsuarioService
+  ) {
+    //Desestructuracion de la informacion del usuario traida de la base de datos 
+    let {
+      cc,
+      address,
+      dateOfBirth,
+      city,
+      department,
+      country,
+      ZIP,
+      profession,
+      description,
+      skills,
+      image
+    } = this.dbUser.profile;
+    //Asignacion de los valores desestructurados al usuario que se enviara a la base de datos
+    this.editProfile = {
+      name: this.dbUser.name,
+      cc,
+      address,
+      dateOfBirth,
+      city,
+      department,
+      country,
+      ZIP,
+      profession,
+      skills,
+      description,
+      image
+    }
+  }
+
+  ngOnInit(): void {
+    this.departments = getDepartments();
+    this.selectedDepartment();
+    this.countries = [{ country: 'Colombia' }];
+  }
+  /**Funciones que se activan al iniciar el contenido de las vistas */
+  ngAfterViewInit(): void {
+    //Contar skills que ya tiene el usuario guardados
+    this.contarChecks.putActiveFromBd(this.dbUser.profile.skills);
+    this.contarChecks.flagGuardian();
+    //Cargar imagen
+    this.authService.getImageFile(this.dbUser.profile.image).subscribe(
+      image => {
+        const reader = new FileReader();
+        reader.onload = e => this.photoSelected = reader.result
+        reader.readAsDataURL(image);
+      }
+    )
+  }
+  /**Funcion que trae los municipios cuando se selecciona un departamento */
+  selectedDepartment() {
+    this.userService.byDepartment(this.editProfile.department)
+      .subscribe(departments => {
+        this.municipalities = [];
+        departments.forEach(({ municipio }) => {
+          this.municipalities.push({ municipio });
+        });
+      });
+  }
+  /** FUncion que me permite actualizar el perfil del usuario*/
+  sendProfile(formulario) {
+    if (this.file != undefined) {
+      this.authService.uploadImage(this.dbUser.id, this.file, localStorage.getItem('provider') || '')
+        .pipe(
+          switchMap(data => {
+            return this.authService.userProfile(this.editProfile, this.dbUser.id, localStorage.getItem('provider') || '')
+          })
+        ).subscribe(data => {
+          if (data.ok == false) {
+            Swal.fire('Error', data.msg, 'error');
+          } else {
+            Swal.fire('Todo en orden :)', data.msg, 'success');
+          }
+        });
+    } else {
+      this.authService.userProfile(this.editProfile, this.dbUser.id, localStorage.getItem('provider') || '')
+        .subscribe(data => {
+          if (data.ok == false) {
+            Swal.fire('Error', data.msg, 'error');
+          } else {
+            Swal.fire('Todo en orden :)', data.msg, 'success');
+          }
+        });
+
+    }
+  }
+  /**
+   * Funcion que recibe la foto que el usuario sube y da un preview
+   * @param foto - Informacion de la foto subida por el usuario
+   */
+  onPhotoSelected(foto) {
+    if (foto.target.files && foto.target.files[0]) {
+      const { size, type } = foto.target.files[0]
+      const imageType = type.split('/')[1];
+
+      if (size > 1000000 || imageType != 'jpg' && imageType != 'png') {
+        Swal.fire('Unable to upload your image', 'The image must be in jpg or png format and size less than 1 MB.', 'warning');
+        return false;
+      }
+      //Previsualizacion de la imagen
+      this.file = foto.target.files[0];
+      const reader = new FileReader();
+      reader.onload = e => this.photoSelected = reader.result;
+      reader.readAsDataURL(this.file);
+    }
+  }
+  /**Funcion para que los campos del perfil  sean editables */
+  editFields(btnEdit) {
+    btnEdit.classList.toggle('btn-profile-active');
+    //Funcion que me toma el div que cubre los skills y le togglea una clase para que sean editables o no
+    document.querySelectorAll('.cover-select-class').forEach(element => {
+      element.classList.toggle('cover');
+    });
+    this.disabledItem = !this.disabledItem;
+    return false;
+  }
+  /**Funcion que toma la fecha del componente de primeng y se la establece al usuario a editar */
+  onChangeDate(fecha) {
+    this.editProfile.dateOfBirth = fecha;
+  }
+  /**Objeto literal que me permite controlar los checkbox
+   * @property { function } url - Funcion retorna un array con los checkbox
+   * @property { function } true - Funcion suma una habilidad al array de habilidades de usuario
+   * @property { function } false - Funcion resta una habilidad al array de habilidades de usuario
+   * @property { function } active - Funcion que remueve el atributo disabled a los checkbox
+   * @property { function } disable - Funcion que añade el atributo disabled a los checkbox
+   * @property { function } putActiveFromBd - Funcion que pone el atributo checkeck del checkbox en true si ya lo tenia el usuario
+   * @property { function } flagGuardian - Funcion se fija si ya tiene 3 habilidades seleccionadas al cargar la info del usuario
+   * @property { function } null - Funcion de error en caso de que se envie un valor que no valido
+   */
+  contarChecks = {
+    url: () => {
+      let checkbox = document.querySelectorAll('.form-check-input');
+      return checkbox;
+    },
+    true: (value: string) => {
+      this.flag += 1;
+      if (!this.editProfile.skills.includes(value)) {
+        this.editProfile.skills.push(value)
+      };
+    },
+    false: (checkbox) => {
+      this.flag -= 1;
+      this.editProfile.skills.splice(this.editProfile.skills.indexOf(checkbox), 1);
+    },
+    "active": () => {
+      this.contarChecks.url().forEach((element: any) => {
+        if (!element.checked) {
+          element.removeAttribute('disabled');
+        };
+      });
+    },
+    "disable": () => {
+      this.contarChecks.url().forEach((element: any) => {
+        if (!element.checked) {
+          element.setAttribute('disabled', 'true');
+        };
+      });
+    },
+    putActiveFromBd: (arr) => {
+      this.contarChecks.url().forEach((element: any) => {
+        if (arr.includes(element.value)) {
+          element.checked = true;
+          this.contarChecks.true(element.value);
+        }
+      });
+    },
+    flagGuardian: () => {
+      if (this.flag > 2) {
+        return this.contarChecks.disable();
+      }
+    },
+    null: () => this.flag = this.flag
+  }
+  /**Funcion que se ejecuta cada vez que se selecciona un checkbox */
+  seleccionado(checkbox) {
+    this.contarChecks[checkbox.target.checked](checkbox.target.value);
+    return (this.flag < 3) ? this.contarChecks['active']() : this.contarChecks['disable']()
+  }
+}
+```
 
 
 ### Registros
+
+Esta es la página donde se muestra la información que el usuario añadio en el Perfil
+
+<center>
+
+**Versión Web**
+
+![Registros](./img/registros_web.png)
+
+**Versión Móvil**
+
+![Registros Móvil](./img/registros_movil.png)
+
+</center>
+
+**Código utilizado en la página de registros**
+
+Definición del servicio para traer la imágen del usuario del backend
+
+```Typescript
+
+```
+
+```Typescript
+import { Component, OnInit } from '@angular/core';
+
+import { AuthService } from '../../../iniciar-sesion/services/auth.service';
+
+@Component({
+  selector: 'app-history',
+  templateUrl: './history.component.html',
+  styles: []
+})
+export class HistoryComponent implements OnInit {
+
+  photoSelected: string | ArrayBuffer;
+
+  /**Metodo que devuelve la información del usuario que es mostrada en el HTML */
+  get userInfo() {
+    return this.authService.user;
+  }
+  
+  constructor(private authService: AuthService) { }
+
+  ngOnInit(): void {
+    this.authService.getImageFile(this.userInfo.user.profile.image).subscribe(
+      image => {
+        const reader = new FileReader();
+        reader.onload = e => this.photoSelected = reader.result;
+        reader.readAsDataURL(image);
+      }
+    )
+  }
+
+}
+
+```
+
 ### Video
 ### Blog
 ### Municipios COL
