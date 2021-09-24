@@ -12,9 +12,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-formulario-login',
   templateUrl: './formulario-login.component.html',
-  styles: [
-
-  ]
+  styles: []
 })
 export class FormularioLoginComponent implements OnInit {
 

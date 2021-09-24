@@ -22,6 +22,8 @@ El presente documento tiene como objeto principal establecer la documentación d
 * rxjs                            6.6.7
 * typescript                      4.3.5
 
+**Para más información acerca de las dependecias utilizadas en el proyecto, entre otras cosas, puedes consultar el repositorio haciendo [click aquí](https://github.com/dev36aiatic/primerosPasosAngular)**
+
 ## Páginas públicas
 
 Estas son las páginas a las que el usuario puede acceder sin necesidad de iniciar sesión.
@@ -66,6 +68,11 @@ export class AuthService {
     private _user!: ( AuthResponse | SocialUser );
     private baseUrl: string = 'https://dev36-auth.herokuapp.com';
 
+     /**Getter del usuario*/
+    get user() {
+        return { ... this._user }
+    }
+
     constructor(private httpClient: HttpClient) { }
     
     /**
@@ -87,8 +94,7 @@ export class AuthService {
         catchError(err => of(err.error.msg))
         )
     }
-
-    /**Metodo para colocar el token que devuelve jwt para validar el inicio de sesion del usuario*/
+    /**Metodo para colocar el token que devuelve jwt en el LocalStorage para validar el inicio de sesion*/
     setTokenAndUser(resp: AuthResponse) {
         localStorage.setItem('provider', 'ownLogin');
         localStorage.setItem('token', resp.token!);
@@ -100,6 +106,7 @@ export class AuthService {
 **Utilización del servicio en el frontend para crear un nuevo usuario en el backend**
 
 ```Typescript
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 //Modulo de alertas
@@ -107,6 +114,10 @@ import Swal from 'sweetalert2';
 //Importación del servicio creado
 import { AuthService } from '../../services/auth.service';
 
+@Component({
+  selector: 'app-formulario-registro',
+  templateUrl: './formulario-registro.component.html'
+})
 export class FormularioRegistroComponent {
     //Se define el formulario para capturar los datos
     mySignup: FormGroup = this.fb.group({
@@ -164,7 +175,7 @@ También está la posibilidad de iniciar sesión con [Facebook](#inicio-de-sesio
 
 #### Inicio de sesión por medio de la aplicación
 
-**Defición del servicio  en el frontend para iniciar sesión por medio de la aplicación**
+**Definición del servicio  en el frontend para iniciar sesión por medio de la aplicación**
 
 ```Typescript
 import { HttpClient } from '@angular/common/http';
@@ -176,6 +187,11 @@ export class AuthService {
 
     private _user!: ( AuthResponse | SocialUser );
     private baseUrl: string = 'https://dev36-auth.herokuapp.com';  
+
+     /**Getter del usuario*/
+    get user() {
+        return { ... this._user }
+    }
 
     constructor(private httpClient: HttpClient) { }
     /**
@@ -198,7 +214,7 @@ export class AuthService {
         catchError(err => of(err.error.msg))
         );
     }
-    /**Metodo para colocar el token que me devuelve jwt para validar el inicio de sesion*/
+    /**Metodo para colocar el token que devuelve jwt en el LocalStorage para validar el inicio de sesion*/
     setTokenAndUser(resp: AuthResponse) {
         localStorage.setItem('provider', 'ownLogin');
         localStorage.setItem('token', resp.token!);
@@ -209,6 +225,7 @@ export class AuthService {
 **Utilización del servicio  en el frontend para iniciar sesión por medio de la aplicación**
 
 ```Typescript
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 //Modulo de alertas
@@ -216,6 +233,11 @@ import Swal from 'sweetalert2'
 //Importación del servicio
 import { AuthService } from '../../services/auth.service';
 
+@Component({
+  selector: 'app-formulario-login',
+  templateUrl: './formulario-login.component.html',
+  styles: []
+})
 export class FormularioLoginComponent {
     //Se define el formulario para capturar los datos
     myLogin: FormGroup = this.formBuilder.group({
@@ -248,25 +270,181 @@ export class FormularioLoginComponent {
 
 ```
 
-#### Inicio de sesión con Facebook
+#### Inicio de sesión con redes sociales
 
-#### Inicio de sesión con Google
+Para iniciar sesión por medio de las redes sociales Facebook y Google primero se debe hacer la siguiente configuración en el archivo `app.module`
 
+```Typescript
+import { NgModule } from '@angular/core';
+//Modulo de inicio de sesion con Facebook o Google
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 
+@NgModule({[
+    imports[
+        ...,
+        SocialLoginModule
+    ],
+    providers: [
+        ...,
+        {
+        provide: 'SocialAuthServiceConfig',
+        useValue: {
+        autoLogin: false,
+        providers: [
+            {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+                'Identificador de la app de google'
+            )
+            },
+            {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('Identificador de la app de Facebook')
+            }
+        ],
+        onError: (err) => {
+            console.error(err);
+        }
+        } as SocialAuthServiceConfig,
+    }]
+]})
+export class AppModule { }
+```
+Una vez realizada la configuración en el paso anterior, se puede hacer uso de los métodos que trae
+el modulo [angularx-social-login](https://www.npmjs.com/package/angularx-social-login)
 
+#### Inicio de sesión con Facebook o Google
+
+**Definición del servicio para iniciar sesión en Facebook o Google**
+
+``` Typescript
+import { Injectable } from '@angular/core';
+import { AuthResponse, } from '../interfaces/auth.interface';
+import { catchError, tap } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
+
+import { SocialAuthService } from "angularx-social-login";
+import { SocialUser } from "angularx-social-login";
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  private _user!: (AuthResponse | SocialUser );
+  private isLogged: boolean = false;
+
+   /**Getter del usuario*/
+  get user() {
+    return { ... this._user }
+  }
+
+  /**Getter del estado del usuario si inicia sesion con google y facebook*/
+  get isLoggedIn() {
+    return this.isLogged;
+  }
+
+  constructor(private authService: SocialAuthService) { }
+
+  /**Metodo para saber si el usuario esta logeado en la app por medio de Facebook o Google*/
+  loginGoogle() {
+    return this.authService.authState.pipe(
+      tap(user => {
+        // Información del usuario de Facebook o Google
+        this._user = user;
+        // Si el usuario que recibe del servicio de angularx-social-login es distinto de null 
+        // entonces la sesión está iniciada
+        this.isLogged = (user != null);
+        // Se revisa si el proveedor es Facebook o Google y coloca el token de inicio en el LocalStorage
+        // Para futuras validaciones
+        if ((user != null)) {
+          if (user.provider == "GOOGLE") {
+            localStorage.setItem('provider', 'GOOGLE');
+            localStorage.setItem('token', user.idToken);
+          }
+
+          if (user.provider == "FACEBOOK") {
+            localStorage.setItem('provider', 'FACEBOOK');
+            localStorage.setItem('token', user.authToken);
+          }
+        }
+      }), catchError(err => of(false, this.isLogged = false))
+    )
+  }
+
+}
+
+```
+
+**Utilizacion del servicio para iniciar sesión en Facebook o Google**
+
+```Typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+//Modulos de autenticacion con facebook y google
+import { SocialAuthService } from "angularx-social-login";
+import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
+
+import { AuthService } from '../../services/auth.service';
+
+@Component({
+  selector: 'app-formulario-login',
+  templateUrl: './formulario-login.component.html',
+  styles: []
+})
+export class FormularioLoginComponent implements OnInit {
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private googleFacebookAuth: SocialAuthService
+    ) { }
+
+  ngOnInit(): void {
+    /**Funcion que se subscribe ( llama el servicio creado anteriormente ) y obtiene al usuario 
+     * cuando este inicia sesion con facebook o google */
+    this.authService.loginGoogle().subscribe(user => {
+        //Si el usuario es null significa que no ha iniciado sesión
+      if (user == null) {
+        localStorage.clear();
+        this.router.navigateByUrl('/auth');
+      }
+        // Si ya inicio sesión redirige a la pagina de inicio
+      if ((user != null)) {
+        this.router.navigateByUrl('/dashboard');
+      }
+    });
+  }
+  /**Funcion que abre la pantalla de iniciar sesion con google */
+  signInWithGoogle(): void {
+    this.googleFacebookAuth.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+  /**Funcion que abre la pantalla de sesion con facebook*/
+  signInWithFB(): void {
+    this.googleFacebookAuth.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
+}
+
+```
 
 
 ### Interfaces Involucradas
 
 ```Typescript
 /**  Interfaz de la respuesta que devuelve la base de datos a iniciar/validar sesión del usuario*/
+
 export interface AuthResponse {
     ok: boolean;
     token: string;
     user: User;
 }
 
+```
+
+```Typescript
 /** Interfaz de usuario */
+
 export interface User {
     id: String,
     name: String;
@@ -274,7 +452,11 @@ export interface User {
     profile: Profile;
 }
 
+```
+
+```Typescript
 /**Interfaz del perfil del usuario */
+
 export interface Profile {
     ZIP: Number;
     cc: Number;
@@ -286,7 +468,11 @@ export interface Profile {
     dateOfBirth: String;
 }
 
+```
+
+```Typescript
 /**Interfaz para los usuarios de Google o Facebook*/
+
 export declare class SocialUser {
     provider: string;
     id: string;
