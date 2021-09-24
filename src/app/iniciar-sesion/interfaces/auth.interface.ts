@@ -13,6 +13,7 @@ export interface User {
     profile: Profile;
 }
 
+/**Interfaz del perfil del usuario */
 export interface Profile {
     ZIP: Number;
     cc: Number;

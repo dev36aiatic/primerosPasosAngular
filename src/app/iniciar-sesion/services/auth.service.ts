@@ -16,7 +16,7 @@ import { ProfileData } from 'src/app/usuarios/interfaces/user.interface';
 export class AuthService {
 
   private baseUrl: string = environment.baseUrl;
-  private _user!: (AuthResponse | SocialUser | any);
+  private _user!: (AuthResponse | SocialUser );
   private isLogged: boolean = false;
 
   /**Getter del usuario*/
@@ -35,7 +35,7 @@ export class AuthService {
    * Metodo para iniciar sesión
    * @param email - Correo del usuario
    * @param password - Contraseña del usuario
-   * @returns - Si todo está bien usuario creado y token de acceso sino error
+   * @returns - Si todo está bien devuelve usuario y token de acceso sino error
    */
   login(email: string, password: string) {
     const url = `${this.baseUrl}/login`;
