@@ -152,8 +152,6 @@ export class FormularioRegistroComponent {
 }
 ```
 
-
-
 ### Iniciar sesión
 
 Esta es la página que carga por defecto cuando el usuario abre la [página de la aplicación](https://dev36-auth.herokuapp.com)
@@ -489,15 +487,74 @@ export declare class SocialUser {
 
 ```
 
-
-
-
-
-
-
 ## Páginas privadas
+
+Estas son las páginas con las que el usuario puede interacturar siempre y cuando haya iniciado sesión, de lo contrario no podrá acceder a estas.
+
 ### Inicio
+
+Página de inicio donde se muestra una portada con el nombre del equipo, la foto de los integrantes y el logo de la UNAB en la parte inferior.
+
+<center>
+
+**Versión Web**
+
+![Portada](./img/inicio_web.png)
+
+**Versión Móvil**
+
+![Portada móvil](./img/inicio_movil.png)
+
+</center>
+
+Código utilizado en la página de inicio
+
+```Typescript
+import { Component, OnInit } from '@angular/core';
+
+import { AuthService } from '../../../iniciar-sesion/services/auth.service';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  /**Getter de la informacion de usuario qué está en el servicio definido en los pasos anteriores.
+   * En el getter esta la información que se muestra en la parte del HTML.
+  */
+  get infoUser() {
+    return this.authService.user.user;
+  }
+
+  constructor(private authService: AuthService) {
+  }
+
+  ngOnInit(): void {}
+}
+
+```
+
 ### Perfil
+
+En esta página se encuentra un formulario por medio del cual se puede editar la información básica del usuario, para poder editar los campos se debe presionar un botón en la esquina superior derecha.
+
+<center>
+
+**Versión Web**
+
+![Perfil](./img/perfil_web.png)
+
+**Versión Móvil**
+
+![Perfil](./img/perfil_movil.png)
+
+</center>
+
+Código utilizado en la página del perfil
+
+
 ### Registros
 ### Video
 ### Blog

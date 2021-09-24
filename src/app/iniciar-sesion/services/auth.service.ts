@@ -16,7 +16,7 @@ import { ProfileData } from 'src/app/usuarios/interfaces/user.interface';
 export class AuthService {
 
   private baseUrl: string = environment.baseUrl;
-  private _user!: (AuthResponse | SocialUser );
+  private _user!: (AuthResponse | SocialUser | any );
   private isLogged: boolean = false;
 
   /**Getter del usuario*/
