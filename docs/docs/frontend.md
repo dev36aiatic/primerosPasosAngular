@@ -944,6 +944,25 @@ export class HistoryComponent implements OnInit {
 ```
 
 ### Video
+
+En esta página se encuentra un video incrustado
+
+<center>
+
+**Versión Web**
+
+![Imagen Video](./img/video_web.png)
+
+**Versión Móvil**
+
+![Imagen Video](./img/video_movil.png)
+
+</center>
+
+El video fue añadido con el objetivo de cumplir una actividad.
+
+
+
 ### Blog
 ### Municipios COL
 ### Interfaces Involucradas
