@@ -4,6 +4,7 @@ import { switchMap } from 'rxjs/operators';
 
 import { WordpressService } from '../../services/wordpress.service';
 import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
+import { Post } from '../../interfaces/post.interface';
 
 @Component({
   selector: 'app-single-post',
@@ -13,7 +14,7 @@ import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
 export class SinglePostComponent implements OnInit {
 
   slug: string;
-  post: any;
+  post: Post;
   wpUser!: WordpressUser;
   isWPLogged: boolean;
 

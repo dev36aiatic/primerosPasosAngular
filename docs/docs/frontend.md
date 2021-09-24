@@ -970,7 +970,183 @@ En esta parte se hace uso de la [API REST de WordPress](https://developer.wordpr
 
 #### Todas las entradas
 
+<center>
+
+**Versión Web**
+
+![Entradas](./img/blog_web.png)
+
+**Versión Móvil**
+
+![Entradas](./img/blog_movil.png)
+
+</center>
+
+
+**Definición del servicio para obtener las entradas de WordPress**
+
+```Typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs'
+
+import { Post } from '../../interfaces/post.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WordpressService {
+
+  private urlWP: string = 'https://dev36.latiendasigueabierta.com/wp-json/wp/v2';
+
+  constructor(private http: HttpClient) { }
+ 
+  /**
+   * Funcion buscar las entradas en la página de WordPress
+   * @param id - numero de entradas a mostrar
+   * @returns - Todas las entradas con el numero indicado ( si existen )
+   */
+  getAll(id: number): Observable<Post[]> {
+    const url = `${this.urlWP}/posts`
+    return this.http.get<Post[]>(`${url}?_embed&per_page=${id}`);
+  }
+
+}
+
+```
+
+**Implementación del servicio para obtener las entradas de WordPress**
+
+```Typescript
+import { Component, OnInit } from '@angular/core';
+
+import { Post } from '../../interfaces/post.interface';
+import { WordpressService } from '../../services/wordpress.service';
+
+@Component({
+  selector: 'app-blog',
+  templateUrl: './blog.component.html',
+  styleUrls: ['./blog.component.css']
+})
+export class BlogComponent implements OnInit {
+
+  posts!: Post[];
+  filterPosts!: Post[];
+
+  constructor(private wpService: WordpressService) { }
+
+  ngOnInit(): void {
+    // Se llama el servicio creado anteriormente y se guardan las entradas para mostrarlas en el HTML
+    this.wpService.getAll(50).subscribe(posts => {
+      this.posts = posts;
+      this.filterPosts = posts;
+    },
+      (error) => {
+        console.log(error);
+      });
+  }
+   /**Filtro de las entradas
+   * Funcion que busca entradas que tengan contenido relacionado al parametro query
+   * @param query - Termino de busqueda
+   */
+  searchPost(query: string) {
+    query = query.toLowerCase().trim();
+    // Se filtran los posts con las coincidencias
+    this.posts = this.filterPosts.filter(post => {
+      return post.title.rendered.toLowerCase().includes(query) ||
+        post['_embedded']['author']['0'].name.toLowerCase().includes(query) ||
+        post.excerpt.rendered.toLowerCase().includes(query)
+    });
+  }
+}
+
+```
+
+
 #### Ver entrada específica
+
+En esta página se ve más información de una entrada a la que el usuario haya accedido
+
+<center>
+
+**Versión Web**
+
+![Entrada específica](./img/blog_especifico_web.png)
+
+**Versión Móvil**
+
+
+![Entrada específica](./img/blog_especifico_movil.png)
+
+</center>
+
+**Definición del servicio para obtener la información de una entrada específica**
+
+```Typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs'
+
+import { Post } from '../../interfaces/post.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WordpressService {
+
+  private urlWP: string = 'https://dev36.latiendasigueabierta.com/wp-json/wp/v2';
+
+  constructor(private http: HttpClient) { }
+
+ /**
+   * Funcion para buscar un entrada por su slug
+   * @param id - slug del entrada
+   * @returns - Información de la entrada
+   */
+  getSinglePost(id: string): Observable<Post> {
+    const url = `${this.urlWP}/posts`
+    return this.http.get<Post>(`${url}?_embed&slug=${id}`);
+  }
+
+}
+
+```
+
+**Implementación del servicio para obtener la información de una entrada específica**
+
+```Typescript
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+
+import { WordpressService } from '../../services/wordpress.service';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
+import { Post } from '../../interfaces/post.interface';
+
+@Component({
+  selector: 'app-single-post',
+  templateUrl: './single-post.component.html',
+  styleUrls: ['./single-post.component.css']
+})
+export class SinglePostComponent implements OnInit {
+
+  slug: string;
+  post: Post;
+
+  constructor(private wpService: WordpressService, private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    //Toma el slug de la url y busca el post en la api de wp
+    this.route.params.pipe(
+      switchMap(({ slug }) => {
+        this.slug = slug
+        return this.wpService.getSinglePost(slug)
+      })
+    ).subscribe(post => this.post = post, (error) => console.log(error));
+  }
+}
+
+```
 
 #### Iniciar sesión en WordPress
 
