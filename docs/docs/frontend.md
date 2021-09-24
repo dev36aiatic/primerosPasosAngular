@@ -875,8 +875,39 @@ Esta es la página donde se muestra la información que el usuario añadio en el
 Definición del servicio para traer la imágen del usuario del backend
 
 ```Typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, tap } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
+
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  private baseUrl: string = 'https://dev36-auth.herokuapp.com';
+
+  constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
+  
+  /**
+   * Metodo que busca en el backend la imagen del usuario para mostrarla
+   * @param fileName - Nombre de la imagen que tiene el usuario
+   * @returns 
+   */
+  getImageFile(fileName: string) {
+    const url = `${this.baseUrl}/get-image/${fileName}`;
+
+    return this.httpClient.get<any>(url, { responseType: 'Blob' as 'json' }).pipe(
+      catchError(err => of(err.error))
+    );
+  }
+}
 
 ```
+
+Implementación del servicio para traer la imágen del usuario del backend
 
 ```Typescript
 import { Component, OnInit } from '@angular/core';
@@ -890,6 +921,7 @@ import { AuthService } from '../../../iniciar-sesion/services/auth.service';
 })
 export class HistoryComponent implements OnInit {
 
+  // Variable en la que se guarda la imagen que es mostrada en el HTML
   photoSelected: string | ArrayBuffer;
 
   /**Metodo que devuelve la información del usuario que es mostrada en el HTML */
@@ -908,7 +940,6 @@ export class HistoryComponent implements OnInit {
       }
     )
   }
-
 }
 
 ```
