@@ -4,7 +4,7 @@
 
 Esta es la documentación del proyecto [**Dashboard | Practicas II Semestre UNAB**](https://dev36-auth.herokuapp.com/), realizado
 en la empresa **A&A Soluciones TIC**, utilizando MKDOCS para publicarlo
-en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la parte del backend se utilizó NodeJS, TypeORM con base de datos MySQL.  También se hizo uso de la [API REST de los departamentos y municipios de Colombia](https://www.datos.gov.co/en/Mapas-Nacionales/Departamentos-y-municipios-de-Colombia/xdk5-pm3f) y la [API REST de WordPress](https://developer.wordpress.org/rest-api/).
+en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la parte del backend se utilizó NodeJS, TypeORM con base de datos MySQL.  También se hizo uso de la [API REST de los departamentos y municipios de Colombia](frontend#municipios-y-departamentos-de-colombia) y la [API REST de WordPres](frontend#wordpress).
 
 ## Contenido
 
@@ -13,8 +13,9 @@ en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la par
     * [Versión de Angular](frontend#version-de-angular)
         * [Versión de los paquetes](frontend#version-de-los-paquetes)
     * [Páginas publicas](frontend#paginas-publicas)
-        * [Iniciar sesión](frontend#iniciar-sesion)
         * [Registrarse](frontend#registrarse)
+            * [Código utilizado para crear un usuario](frontend#codigo-utilizado-para-crear-un-usuario)
+        * [Iniciar sesión](frontend#iniciar-sesion)
         * [Interfaces Involucradas](frontend#interfaces-involucradas)
     * [Páginas privadas](frontend#paginas-privadas)
         * [Inicio](frontend#inicio)
@@ -29,7 +30,9 @@ en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la par
         * [Menú de Dashboard](frontend#menu-de-dashboard)
         * [Menú de WordPress](frontend#menu-de-wordpress)
         * [Interfaces Involucradas](frontend#interfaces-involucradas)
-<br/>
+    * [Rest Web Services](frontend#rest-web-services)
+        * [Municipios y departamentos de Colombia](frontend#municipios-y-departamentos-de-colombia)
+        * [WordPress](frontend#wordpress)
 * Backend
     * Introducción
     * Controladores

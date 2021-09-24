@@ -31,7 +31,12 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
 
-  /**Metodo para iniciar sesion*/
+  /**
+   * Metodo para iniciar sesión
+   * @param email - Correo del usuario
+   * @param password - Contraseña del usuario
+   * @returns - Si todo está bien usuario creado y token de acceso sino error
+   */
   login(email: string, password: string) {
     const url = `${this.baseUrl}/login`;
     const body = { email, password }
@@ -46,7 +51,13 @@ export class AuthService {
         catchError(err => of(err.error.msg))
       );
   }
-  /**Metodo para registrarse*/
+  /**
+   * Metodo para registrar un usuario
+   * @param name - Nombre del usuario
+   * @param email - Correo del usuario
+   * @param password - Contraseña del usuario
+   * @returns - Si todo está bien usuario creado y token de acceso sino error
+   */
   signup(name: string, email: string, password: string) {
     const url = `${this.baseUrl}/new`;
     const body = { name, email, password }

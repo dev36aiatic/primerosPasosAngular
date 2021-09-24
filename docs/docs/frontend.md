@@ -26,6 +26,90 @@ El presente documento tiene como objeto principal establecer la documentación d
 
 Estas son las páginas a las que el usuario puede acceder sin necesidad de iniciar sesión.
 
+### Registrarse
+
+Esta es la página en la cual el usuario puede [crear una nueva cuenta](https://dev36-auth.herokuapp.com/#/auth/signup)
+
+<center>
+
+**Versión Web**
+
+![Página de registro](./img/registro_web.png)
+
+**Versión Móvil**
+
+![Página de registro](./img/registro_movil.png)
+
+
+</center>
+
+En ambas imágenes se observan 3 campos que piden la siguiente información para realizar un registro:
+
+1. Nombre completo del usuario
+2. Correo electrónico del usuario
+3. Contraseña del usuario
+
+También se encuentra un boton de menú en la barra lateral izquierda, para más información sobre este menú [click aqui](#menu-publico)
+
+#### Código utilizado para crear un usuario
+
+**Definición del servicio en el frontend para crear un nuevo usuario en el backend**
+
+```Typescript
+private baseUrl: string = 'https://dev36-auth.herokuapp.com';
+
+/**
+ * Metodo para registrar un usuario
+ * @param name - Nombre del usuario
+ * @param email - Correo del usuario
+ * @param password - Contraseña del usuario
+ * @returns - Si todo está bien usuario creado y token de acceso sino error
+ */
+signup(name: string, email: string, password: string) {
+const url = `${this.baseUrl}/new`;
+const body = { name, email, password }
+
+return this.httpClient.post<AuthResponse>(url, body)
+    .pipe(
+    tap(resp => {
+        this.setTokenAndUser(resp);
+    }),
+    catchError(err => of(err.error.msg))
+    )
+}
+```
+
+**Utilización del servicio en el frontend para crear un nuevo usuario en el backend**
+
+```Typescript
+//Se define el formulario para capturar los datos
+mySignup: FormGroup = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
+});
+
+/**Metodo que se activa cuando el usuario crea un registro*/
+signup() {
+    //Se recogen los valores del formulario
+    const { name, email, password } = this.mySignup.value;
+
+    // Se llama al servicio
+    this.authService.signup(name, email, password)
+    .subscribe(resp => {
+        // Si la respuesta es exitosa redirige al Inicio de la aplicación
+        if (resp.ok) {
+            this.router.navigateByUrl('/dashboard');
+        } else {
+            // De lo contrario muestra un error
+            Swal.fire(resp, 'Error', 'error');
+        }
+    })
+}
+```
+
+
+
 ### Iniciar sesión
 
 Esta es la página que carga por defecto cuando el usuario abre la [página de la aplicación](https://dev36-auth.herokuapp.com)
@@ -35,7 +119,7 @@ Esta es la página que carga por defecto cuando el usuario abre la [página de l
 Se observa un formulario el cual solicita el correo y la contraseña con el fin de acceder a la [página de inicio de la Dashboard](#inicio)
 
 
-### Registrarse
+
 
 
 ### Interfaces Involucradas
@@ -63,4 +147,11 @@ Se observa un formulario el cual solicita el correo y la contraseña con el fin 
 ### Menú de Dashboard
 ### Menú de WordPress
 ### Interfaces Involucradas
+
+
+
+
+## Rest Web Services
+### Municipios y departamentos de Colombia
+### WordPress
 
