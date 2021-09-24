@@ -959,11 +959,28 @@ En esta página se encuentra un video incrustado
 
 </center>
 
-El video fue añadido con el objetivo de cumplir una actividad.
-
-
+El video fue añadido con el objetivo de cumplir una actividad sin más.
 
 ### Blog
+
+En esta parte se hace uso de la [API REST de WordPress](https://developer.wordpress.org/rest-api/) con el objetivo de
+**ver todas las entradas, ver una en específico, crearlas, editarlas. Crear categorías y administrar estas mismas a través de Angular.** 
+
+**Para ver la página de WordPress que se utiliza para conectarla con Angular puedes hacer [click aquí](https://dev36.latiendasigueabierta.com)**
+
+#### Todas las entradas
+
+#### Ver entrada específica
+
+#### Iniciar sesión en WordPress
+
+#### Crear entrada
+
+#### Editar entrada
+
+#### Administrar categorías
+
+
 ### Municipios COL
 ### Interfaces Involucradas
 
@@ -977,10 +994,4 @@ El video fue añadido con el objetivo de cumplir una actividad.
 ### Menú de WordPress
 ### Interfaces Involucradas
 
-
-
-
-## Rest Web Services
-### Municipios y departamentos de Colombia
-### WordPress
 
