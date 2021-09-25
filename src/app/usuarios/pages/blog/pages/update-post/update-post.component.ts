@@ -15,7 +15,7 @@ import { Post } from '../../interfaces/post.interface';
   styleUrls: ['./update-post.component.css']
 })
 export class UpdatePostComponent implements OnInit {
-
+  // Se define el formulario para capturar la información del post
   formPost: FormGroup = this.formBuilder.group({
     title: ['', [Validators.required]],
     author: ['', [Validators.required]],
@@ -62,6 +62,7 @@ export class UpdatePostComponent implements OnInit {
             this.photoSelected = media["guid"]["rendered"];
           })
         }
+        // Settea los valores del post en el formulario
         this.formPost.setValue({
           title: post[0].title.rendered,
           author: post[0]?.["_embedded"]['author']['0'].id,
@@ -86,12 +87,15 @@ export class UpdatePostComponent implements OnInit {
         this.isWPLogged = true;
       }
     });
+    // Trae las categorías de WordPress
     this.wpService.getCategories().subscribe(categories => {
       categories.forEach(({ name, id }) => {
         this.categories.push({ name, id });
       })
     });
+    // Trae los autores de Wordpress
     this.wpService.getAllUsers().subscribe(users => this.authors = users);
+    //Define los valores del posible estado de la entrada
     this.status = [
       {
         status: 'Publicar',

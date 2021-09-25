@@ -22,7 +22,7 @@ export class LoginWpComponent implements OnInit {
   constructor(private wpService: WordpressService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
-    //Si ya inicio sesion que redirige a la pagina de añadir post 
+    //Si ya inicio sesion que redirige a la pagina de inici del blog  
     if (localStorage.getItem('wp-token')) {
       this.isWpLogged = true;
       this.router.navigateByUrl('dashboard/blog');
