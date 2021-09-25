@@ -1109,7 +1109,6 @@ export class WordpressService {
   }
 
 }
-
 ```
 
 **Implementación del servicio para obtener la información de una entrada específica**
@@ -1150,11 +1149,725 @@ export class SinglePostComponent implements OnInit {
 
 #### Iniciar sesión en WordPress
 
+En esta página se observa un formulario para iniciar sesión en WordPress.
+**Si el usuario quiere utilizar las funcionalidades de añadir, editar entradas, etc, debe iniciar sesión y su cuenta debe tener el rol de Administrador**
+
+<center>
+
+**Versión Web**
+
+![Sesion WordPress](./img/sesion-wp_web.png)
+
+**Versión Móvil**
+
+![Sesion WordPress Móvil](./img/sesion_wp_movil.png)
+
+</center>
+
+**Definición del servicio para iniciar sesión en WordPress**
+
+```Typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+import { UserWordpress } from '../interfaces/user-wp.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WordpressService {
+
+  private urlWpToken: string = 'https://dev36.latiendasigueabierta.com/wp-json/jwt-auth/v1/token';
+
+  constructor(private http: HttpClient) { }
+
+ /**
+   * Funcion para iniciar sesion en wordpress
+   * @param username - nombre de usuario
+   * @param password - contraseña
+   * @returns - Informacion del basica del usuario y token
+   */
+  wordpressLogin(username: string, password: string) {
+    const body = { username, password }
+
+    return this.http.post<UserWordpress>(this.urlWpToken, body)
+      .pipe(
+        tap(data => {
+          if (data.token) {
+            localStorage.setItem('wp-token', data.token);
+          }
+        }),
+        catchError(error => of(error))
+      );
+  }
+
+}
+
+```
+Se pone le token que devuelve la petición en el localStorage con el fin de validar la sesión del usuario cada vez que quiera añadir o borrar algun elemento de WordPress.
+
+**Implementación del servicio para iniciar sesión en WordPress**
+
+```Typescript
+import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { WordpressService } from '../../services/wordpress.service';
+
+@Component({
+  selector: 'login-wp',
+  templateUrl: './login-wp.component.html',
+  styleUrls: ['./login-wp.component.css']
+})
+export class LoginWpComponent implements OnInit {
+  // Se define el formulario para obtener el usuario y la contraseña
+  myLogin: FormGroup = this.formBuilder.group({
+    username: ['', [Validators.required]],
+    password: ['', [Validators.required]]
+  });
+  // Banderas para saber si el usuario ya tiene la sesión iniciada
+  isWpLogged: boolean = false;
+  loading: boolean = false;
+
+  constructor(
+    private wpService: WordpressService, 
+    private formBuilder: FormBuilder, 
+    private router: Router
+    ) { }
+
+  ngOnInit(): void {
+    //Si ya inicio sesion que redirige a la pagina de inicio del blog 
+    if (localStorage.getItem('wp-token')) {
+      this.isWpLogged = true;
+      this.router.navigateByUrl('dashboard/blog');
+      return;
+    }
+    this.isWpLogged = false;
+  }
+
+  /**
+   * Funcion para iniciar sesión en wordpress, es ejecutada cuando el usuario le da click al botón Iniciar Sesión
+   */
+  iniciarSesionWp() {
+    this.isWpLogged = true;
+    // Se capturan los valores del formulario
+    const { username, password } = this.myLogin.value;
+    // Se llama el servicio creado anteriormente
+    this.wpService.wordpressLogin(username, password).subscribe(data => {
+      if (data.error) {
+        Swal.fire('Oops', 'Parece que el usuario o contraseña son incorrectos, por favor cambialos e  intenta de nuevo.', 'error');
+        this.isWpLogged = false;
+        return false;
+      }
+      this.router.navigateByUrl('dashboard/blog');
+    });
+  }
+
+}
+```
+
 #### Crear entrada
+
+Esta página permite añadir nuevas entradas a la página de WordPress desde Angular. **El usuario debe iniciar sesión primero y tener el rol de Administrador, de lo contrario no podrá realizar esta acción.**
+
+<center>
+
+**Versión Web**
+
+![Crear entrada](./img/nueva_entrada_web.png)
+
+**Versión Móvil**
+
+![Crear entrada movil](./img/nueva_entrada_movil.png)
+
+</center>
+
+**Definición de los servicios para crear una entrada en WordPress**
+
+```Typescript
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+
+import { NewPost } from '../interfaces/new-post-wp.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WordpressService {
+
+  private urlWp: string = 'https://dev36.latiendasigueabierta.com/wp-json/wp/v2';
+    /**Getter de los headers */
+  get wpHeaders() {
+    //Se envia el token que está en el localStorage por los headers
+    // Si es válido permite añadir el post de lo contrario da error
+    return new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('wp-token') || '');
+  }
+
+  constructor(private http: HttpClient) { }
+
+  /**
+   * Funcion para crear un nuevo post en wordpress
+   * @param body - Datos basicos para crear un post
+   * @returns - Informacion del post creado
+   */
+  newPost(body: NewPost): Observable<NewPost> {
+    const url = `${this.urlWP}/posts`;
+
+    return this.http.post<NewPost>(url, body, { headers: this.wpHeaders }).pipe(
+      catchError(err => of(err))
+    )
+  }
+    /**
+   * Funcion que toma la informacion del usuario que inicio sesion
+   * @returns Usuario de wordpress que inicio sesion
+   */
+  getWPUser(): Observable<WordpressUser> {
+    const url = `${this.urlWP}/users/me`;
+
+    return this.http.post<WordpressUser>(url, null, { headers: this.wpHeaders })
+      .pipe(
+        catchError(err => of(err))
+      );
+  }
+  /**
+   * Funcion para añadir media a wordpress
+   * @param slug - Slug de la imagen
+   * @param title - Titulo de la imagen
+   * @param author - Id de la persona que subio la imagen
+   * @param file - Imagen
+   * @returns - Informacion de la imagen
+   */
+  uploadMedia(slug: string, title: string, author: any, file: any) {
+    const url = `${this.urlWP}/media`;
+    const formData = new FormData();
+
+    formData.append('slug', slug);
+    formData.append('status', 'publish');
+    formData.append('title', title);
+    formData.append('author', author);
+    formData.append('media_type', 'image');
+    formData.append('file', file);
+    formData.append('comment_status', 'closed');
+
+    return this.http.post(url, formData, { headers: this.wpHeaders })
+      .pipe(
+        catchError(err => of(err))
+      )
+  }
+   /**
+   * Funcion para obtener las categorias que estan en wordpress
+   * @returns Categorias almacenadas en wordpress 
+   */
+  getCategories(): Observable<WpCategory[]> {
+    const params = new HttpParams().set('per_page', 100);
+    const url = `${this.urlWP}/categories?`;
+
+    return this.http.get<WpCategory[]>(url, { params })
+      .pipe(
+        catchError(err => of(err))
+      );
+  }
+
+   /**
+   * Funcion que devuelve los usuarios de wordpress
+   * @returns - Nombre e id de los usuarios
+   */
+  getAllUsers(): Observable<WordpressUser[]> {
+    const url = `${this.urlWP}/users`;
+
+    return this.http.get<WordpressUser[]>(url, { headers: this.wpHeaders })
+      .pipe(
+        map(users => {
+          let filteredUsers = [];
+
+          users.forEach(({ name, id }) => filteredUsers.push({ name, id }));
+          return filteredUsers;
+        }),
+        catchError(error => of(error))
+      );
+  }
+   /**
+   * Funcion para cerrar sesion en wordpress
+   */
+  wpLogout() {
+    if (localStorage.getItem('wp-token')) {
+      localStorage.removeItem('wp-token');
+    }
+  }
+
+}
+```
+
+**Implementación del servicio para crear una entrada en WordPress**
+
+```Typescript
+import { Component, OnInit } from '@angular/core';
+import { switchMap } from 'rxjs/operators';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
+
+import { WordpressService } from '../../services/wordpress.service';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
+import { WpCategory } from '../../interfaces/wp-category.interface';
+
+@Component({
+  selector: 'new-post',
+  templateUrl: './new-post.component.html',
+  styleUrls: ['./new-post.component.css']
+})
+export class NewPostComponent implements OnInit {
+
+  formPost: FormGroup = this.formBuilder.group({
+    title: ['', [Validators.required]],
+    author: ['', [Validators.required]],
+    slug: ['', [Validators.required]],
+    content: ['', [Validators.required]],
+    excerpt: ['', [Validators.required]],
+    status: ['', [Validators.required]],
+    categories: ['', [Validators.required]],
+    featured_media: [undefined]
+  });
+  photoSelected: string | ArrayBuffer;
+  wpUser!: WordpressUser;
+  isWPLogged: boolean;
+  authors: object[];
+  status: object[];
+  file: File;
+  categories: WpCategory[] = [];
+  loading = false;
+
+  constructor(private formBuilder: FormBuilder, private wpService: WordpressService) { }
+
+  ngOnInit(): void {
+    //Valida si el usuario inicio sesion  y el rol que tiene
+    this.wpService.getWPUser().subscribe(user => {
+      if (user["error"]) {
+        this.isWPLogged = false;
+        this.wpService.wpLogout();
+      } else {
+        this.wpUser = user;
+        this.isWPLogged = true;
+      }
+    });
+    // LLama la función de las categorias almacenadas en WordPress
+    this.wpService.getCategories().subscribe(categories => {
+      categories.forEach(({ name, id }) => {
+        this.categories.push({ name, id });
+      })
+    });
+    // LLama la función de los autores creados en WordPress
+    this.wpService.getAllUsers().subscribe(users => this.authors = users);
+    // Definición de los estados de la entrada
+    this.status = [
+      {
+        status: 'Publicar',
+        value: 'publish'
+      }
+    ]
+  }
+  /**Funcion para crear un nuevo post */
+  newPost() {
+    this.loading = true;
+    if (this.file != undefined) {
+      const title = this.file.name.split('.')[0];
+      const slug = this.file.name.split('.')[0];
+      const author = this.wpUser.id;
+
+      this.wpService.uploadMedia(slug, title, author, this.file)
+        .pipe(
+          switchMap(image => {
+            if (image["error"]) {
+              Swal.fire('Oops!', image["error"], 'error');
+              return;
+            } else {
+              this.formPost.get('featured_media').setValue(parseInt(image.id));
+              return this.wpService.newPost(this.formPost.value);
+            }
+          })
+        ).subscribe(post => {
+          this.newPostHandleError(post);
+        })
+    } else {
+      this.wpService.newPost(this.formPost.value).subscribe(post => {
+        this.newPostHandleError(post);
+      });
+    }
+  }
+
+  /**
+   * Funcion que recibe un post analiza si hay errores o fue exitoso
+   * @param post - Post
+   */
+  newPostHandleError(post: any) {
+    if (post["error"]) {
+      Swal.fire('Oops!', post["error"], 'error');
+      return;
+    } else {
+      this.postStored();
+      this.deleteImage();
+    }
+  }
+
+  /**Funcion muestra un mensaje cuando el post se guarda con exito */
+  postStored() {
+    this.loading = false;
+    Swal.fire('Todo en orden!', 'El post ha sido añadido correctamente!', 'success');
+    this.formPost.reset();
+  }
+
+  /**Funcion que muestra una preview de la imagen principal del post */
+  onPhotoSelected(e) {
+    if (e.target.files && e.target.files[0] && e.target.files[0].type.includes("image")) {
+      this.file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = e => this.photoSelected = reader.result;
+      reader.readAsDataURL(this.file);
+    } else {
+      Swal.fire('Error', 'Solo puedes subir imagenes.', 'error');
+    }
+  }
+  /**Funcion para borrar la imagen */
+  deleteImage() {
+    this.file = undefined;
+    this.photoSelected = undefined;
+  }
+}
+
+```
+
+
 
 #### Editar entrada
 
+En esta página se puede editar una entrada que esté publicada en la página de WordPress.**El usuario debe iniciar sesión primero y tener el rol de Administrador, de lo contrario no podrá realizar esta acción.**
+
+<center>
+
+**Versión Web**
+
+![Editar Entrada](./img/editar_entrada_web.png)
+
+**Versión Móvil**
+
+![Editar Entrada](./img/editar_entrada_movil.png)
+
+</center>
+
+**Definición de los servicios utilizados para editar una entrada desde Angular a WordPress**
+
+```Typescript
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, map, tap } from 'rxjs/operators';
+import { of, Observable } from 'rxjs'
+import { environment } from 'src/environments/environment';
+
+import { WordpressUser } from '../interfaces/logged-wp-user.interface';
+import { NewPost } from '../interfaces/new-post-wp.interface';
+import { Post } from '../interfaces/post.interface';
+import { UserWordpress } from '../interfaces/user-wp.interface';
+import { WpCategory } from '../interfaces/wp-category.interface';
+import { ValidateWPToken } from '../interfaces/wp-token.interface';
+import { NewCategory } from '../interfaces/new-category.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WordpressService {
+
+  private urlWP: string = environment.wpURL;
+
+  constructor(private http: HttpClient) { }
+  /**Getter de los headers */
+  get wpHeaders() {
+    return new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('wp-token') || '');
+  }
+  /**
+   * Funcion para buscar un post por su slug
+   * @param id - slug del post
+   */
+  getSinglePost(id: string): Observable<Post> {
+    const url = `${this.urlWP}/posts`
+    return this.http.get<Post>(`${url}?_embed&slug=${id}`);
+  }
+  /**
+   * Funcion que toma la informacion del usuario que inicio sesion
+   * @returns Usuario de wordpress que inicio sesion
+   */
+  getWPUser(): Observable<WordpressUser> {
+    const url = `${this.urlWP}/users/me`;
+
+    return this.http.post<WordpressUser>(url, null, { headers: this.wpHeaders })
+      .pipe(
+        catchError(err => of(err))
+      );
+  }
+  /**
+   * Funcion para añadir media a wordpress
+   * @param slug - Slug de la imagen
+   * @param title - Titulo de la imagen
+   * @param author - Id de la persona que subio la imagen
+   * @param file - Imagen
+   * @returns - Informacion de la imagen
+   */
+  uploadMedia(slug: string, title: string, author: any, file: any) {
+    const url = `${this.urlWP}/media`;
+    const formData = new FormData();
+
+    formData.append('slug', slug);
+    formData.append('status', 'publish');
+    formData.append('title', title);
+    formData.append('author', author);
+    formData.append('media_type', 'image');
+    formData.append('file', file);
+    formData.append('comment_status', 'closed');
+
+    return this.http.post(url, formData, { headers: this.wpHeaders })
+      .pipe(
+        catchError(err => of(err))
+      )
+  }
+  /**
+   * Metodo que devuelve media guardada en wordpress
+   * @param id - identificador de la media
+   * @returns - Información de la media
+   */
+  getMedia(id: number) {
+    const url = `${this.urlWP}/media/${id}`;
+
+    return this.http.get(url).pipe(catchError(err => of(err)));
+  }
+  /**
+   * Funcion para obtener las categorias que estan en wordpress
+   * @returns Categorias almacenadas en wordpress 
+   */
+  getCategories(): Observable<WpCategory[]> {
+    const params = new HttpParams().set('per_page', 100);
+    const url = `${this.urlWP}/categories?`;
+
+    return this.http.get<WpCategory[]>(url, { params })
+      .pipe(
+        catchError(err => of(err))
+      );
+  }
+
+  /**
+   * Función para actualizar un post
+   * @param body - Data del post para actualizar
+   * @param id  - Indentifiador único del post
+   * @returns - Post actualizado
+   */
+  updateSinglePost(body: NewPost, id: number): Observable<NewPost> {
+    const url = `${this.urlWP}/posts/${id}`
+
+    return this.http.post<NewPost>(url, body, { headers: this.wpHeaders })
+      .pipe(catchError(err => of(err)));
+  }
+
+  /**
+   * Funcion que devuelve los usuarios de wordpress
+   * @returns - Nombre e id de los usuarios
+   */
+  getAllUsers(): Observable<WordpressUser[]> {
+    const url = `${this.urlWP}/users`;
+
+    return this.http.get<WordpressUser[]>(url, { headers: this.wpHeaders })
+      .pipe(
+        map(users => {
+          let filteredUsers = [];
+
+          users.forEach(({ name, id }) => filteredUsers.push({ name, id }));
+          return filteredUsers;
+        }),
+        catchError(error => of(error))
+      );
+  }
+  /**
+   * Funcion para cerrar sesion en wordpress
+   */
+  wpLogout() {
+    if (localStorage.getItem('wp-token')) {
+      localStorage.removeItem('wp-token');
+    }
+  }
+}
+
+```
+
+**Implementación de los servicios utilizados para editar una entrada desde Angular a WordPress**
+
+```Typescript
+import { Component, OnInit } from '@angular/core';
+import { switchMap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
+
+import { WordpressService } from '../../services/wordpress.service';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
+import { WpCategory } from '../../interfaces/wp-category.interface';
+import { Post } from '../../interfaces/post.interface';
+
+@Component({
+  selector: 'app-update-post',
+  templateUrl: './update-post.component.html',
+  styleUrls: ['./update-post.component.css']
+})
+export class UpdatePostComponent implements OnInit {
+  // Se define el formulario para capturar la información del post
+  formPost: FormGroup = this.formBuilder.group({
+    title: ['', [Validators.required]],
+    author: ['', [Validators.required]],
+    slug: ['', [Validators.required]],
+    content: ['', [Validators.required]],
+    excerpt: ['', [Validators.required]],
+    status: ['', [Validators.required]],
+    categories: ['', [Validators.required]],
+    featured_media: [undefined]
+  });
+  post!: Post;
+  photoSelected: string | ArrayBuffer;
+  wpUser!: WordpressUser;
+  authors: object[];
+  status: object[];
+  file: File;
+  categories: WpCategory[] = [];
+  loading = false;
+  slug: string;
+  exist: boolean = true;
+  isWPLogged: boolean;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private wpService: WordpressService,
+    private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    //Toma el parametro de la url y busca el post
+    this.route.params.pipe(
+      switchMap(({ slug }) => {
+        this.slug = slug;
+        return this.wpService.getSinglePost(slug);
+      })
+    ).subscribe(post => {
+      if (post[0]) {
+        // Expresión regular para quitar etiquetas html que vienen en el extracto
+        const regex = /(<([^>]+)>)/ig;
+
+        this.exist = true;
+        this.post = post[0];
+        if (post[0].featured_media != 0) {
+          this.wpService.getMedia(post[0].featured_media).subscribe(media => {
+            this.photoSelected = media["guid"]["rendered"];
+          })
+        }
+        // Settea los valores del post en el formulario
+        this.formPost.setValue({
+          title: post[0].title.rendered,
+          author: post[0]?.["_embedded"]['author']['0'].id,
+          slug: post[0].slug,
+          content: post[0].content.rendered,
+          excerpt: post[0].excerpt.rendered.replace(regex, ""),
+          status: post[0].status,
+          categories: post[0].categories,
+          featured_media: post[0].featured_media
+        });
+      } else {
+        this.exist = false;
+      }
+    });
+    //Valida si el usuario inicio sesion  y el rol que tiene
+    this.wpService.getWPUser().subscribe(user => {
+      if (user["error"]) {
+        this.isWPLogged = false;
+        this.wpService.wpLogout();
+      } else {
+        this.wpUser = user;
+        this.isWPLogged = true;
+      }
+    });
+    // Trae las categorías de WordPress
+    this.wpService.getCategories().subscribe(categories => {
+      categories.forEach(({ name, id }) => {
+        this.categories.push({ name, id });
+      })
+    });
+    // Trae los autores de Wordpress
+    this.wpService.getAllUsers().subscribe(users => this.authors = users);
+    //Define los valores del posible estado de la entrada
+    this.status = [
+      {
+        status: 'Publicar',
+        value: 'publish'
+      }
+    ]
+  }
+  /**Funcion para actualizar un post */
+  updatePost() {
+    this.loading = true;
+    if (this.file != undefined) {
+      const title = this.file.name.split('.')[0];
+      const slug = this.file.name.split('.')[0];
+      const author = this.wpUser.id;
+
+      this.wpService.uploadMedia(slug, title, author, this.file)
+        .pipe(
+          switchMap(image => {
+            if (image["error"]) {
+              Swal.fire('Oops!', image["error"], 'error');
+              return;
+            } else {
+              this.formPost.get('featured_media').setValue(parseInt(image.id));
+              return this.wpService.updateSinglePost(this.formPost.value, this.post.id);
+            }
+          })
+        ).subscribe(post => {
+          this.newPostHandleError(post);
+        })
+    } else {
+      this.wpService.updateSinglePost(this.formPost.value, this.post.id).subscribe(post => {
+        this.newPostHandleError(post);
+      });
+    }
+  }
+  /**
+   * Función para saber si manejar el post si existe
+   * @param post - Post
+   * @returns - Mensaje de error si el post no existe, de lo contrario mensaje de todo correcto
+   */
+  newPostHandleError(post: any) {
+    if (post["error"]) {
+      Swal.fire('Oops!', post["error"], 'error');
+      return;
+    } else {
+      Swal.fire('Todo en orden!', 'El post ha sido actualizado sin problemas!', 'success');
+    }
+  }
+  /**Funcion que muestra una preview de la imagen principal del post */
+  onPhotoSelected(e) {
+    if (e.target.files && e.target.files[0] && e.target.files[0].type.includes("image")) {
+      this.file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = e => this.photoSelected = reader.result;
+      reader.readAsDataURL(this.file);
+    } else {
+      Swal.fire('Error', 'Solo puedes subir imagenes.', 'error');
+    }
+  }
+  /**Funcion para borrar la imagen */
+  deleteImage() {
+    this.file = undefined;
+    this.photoSelected = undefined;
+  }
+}
+
+```
+
 #### Administrar categorías
+
+
 
 
 ### Municipios COL
