@@ -40,10 +40,10 @@ en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la par
         * [Menú de WordPress](frontend#menu-de-wordpress)
         * [Interfaces Involucradas](frontend#interfaces-involucradas)
     * [Guards](frontend#guards)
-        *[Token aplicación](frontend#token-aplicacion)
-            *[Validar token creado por la aplicación](frontend#validar-token-creado-por-la-aplicacion)
-            *[Validar token creado por Google o Facebook](frontend#validar-token-creado-por-google-o-facebook)
-        *[Token enviado por WordPress](frontend#token-enviado-por-wordpress)
+        * [Token aplicación](frontend#token-aplicacion)
+            * [Validar token creado por la aplicación](frontend#validar-token-creado-por-la-aplicacion)
+            * [Validar token creado por Google o Facebook](frontend#validar-token-creado-por-google-o-facebook)
+        * [Token enviado por WordPress](frontend#token-enviado-por-wordpress)
 
 * Backend
     * Introducción
