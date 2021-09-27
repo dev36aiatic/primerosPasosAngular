@@ -3160,11 +3160,11 @@ export interface WpCategory {
 
 </center>
 
-Esta sección tiene como objeto principal documentar los guards utilizados en la aplicación para proteger las rutas
+Esta sección tiene como objeto principal documentar los guards utilizados en la aplicación para proteger las rutas. Los Guards en Angular sirven para proteger las rutas, evitar que estas se activen o se carguen los modulos de estas ( si se usa lazyload ).
 
 ### Token aplicación
 
-Este token es generado luego de iniciar sesión con una cuenta creada por medio de la aplicación o utilizando una cuenta de Facebook o Google, es validado mientras el usuario navega por las distintas rutas de la aplicación, si el token no es valido por algun motivo se cierra sesión automaticamente. 
+Este token es generado luego de iniciar sesión con una cuenta creada por medio de la aplicación o utilizando una cuenta de Facebook o Google, es validado mientras el usuario navega por las distintas rutas de la aplicación, si el token no es valido se cierra sesión automaticamente. 
 
 #### Validar token creado por la aplicación
 
@@ -3173,13 +3173,9 @@ Este token es generado luego de iniciar sesión con una cuenta creada por medio 
 ```Typescript
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthResponse, User } from '../interfaces/auth.interface';
-import { catchError, map, tap } from 'rxjs/operators';
+import { AuthResponse } from '../interfaces/auth.interface';
+import { catchError, map } from 'rxjs/operators';
 import { of, Observable, pipe } from 'rxjs';
-
-import { SocialAuthService } from "angularx-social-login";
-import { SocialUser } from "angularx-social-login";
-
 
 @Injectable({
   providedIn: 'root'
@@ -3194,7 +3190,7 @@ export class AuthService {
     return { ... this._user }
   }
 
-  constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
+  constructor(private httpClient: HttpClient) { }
 
   /**Metodo para validar token creado utilizando jwt*/
   validateToken(): Observable<boolean> {
@@ -3228,9 +3224,469 @@ export class AuthService {
 ```
 
 
-**Implementacion del servicio utilizado para validar el token creado por una cuenta propia de la aplicación**
+**Implementacion del servicio utilizado para validar el token creado por una cuenta propia de la aplicación en el Guard**
 
+```Typescript
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, CanLoad, Router, RouterStateSnapshot } from '@angular/router';
+import { SocialAuthService } from 'angularx-social-login';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { AuthService } from '../iniciar-sesion/services/auth.service';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ValidateTokenGuard implements CanActivate, CanLoad {
+
+  constructor(private authService: AuthService, private router: Router,
+    private socialAuthService: SocialAuthService) { }
+
+  /** Los metodos canActivate (Activar rutas) canLoad (Mostrar contenido de las rutas)
+   dependiendo si el usuario inicia sesion con una cuenta creada por medio de la app
+  o se autentico con facebook y google, validan si las rutas deben ser activadas y mostradas */
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+
+    console.log('Can activate');
+    // Se define el object literal para cerrar sesión
+    let logoutObject = {
+      "LOGOUT": (ok: boolean) => {
+        if (!ok || !localStorage.getItem('token')) {
+          if (this.authService.isLoggedIn) {
+            this.socialAuthService.signOut();
+          }
+          this.authService.logout();
+          this.router.navigateByUrl('/auth');
+        }
+      }
+    }
+
+    // Se define el object literal con la propiedad de ingreso por cuenta creada por la app
+    let routesObject = {
+      "ownLogin": () => {
+        return this.authService.validateToken().pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "DEFAULT": () => {
+        logoutObject["LOGOUT"](!!false);
+      }
+    }
+
+    return (!!localStorage.getItem('provider')) ? routesObject[localStorage.getItem('provider')]() : routesObject["DEFAULT"]();
+    
+  }
+
+  canLoad(): Observable<boolean> | boolean {
+    console.log('Can load');
+    // Se define el object literal para cerrar sesión
+    let logoutObject = {
+      "LOGOUT": (ok: boolean) => {
+        if (!ok || !localStorage.getItem('token')) {
+          if (this.authService.isLoggedIn) {
+            this.socialAuthService.signOut();
+          }
+          this.authService.logout();
+          this.router.navigateByUrl('/auth');
+        }
+      }
+    }
+    // Se define el object literal con la propiedad de ingreso por cuenta creada por la app
+    let routesObject = {
+      "ownLogin": () => {
+        return this.authService.validateToken().pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "DEFAULT": () => {
+        console.log('default');
+        logoutObject["LOGOUT"](!!false);
+      }
+
+    }
+    // Se toma el proveedor almacenado en el localStorage, si no hay manda el default
+    return (!!localStorage.getItem('provider')) ? routesObject[localStorage.getItem('provider')]() : routesObject["DEFAULT"]();
+    
+  }
+}
+
+```
 
 #### Validar token creado por Google o Facebook
 
+Este token es lo genera Facebook o Google luego de iniciar sesión con una cuenta de ellos, es validado mientras el usuario navega por las distintas rutas de la aplicación, si el token no es valido se cierra sesión automaticamente. 
+
+**Definición del servicio utilizado para validar el token creado por Facebook o Google**
+
+```Typescript
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { AuthResponse } from '../interfaces/auth.interface';
+import { catchError, map, tap } from 'rxjs/operators';
+import { of, Observable, pipe } from 'rxjs';
+
+import { SocialAuthService } from "angularx-social-login";
+import { SocialUser } from "angularx-social-login";
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  private baseUrl: string = 'https://dev36-auth.herokuapp.com';
+  private _user!: (AuthResponse | SocialUser | any );
+  private isLogged: boolean = false;
+
+  /**Getter del usuario*/
+  get user() {
+    return { ... this._user }
+  }
+
+  /**Getter del estado del usuario si inicia sesion con google y facebook*/
+  get isLoggedIn() {
+    return this.isLogged;
+  }
+
+  constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
+
+  /**Object Literal que recibe una variable y permite validar el token de google o facebook*/
+  validateAuthGoogleFb(decision: string): Observable<boolean> {
+    let objectSocialAuth = {
+      "GOOGLE": () => {
+        const url = `${this.baseUrl}/validateToken`;
+        const headers = new HttpHeaders().set('token-auth', localStorage.getItem('token') || '');
+        return this.httpClient.get<AuthResponse>(url, { headers })
+          .pipe(
+            map(resp => {
+              this._user = resp;
+              return resp.ok;
+            }),
+            catchError(err => of(false, this.isLogged = false))
+          );
+      },
+      "FACEBOOK": () => {
+        const url = `${this.baseUrl}/auth/facebook/token?access_token=${localStorage.getItem('token') || ''}`;
+        return this.httpClient.get<AuthResponse>(url)
+          .pipe(
+            map(resp => {
+              this._user = resp;
+              return resp.ok;
+            }),
+            catchError(err => of(false, this.isLogged = false))
+          );
+      },
+      "DEFAULT": () => {
+        return of(false, this.isLogged = false);
+      }
+    }
+
+    return objectSocialAuth[decision]() || objectSocialAuth["DEFAULT"]();
+  }
+
+  /**Metodo para borrar los tokens (cerrar sesion)*/
+  logout() {
+    localStorage.clear();
+  }
+
+  /**Metodo para saber si el usuario esta logeado en la app con Facebook o Google*/
+  loginGoogle() {
+    // authState es una función que brinda el  modulo de angularx-social-login
+    // Lo que hace es suscribirse al estado del usuario, si está conectado manda la información del usuario
+    // De lo contrario manda null
+    return this.authService.authState.pipe(
+      tap(user => {
+        this._user = user;
+        this.isLogged = (user != null);
+
+        if ((user != null)) {
+          if (user.provider == "GOOGLE") {
+            localStorage.setItem('provider', 'GOOGLE');
+            localStorage.setItem('token', user.idToken);
+          }
+
+          if (user.provider == "FACEBOOK") {
+            localStorage.setItem('provider', 'FACEBOOK');
+            localStorage.setItem('token', user.authToken);
+          }
+        }
+      }), catchError(err => of(false, this.isLogged = false))
+    )
+  }
+
+}
+
+```
+
+**Implementación del servicio utilizado para validar el token creado por Facebook o Google en el Guard**
+
+```Typescript
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, CanLoad, Router, RouterStateSnapshot } from '@angular/router';
+import { SocialAuthService } from 'angularx-social-login';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+import { AuthService } from '../iniciar-sesion/services/auth.service';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ValidateTokenGuard implements CanActivate, CanLoad {
+
+  constructor(private authService: AuthService, private router: Router,
+    private socialAuthService: SocialAuthService) { }
+
+  /* Los metodos canActivate (Activar rutas) canLoad (Mostrar contenido de las rutas)
+   dependiendo si el usuario inicia sesion con una cuenta creada por medio de la app
+  o se autentico con facebook y google, validan si las rutas deben ser activadas y mostradas */
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
+
+    console.log('Can activate');
+    // Se define el object literal para cerrar sesión
+    let logoutObject = {
+      "LOGOUT": (ok: boolean) => {
+        if (!ok || !localStorage.getItem('token')) {
+          if (this.authService.isLoggedIn) {
+            this.socialAuthService.signOut();
+          }
+          this.authService.logout();
+          this.router.navigateByUrl('/auth');
+        }
+      }
+    }
+    // Se define el object literal con los proveedores Facebook o Google
+    let routesObject = {
+      "FACEBOOK": () => {
+        return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "GOOGLE": () => {
+        return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "DEFAULT": () => {
+        logoutObject["LOGOUT"](!!false);
+      }
+
+    }
+    // Se toma el proveedor almacenado en el localStorage, si no hay manda el default
+    return (!!localStorage.getItem('provider')) ? routesObject[localStorage.getItem('provider')]() : routesObject["DEFAULT"]();
+    
+  }
+
+  canLoad(): Observable<boolean> | boolean {
+    console.log('Can load');
+
+    
+    console.log('Can activate');
+    // Se define el object literal para cerrar sesión
+    let logoutObject = {
+      "LOGOUT": (ok: boolean) => {
+        if (!ok || !localStorage.getItem('token')) {
+          if (this.authService.isLoggedIn) {
+            this.socialAuthService.signOut();
+          }
+          this.authService.logout();
+          this.router.navigateByUrl('/auth');
+        }
+      }
+    }
+    // Se define el object literal con los proveedores Facebook o Google
+    let routesObject = {
+      "FACEBOOK": () => {
+        return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "GOOGLE": () => {
+        return this.authService.validateAuthGoogleFb(localStorage.getItem('provider') || '').pipe(
+          tap(ok => {
+            logoutObject["LOGOUT"](!!ok);
+          })
+        );
+      },
+      "DEFAULT": () => {
+        logoutObject["LOGOUT"](!!false);
+      }
+
+    }
+    // Se toma el proveedor almacenado en el localStorage, si no hay manda el default
+    return (!!localStorage.getItem('provider')) ? routesObject[localStorage.getItem('provider')]() : routesObject["DEFAULT"]();
+  }
+  
+}
+
+```
+
 ### Token enviado por WordPress
+
+Este token es generado por la API REST de WordPress cuando el usuario inicia sesión y almacenado en el localStorage para las validaciones en el momento que el usuario quiera administrar las entradas o las categorías.
+Para la autenticación se utilizo **JWT Authentication for WP REST API**, puedes encontrar la documentación oficial [aquí](https://wordpress.org/plugins/jwt-authentication-for-wp-rest-api/)
+
+**Definición del servicio utilizado para validar el token de WordPress**
+
+```Typescript
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, map, tap } from 'rxjs/operators';
+import { of, Observable } from 'rxjs'
+
+import { WordpressUser } from '../interfaces/logged-wp-user.interface';
+import { ValidateWPToken } from '../interfaces/wp-token.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WordpressService {
+
+  private urlWP: string = 'https://dev36.latiendasigueabierta.com/wp-json/wp/v2';
+  private urlWpToken: string = 'https://dev36.latiendasigueabierta.com/wp-json/jwt-auth/v1/token';
+
+  constructor(private http: HttpClient) { }
+  /**Getter de los headers */
+  get wpHeaders() {
+    return new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('wp-token') || '');
+  }
+  /**
+   * Funcion para validar el token de wordpress
+   * @returns - Observable true si el token es valido, de lo contrario observable false
+   */
+  validateWpToken(): Observable<boolean> {
+    const url = `${this.urlWpToken}/validate`;
+
+    return this.http.post<ValidateWPToken>(url, null, { headers: this.wpHeaders })
+      .pipe(
+        map(resp => {
+          if (resp.code === 'jwt_auth_valid_token') {
+            return true;
+          }
+          return false;
+        }),
+        catchError(err => of(false))
+      );
+  }
+  /**
+   * Funcion que toma la informacion del usuario que inicio sesion
+   * @returns Usuario de wordpress que inicio sesion
+   */
+  getWPUser(): Observable<WordpressUser> {
+    const url = `${this.urlWP}/users/me`;
+
+    return this.http.post<WordpressUser>(url, null, { headers: this.wpHeaders })
+      .pipe(
+        catchError(err => of(err))
+      );
+  }
+  /**
+   * Funcion para cerrar sesion en wordpress
+   */
+  wpLogout() {
+    if (localStorage.getItem('wp-token')) {
+      localStorage.removeItem('wp-token');
+    }
+  }
+}
+
+```
+
+**Implementación del servicio utilizado para validar el token de WordPress en el Guard**
+
+```Typescript
+import { Injectable } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+import { WordpressService } from '../usuarios/pages/blog/services/wordpress.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TokenWpGuard implements CanActivate {
+
+  constructor(private wpService: WordpressService, private router: Router) { }
+
+  canActivate(): Observable<boolean> | boolean {
+    console.log('Can Activate New Post')
+    return this.wpService.validateWpToken()
+      .pipe(
+        tap(logged => {
+          // Si la respuesta del observable es false ejecuta lo siguiente
+          if (!logged) {
+            this.wpService.wpLogout();
+            this.router.navigateByUrl('dashboard/blog/iniciar-sesion-wp');
+          } else {
+            // Si la respuesta es true ejecuta lo siguiente
+            this.wpService.getWPUser().subscribe(user => {
+              if (!user["capabilities"]["administrator"]) {
+                this.router.navigateByUrl('dashboard/blog');
+              }
+            })
+          }
+        })
+      )
+  }
+
+}
+
+```
+
+### Interfaces Involucradas 
+
+```Typescript
+/**
+ *  Interfaz de la respuesta que me devuelve la base de datos 
+ */
+export interface AuthResponse {
+    ok: boolean;
+    token: string;
+    user: User;
+}
+
+/**
+ * Interfaz del usuario de angulax-social-login 
+ */
+export declare class SocialUser {
+    provider: string;
+    id: string;
+    email: string;
+    name: string;
+    photoUrl: string;
+    firstName: string;
+    lastName: string;
+    authToken: string;
+    idToken: string;
+    authorizationCode: string;
+    response: any;
+}
+
+
+/** 
+ * Interfaz del token recibido por WordPress 
+ */
+export interface ValidateWPToken {
+    code: string;
+    data: Data;
+}
+
+export interface Data {
+    status: number;
+}
+
+
+```
