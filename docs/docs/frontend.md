@@ -31,7 +31,13 @@ El presente documento tiene como objeto principal establecer la documentación d
 
 **Para más información acerca de las dependecias utilizadas en el proyecto, entre otras cosas, puedes consultar el repositorio haciendo [click aquí](https://github.com/dev36aiatic/primerosPasosAngular)**
 
+<center>
+
 ## Páginas públicas
+
+![Página pública](./img/pag_publica.jpg)
+
+</center>
 
 Estas son las páginas a las que el usuario puede acceder sin necesidad de iniciar sesión.
 
@@ -494,7 +500,14 @@ export declare class SocialUser {
 
 ```
 
+<center>
+
 ## Páginas privadas
+
+![Página privada](./img/pag_privada.jpg)
+
+</center>
+
 
 Estas son las páginas con las que el usuario puede interacturar siempre y cuando haya iniciado sesión, de lo contrario no podrá acceder a estas.
 
@@ -2474,18 +2487,6 @@ export interface TargetClass {
 ```
 
 ```Typescript
-/**
- * Interfaz utilizada para crear una categoría en Angular 
- */
-export interface WpCategory {
-    id: number;
-    name: string;
-    description?: string;
-    slug?: string;
-}
-```
-
-```Typescript
 /** 
  * Interfaz de las entradas
 */
@@ -2705,10 +2706,458 @@ export interface Data {
 
 ```
 
+
+
+
+<center>
+
 ## Menús
+
+![Menus](./img/tipos_menu.png)
+
+</center>
+
+En está sección se busca detallar las funcionalidades de los menús utilizados en el proyecto
+
 ### Menú Publico
+
+Este menú el usuario puede acceder sin tener que iniciar sesión previamente, se encuentra en las páginas de iniciar sesión y registrarse
+
+<center>
+
+**Versión Web**
+
+![Menú público](./img/menu_publico_web.png)
+
+**Versión Móvil**
+
+![Menú público móvil](./img/menu_publico_movil.png)
+
+</center>
+
+Para la implementación de este menú **se utilizó el modulo sidebar de [PrimeNG](https://www.primefaces.org/primeng/showcase/#/sidebar)**
+
 ### Menú de Dashboard
+
+A este menú el usuario puede acceder una vez haya iniciado sesión en la aplicación, permite navegar a través de las rutas definidas en esta misma. Se realizó utilizando CSS(3)
+
+<center>
+
+**Versión Web**
+
+![Menú Dash Web](./img/menu_dashboard_web.png)
+
+**Versión Móvil**
+
+![Menú Dash Movil](./img/menu_dashboard_movil.png)
+
+</center>
+
+**Definición de los servicios utilizados para las funcionalidades del menú**
+
+```Typescript
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  // Variable que se pone en true cuando inicia sesión con Facebook o Google
+  private isLogged: boolean = false;
+
+ /**Metodo para borrar los tokens (cerrar sesion)*/
+  logout() {
+    localStorage.clear();
+  }
+}
+```
+
+**Implementación de los servicios utilizados para las funcionalidades del menú**
+
+```Typescript
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AuthService } from '../../iniciar-sesion/services/auth.service';
+import { SocialAuthService } from "angularx-social-login";
+
+@Component({
+  selector: 'app-sidebar',
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.css']
+})
+export class SidebarComponent implements OnInit {
+
+  loggedIn: boolean;
+
+  constructor(
+    private router: Router, 
+    private authservice: AuthService, 
+    private googleFbService: SocialAuthService
+    ) { }
+
+  ngOnInit(): void { }
+
+  /**Funcion para cerrar sesion */
+  logout() {
+    if (this.authservice.isLoggedIn) {
+      this.authservice.logout();
+      // Metodo para cerrar sesión propio del modulo angularx-social-login
+      this.googleFbService.signOut();
+    }
+
+    this.authservice.logout();
+    this.router.navigateByUrl('/auth');
+  }
+
+  /**Funcion para la animacion del sidebar **/
+  toggleBtn(btnBurger) {
+    let sidebar = document.querySelector(".sidebar");
+    let decision = sidebar.classList.toggle('active');
+    let texts = document.querySelectorAll('.links_name');
+    let tooltips = document.querySelectorAll('.tooltip');
+
+    if (decision) {
+      btnBurger.style.left = "90%";
+      texts.forEach(element => {
+        element.classList.add('showLinks')
+      });
+      tooltips.forEach(element => {
+        element.classList.add('hideTooltip');
+      });
+    } else {
+      btnBurger.style.left = "55%";
+      texts.forEach(element => {
+        element.classList.remove('showLinks')
+      });
+      tooltips.forEach(element => {
+        element.classList.remove('hideTooltip');
+      });
+    }
+  }
+  /**Funcion que cambia el alto del sidebar cuando esta en dispositivos moviles */
+  toggleHidden() {
+    document.querySelector('.sidebar').classList.toggle('totalHeight');
+  }
+
+}
+
+```
+
 ### Menú de WordPress
+
+
+
+Este menú se encuentra en la página de Blog, le permite al usuario ver las entradas, categorias y administrarlas. Para la funcionalidad de administrar, el usuario debe iniciar sesión en WordPress y tener el rol de Administrador.
+
+#### Menú Sin iniciar sesión
+
+![Menu sin sesión](./img/menu_wp_logout.JPG)
+
+#### Menu de Administrador
+
+![Menu administrador](./img/menu_wp_admin.JPG)
+
+#### Menú Cliente
+
+![Menu Cliente](./img/menu_wp_no_admin.JPG)
+
+**Definición de los servicios utilizados en el menú para manejar el menú del usuario y crear categorías**
+
+```Typescript
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError } from 'rxjs/operators';
+import { of, Observable } from 'rxjs'
+
+import { NewCategory } from '../interfaces/new-category.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WordpressService {
+
+  private urlWP: string = 'https://dev36.latiendasigueabierta.com/wp-json/wp/v2';
+
+  constructor(private http: HttpClient) { }
+  /**Getter de los headers */
+  get wpHeaders() {
+    return new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('wp-token') || '');
+  }
+  /**
+   * Función para crear una nueva categoria
+   * @param body - Objeto con la información de la nueva categoria
+   * @returns - Información de la categoria creada
+   */
+  newCategory(body: object): Observable<NewCategory> {
+    const url = `${this.urlWP}/categories`;
+
+    return this.http.post<NewCategory>(url, body, { headers: this.wpHeaders })
+      .pipe(
+        catchError(err => {
+          if (err.error.code == "term_exists") {
+            return of({ error: err.error, msg: 'El slug proporcionado ya existe.' });
+          }
+          return of(err.error.message)
+        })
+      )
+  }
+  
+  /**
+   * Funcion para cerrar sesion en wordpress
+   */
+  wpLogout() {
+    if (localStorage.getItem('wp-token')) {
+      localStorage.removeItem('wp-token');
+    }
+  }
+
+}
+
+```
+
+**Implementación de los servicios utilizados en el menú para manejar el menú del usuario y crear categorías**
+
+```Typescript
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
+
+import { WordpressService } from '../../services/wordpress.service';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
+import { WpCategory } from '../../interfaces/wp-category.interface';
+
+@Component({
+  selector: 'app-menu-wp',
+  templateUrl: './menu-wp.component.html',
+  styleUrls: ['./menu-wp.component.css']
+})
+export class MenuWpComponent implements OnInit {
+  // Usuario que recibe del componente padre y su estado ( si está logeado o no )
+  @Input() wpUser: WordpressUser;
+  @Input() isWPLogged: boolean;
+  // Variables de menú
+  loading: boolean = undefined;
+  items: MenuItem[];
+  load: boolean = false;
+  linkTo: string;
+  displayResponsive: boolean = false;
+  // Evento que emite al padre las categorías en caso de que se cree una nueva
+  @Output() onUpdateCategories: EventEmitter<WpCategory[]> = new EventEmitter();
+  // Definición del formulario que recoge la información para crear una nueva categoría
+  formCategory: FormGroup = this.formBuilder.group({
+    name: ['', [Validators.required]],
+    slug: ['', [Validators.required]],
+    description: ['']
+  });
+
+  constructor(
+    private wpService: WordpressService,
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute
+  ) { }
+
+  ngOnInit(): void {
+    // Cambia la ruta de iniciar sesión en wordpress dependiendo de la página en la que el usuario se encuentre
+    this.route.params.subscribe(({ slug }) => {
+      if (slug) {
+        this.linkTo = '/dashboard/blog/iniciar-sesion-wp';
+      } else {
+        this.linkTo = './iniciar-sesion-wp';
+      }
+    });
+  }
+
+  //Revisa si el usuario que pasa el componente padre blog ya le paso la información del usuario y si inició sesión
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.isWPLogged.currentValue != undefined) {
+      this.loading = false;
+    }
+
+    if (changes.wpUser.currentValue != undefined) {
+      this.loading = false;
+      if (this.wpUser["capabilities"]["administrator"]) {
+        this.items = this.adminMenu();
+      } else {
+        this.items = this.customerMenu();
+      }
+    }
+  }
+
+  /**Funcion que permite o no ir a la pagina de agregar post */
+  addPost() {
+    if (this.wpUser["capabilities"]["administrator"]) {
+      this.router.navigateByUrl('dashboard/blog/anadir-entrada');
+    }
+    else if (!this.wpUser) {
+      this.router.navigateByUrl('dashboard/blog/iniciar-sesion-wp');
+    } else {
+      this.router.navigateByUrl('dashboard/blog');
+    }
+  }
+
+  /**Metodo para cerrar sesion en wordpress */
+  signoutWP() {
+    this.wpService.wpLogout();
+    this.router.navigateByUrl('dashboard/blog');
+    if (this.router.url == '/dashboard/blog') {
+      window.location.reload();
+    }
+  }
+
+  /**
+   * Funcion para agregar una nueva categoría
+   */
+  newCategory() {
+    this.wpService.newCategory(this.formCategory.value).subscribe(category => {
+      if (category["error"]) {
+        Swal.fire('Oops', category["msg"], 'error');
+        return false;
+      }
+      if (
+        this.router.url == '/dashboard/blog/anadir-entrada'
+        || this.router.url.indexOf('editar-entrada') > -1
+        || this.router.url.indexOf('administrar-categorias') > -1
+      ) {
+        this.wpService.getCategories().subscribe(categories => this.onUpdateCategories.emit(categories));
+      }
+      Swal.fire('Todo en orden!', 'La categoria ha sido añadida con exito!', 'success');
+    });
+  }
+
+  /**Funcion para mostrar el modal de nueva categoria */
+  showResponsiveDialog() {
+    this.displayResponsive = true;
+  }
+
+  /**Funcion que retorna el menu del administrador */
+  adminMenu() {
+    return [
+      {
+        label: 'Blog',
+        icon: 'fas fa-blog',
+        routerLink: '/dashboard/blog'
+      },
+      {
+        label: 'Entradas',
+        icon: 'pi pi-bookmark',
+        items: [{
+          label: 'Añadir entrada',
+          icon: 'pi pi-fw pi-plus',
+          command: () => {
+            this.addPost();
+          }
+        },
+        {
+          label: 'Categorías',
+          icon: 'pi pi-external-link',
+          items: [
+            {
+              label: 'Añadir',
+              icon: 'pi pi-fw pi-plus',
+              command: () => {
+                this.showResponsiveDialog();
+              }
+            },
+            {
+              label: 'Administrar',
+              icon: 'pi i pi-cog',
+              routerLink: '/dashboard/blog/administrar-categorias'
+            }
+          ]
+        }
+        ]
+      },
+      {
+        label: 'Ajustes',
+        icon: 'pi pi-cog',
+        items: [
+          {
+            label: 'Se tu propio jefe',
+            icon: 'pi pi-user-edit',
+            command: () => {
+              Swal.fire('Empanadas', 'Por el momento esta opcion es solo decoración!', 'info')
+            }
+          },
+          {
+            separator: true
+          },
+          {
+            label: 'Cerrar sesión',
+            icon: 'pi pi-sign-out',
+            command: () => {
+              this.signoutWP();
+            }
+          }
+
+        ]
+      }
+    ];
+  }
+  /**Funcion que retorna el menu del cliente o usuario basico */
+  customerMenu() {
+    return [
+      {
+        label: 'Blog',
+        icon: 'fas fa-blog',
+        routerLink: '/dashboard/blog'
+      },
+      {
+        label: 'Ajustes',
+        icon: 'pi pi-cog',
+        items: [
+          {
+            label: 'Se tu propio jefe',
+            icon: 'pi pi-user-edit',
+            command: () => {
+              Swal.fire('Empanadas', 'Por el momento esta opcion es solo decoración!', 'info')
+            }
+          },
+          {
+            separator: true
+          },
+          {
+            label: 'Cerrar sesión',
+            icon: 'pi pi-sign-out',
+            command: () => {
+              this.signoutWP();
+            }
+          }
+
+        ]
+      }
+    ];
+  }
+
+}
+```
+
+
 ### Interfaces Involucradas
 
+```Typescript
+/**Interfaz utilizada para crear una categoría */
+export interface WpCategory {
+    id: number;
+    name: string;
+    description?: string;
+    slug?: string;
+}
+```
 
+
+
+
+
+## Guards
+
+### Token aplicación
+
+#### Validar token creado por la aplicación
+#### Validar token creado por Google o Facebook
+
+### Token enviado por WordPress
