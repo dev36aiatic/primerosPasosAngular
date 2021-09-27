@@ -1,4 +1,11 @@
+<center>
+
 # Frontend
+
+![Angular](./img/angular.jpg)
+
+</center>
+
 
 ## Introducción
 
@@ -961,7 +968,16 @@ En esta página se encuentra un video incrustado
 
 El video fue añadido con el objetivo de cumplir una actividad sin más.
 
-### Blog
+<center>
+
+### **Blog**
+&nbsp;
+
+![Wordpress logo](./img/wordpress-logo.png)
+
+</center>
+&nbsp;
+&nbsp;
 
 En esta parte se hace uso de la [API REST de WordPress](https://developer.wordpress.org/rest-api/) con el objetivo de
 **ver todas las entradas, ver una en específico, crearlas, editarlas. Crear categorías y administrar estas mismas a través de Angular.** 

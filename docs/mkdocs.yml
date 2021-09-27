@@ -1,4 +1,5 @@
 site_name: Documentación Proyecto Angular & WordPress | Practicas 2021-2 UNAB
+site_favicon: img/favicon.png
 theme: readthedocs
 nav: 
     - 'CONTENIDO:':

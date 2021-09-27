@@ -1,4 +1,11 @@
+
+<center>
+
 # Documentación del proyecto Angular con Wordpress
+
+![Angular y Wordpress](./img/angular-wordpress.jpg)
+
+</center>
 
 ## Introducción
 
