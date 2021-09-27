@@ -1,3 +1,4 @@
+/**Interfaz de los archivos Media de WordPress */
 export interface Media {
     id: number;
     date?: Date;

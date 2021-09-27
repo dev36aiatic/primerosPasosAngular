@@ -1,3 +1,4 @@
+/** Interfaz de una nueva entrada */
 export interface NewPost {
     id:                 number;
     date:               Date;

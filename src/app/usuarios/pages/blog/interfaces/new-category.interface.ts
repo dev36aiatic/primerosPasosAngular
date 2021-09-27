@@ -1,3 +1,4 @@
+/** Interfaz de una nueva categoría */
 export interface NewCategory {
     id:              number;
     count:           number;

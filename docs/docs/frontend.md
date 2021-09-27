@@ -1926,8 +1926,8 @@ export class WordpressService {
     return new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('wp-token') || '');
   }
   /**
-   * Funcion que toma la informacion del usuario que inicio sesion
-   * @returns Usuario de wordpress que inicio sesion
+   * Función que toma la información del usuario que inició sesión
+   * @returns Usuario de wordpress que inició sesión
    */
   getWPUser(): Observable<WordpressUser> {
     const url = `${this.urlWP}/users/me`;
@@ -1938,7 +1938,7 @@ export class WordpressService {
       );
   }
   /**
-   * Funcion para obtener las categorias que estan en wordpress
+   * Función para obtener las categorías que está en wordpress
    * @returns Categorias almacenadas en wordpress 
    */
   getCategories(): Observable<WpCategory[]> {
@@ -1952,10 +1952,10 @@ export class WordpressService {
       );
   }
   /**
-   * Función que permite actualizar una categoria
-   * @param body - Información nueva de la categoria
-   * @param id - Identificador único de la categoria
-   * @returns - Categoria actualizada
+   * Función que permite actualizar una categoría
+   * @param body - Información nueva de la categoría
+   * @param id - Identificador único de la categoría
+   * @returns - Categoría actualizada
    */
   updateCategory(body: WpCategory, id: number): Observable<WpCategory> {
     const url = `${this.urlWP}/categories/${id}`;
@@ -1966,9 +1966,9 @@ export class WordpressService {
       )
   }
   /**
-   * Función que permite borrar una categoria
+   * Función que permite borrar una categoría
    * @param id - Id de la categoría a borrar
-   * @returns - Categoria borrada
+   * @returns - Categoría borrada
    */
   deleteCategory(id: number): Observable<WpCategory> {
     const params = new HttpParams().set('force', true);
@@ -1980,9 +1980,9 @@ export class WordpressService {
       );
   }
   /**
-   * Función para crear una nueva categoria
-   * @param body - Objeto con la información de la nueva categoria
-   * @returns - Información de la categoria creada
+   * Función para crear una nueva categoría
+   * @param body - Objeto con la información de la nueva categoría
+   * @returns - Información de la categoría creada
    */
   newCategory(body: object): Observable<NewCategory> {
     const url = `${this.urlWP}/categories`;
@@ -2058,7 +2058,7 @@ export class ManageCategoriesComponent implements OnInit {
     });
   }
   /**
-   * Funcion que toma los vales de la categoría a editar y lo pone en el formulario a enviar para actualizar
+   * Función que toma los vales de la categoría a editar y lo pone en el formulario a enviar para actualizar
    */
   onRowEditInit(category: WpCategory) {
     this.isEditingRow = true;
@@ -2099,16 +2099,16 @@ export class ManageCategoriesComponent implements OnInit {
   }
   /**
    * Función para cancelar la edición de una categoría
-   * @param category - Informacion de la categoría
-   * @param index - Indice de la categoría
+   * @param category - Información de la categoría
+   * @param index - Índice de la categoría
    */
   onRowEditCancel(category: WpCategory, index: number) {
     this.isEditingRow = false;
     this.formCategory.reset();
   }
   /**
-  * Funcion que recibe del hijo menu-wp las categorias mas recientes 
-  * @param categories - Categorias actualizadas
+  * Función que recibe del hijo menu-wp las categorías más recientes 
+  * @param categories - Categorías actualizadas
   */
   updateCategories(categories: WpCategory[]) {
     this.categories = [];
@@ -2118,7 +2118,7 @@ export class ManageCategoriesComponent implements OnInit {
   }
 
   /**
-   * Funcioón que permite borrar una categoria
+   * Función que permite borrar una categoria
    * @param category - Información de la categoría
    */
   onDeleteCategory(category: WpCategory) {
@@ -2144,18 +2144,566 @@ export class ManageCategoriesComponent implements OnInit {
       }, 30000);
     });
   }
+
 }
 
 ```
 
-
-
-### Municipios COL
 ### Interfaces Involucradas
 
+``` Typescript
+/**
+ * Interfaz del perfil recibido desde la base de datos 
+ */
+export interface ProfileData {
+    name: String,
+    cc: String,
+    address: String,
+    dateOfBirth: String,
+    city: String,
+    department: String,
+    country: String,
+    ZIP: Number,
+    profession: String,
+    skills: String[],
+    description: String,
+    image: Photo
+}
 
+export interface Photo {
+    id:string;
+    tipo_imagen: string;
+    imagePath: string;
+}
 
+```
 
+```Typescript
+/**
+ * Interfaz del usuario de WordPress
+ */
+export interface WordpressUser {
+    id:                 number;
+    username:           string;
+    name:               string;
+    first_name:         string;
+    last_name:          string;
+    email:              string;
+    url:                string;
+    description:        string;
+    link:               string;
+    locale:             string;
+    nickname:           string;
+    slug:               string;
+    roles:              string[];
+    registered_date:    Date;
+    capabilities:       { [key: string]: boolean };
+    extra_capabilities: ExtraCapabilities;
+    avatar_urls:        { [key: string]: string };
+    meta:               any[];
+    yoast_head:         string;
+    yoast_head_json:    YoastHeadJSON;
+    is_super_admin:     boolean;
+    woocommerce_meta:   WoocommerceMeta;
+    _links:             Links;
+}
+
+export interface Links {
+    self:       Collection[];
+    collection: Collection[];
+}
+
+export interface Collection {
+    href: string;
+}
+
+export interface ExtraCapabilities {
+    administrator: boolean;
+}
+
+export interface WoocommerceMeta {
+    activity_panel_inbox_last_read:   string;
+    activity_panel_reviews_last_read: string;
+    categories_report_columns:        string;
+    coupons_report_columns:           string;
+    customers_report_columns:         string;
+    orders_report_columns:            string;
+    products_report_columns:          string;
+    revenue_report_columns:           string;
+    taxes_report_columns:             string;
+    variations_report_columns:        string;
+    dashboard_sections:               string;
+    dashboard_chart_type:             string;
+    dashboard_chart_interval:         string;
+    dashboard_leaderboard_rows:       string;
+    homepage_layout:                  string;
+    homepage_stats:                   string;
+    task_list_tracked_started_tasks:  string;
+    help_panel_highlight_shown:       string;
+    android_app_banner_dismissed:     string;
+}
+
+export interface YoastHeadJSON {
+    title:        string;
+    robots:       Robots;
+    canonical:    string;
+    og_locale:    string;
+    og_type:      string;
+    og_title:     string;
+    og_url:       string;
+    og_site_name: string;
+    og_image:     OgImage[];
+    twitter_card: string;
+    schema:       Schema;
+}
+
+export interface OgImage {
+    url: string;
+}
+
+export interface Robots {
+    index:               string;
+    follow:              string;
+    "max-snippet":       string;
+    "max-image-preview": string;
+    "max-video-preview": string;
+}
+
+export interface Schema {
+    "@context": string;
+    "@graph":   Graph[];
+}
+
+export interface Graph {
+    "@type":           string;
+    "@id":             string;
+    url?:              string;
+    name?:             string;
+    description?:      string;
+    potentialAction?:  PotentialAction[];
+    inLanguage?:       string;
+    isPartOf?:         Breadcrumb;
+    breadcrumb?:       Breadcrumb;
+    itemListElement?:  ItemListElement[];
+    image?:            Image;
+    mainEntityOfPage?: Breadcrumb;
+}
+
+export interface Breadcrumb {
+    "@id": string;
+}
+
+export interface Image {
+    "@type":    string;
+    "@id":      string;
+    inLanguage: string;
+    url:        string;
+    contentUrl: string;
+    caption:    string;
+}
+
+export interface ItemListElement {
+    "@type":  string;
+    position: number;
+    name:     string;
+    item?:    string;
+}
+
+export interface PotentialAction {
+    "@type":        string;
+    target:         string[] | TargetClass;
+    "query-input"?: string;
+}
+
+export interface TargetClass {
+    "@type":     string;
+    urlTemplate: string;
+}
+
+```
+
+```Typescript
+/**
+ * Interfaz de los archivos Media de WordPress 
+ */
+export interface Media {
+    id: number;
+    date?: Date;
+    date_gmt?: Date;
+    guid?: Caption;
+    modified?: Date;
+    modified_gmt?: Date;
+    slug: string;
+    status: string;
+    type?: string;
+    link?: string;
+    title: Caption;
+    author: number;
+    comment_status: string;
+    permalink_template?: string;
+    generated_slug?: string;
+    description?: Caption;
+    caption?: Caption;
+    alt_text?: string;
+    media_type: string;
+    mime_type?: string;
+    post?: null;
+    source_url?: string;
+}
+
+export interface Caption {
+    raw: string;
+    rendered: string;
+}
+```
+
+```Typescript
+/** 
+ * Interfaz de la respuesta del backend en WordPress de una nueva categoría 
+ */
+export interface NewCategory {
+    id:              number;
+    count:           number;
+    description?:     string;
+    link:            string;
+    name:            string;
+    slug:            string;
+    taxonomy:        string;
+    parent:          number;
+    meta:            any[];
+    yoast_head:      string;
+    yoast_head_json: YoastHeadJSON;
+    _links:          Links;
+}
+
+export interface Links {
+    self:           About[];
+    collection:     About[];
+    about:          About[];
+    "wp:post_type": About[];
+    curies:         Cury[];
+}
+
+export interface About {
+    href: string;
+}
+
+export interface Cury {
+    name:      string;
+    href:      string;
+    templated: boolean;
+}
+
+export interface YoastHeadJSON {
+    title:          string;
+    robots:         Robots;
+    canonical:      string;
+    og_locale:      string;
+    og_type:        string;
+    og_title:       string;
+    og_description: string;
+    og_url:         string;
+    og_site_name:   string;
+    twitter_card:   string;
+    schema:         Schema;
+}
+
+export interface Robots {
+    index:               string;
+    follow:              string;
+    "max-snippet":       string;
+    "max-image-preview": string;
+    "max-video-preview": string;
+}
+
+export interface Schema {
+    "@context": string;
+    "@graph":   Graph[];
+}
+
+export interface Graph {
+    "@type":          string;
+    "@id":            string;
+    name?:            string;
+    url?:             string;
+    sameAs?:          any[];
+    logo?:            Logo;
+    image?:           Breadcrumb;
+    description?:     string;
+    publisher?:       Breadcrumb;
+    potentialAction?: PotentialAction[];
+    inLanguage?:      string;
+    isPartOf?:        Breadcrumb;
+    breadcrumb?:      Breadcrumb;
+    itemListElement?: ItemListElement[];
+}
+
+export interface Breadcrumb {
+    "@id": string;
+}
+
+export interface ItemListElement {
+    "@type":  string;
+    position: number;
+    name:     string;
+    item?:    string;
+}
+
+export interface Logo {
+    "@type":    string;
+    "@id":      string;
+    inLanguage: string;
+    url:        string;
+    contentUrl: string;
+    width:      number;
+    height:     number;
+    caption:    string;
+}
+
+export interface PotentialAction {
+    "@type":        string;
+    target:         string[] | TargetClass;
+    "query-input"?: string;
+}
+
+export interface TargetClass {
+    "@type":     string;
+    urlTemplate: string;
+}
+
+```
+
+```Typescript
+/**
+ * Interfaz utilizada para crear una categoría en Angular 
+ */
+export interface WpCategory {
+    id: number;
+    name: string;
+    description?: string;
+    slug?: string;
+}
+```
+
+```Typescript
+/** 
+ * Interfaz de las entradas
+*/
+export interface Post {
+    id:                 number;
+    date:               Date;
+    date_gmt:           Date;
+    guid:               GUID;
+    modified:           Date;
+    modified_gmt:       Date;
+    password:           string;
+    slug:               string;
+    status:             string;
+    type:               string;
+    link:               string;
+    title:              GUID;
+    content:            Content;
+    excerpt:            Content;
+    author:             number;
+    featured_media:     number;
+    comment_status:     string;
+    ping_status:        string;
+    sticky:             boolean;
+    template:           string;
+    format:             string;
+    meta:               any[];
+    categories:         number[];
+    tags:               any[];
+    permalink_template: string;
+    generated_slug:     string;
+    yoast_head:         string;
+    yoast_head_json:    YoastHeadJSON;
+    _links:             Links;
+}
+
+export interface Links {
+    self:                          About[];
+    collection:                    About[];
+    about:                         About[];
+    author:                        AuthorElement[];
+    replies:                       AuthorElement[];
+    "version-history":             VersionHistory[];
+    "wp:featuredmedia":            AuthorElement[];
+    "wp:attachment":               About[];
+    "wp:term":                     WpTerm[];
+    "wp:action-publish":           About[];
+    "wp:action-unfiltered-html":   About[];
+    "wp:action-sticky":            About[];
+    "wp:action-assign-author":     About[];
+    "wp:action-create-categories": About[];
+    "wp:action-assign-categories": About[];
+    "wp:action-create-tags":       About[];
+    "wp:action-assign-tags":       About[];
+    curies:                        Cury[];
+}
+
+export interface About {
+    href: string;
+}
+
+export interface AuthorElement {
+    embeddable: boolean;
+    href:       string;
+}
+
+export interface Cury {
+    name:      string;
+    href:      string;
+    templated: boolean;
+}
+
+export interface VersionHistory {
+    count: number;
+    href:  string;
+}
+
+export interface WpTerm {
+    taxonomy:   string;
+    embeddable: boolean;
+    href:       string;
+}
+
+export interface Content {
+    raw:            string;
+    rendered:       string;
+    protected:      boolean;
+    block_version?: number;
+}
+
+export interface GUID {
+    rendered: string;
+    raw:      string;
+}
+
+export interface YoastHeadJSON {
+    title:                  string;
+    robots:                 Robots;
+    canonical:              string;
+    og_locale:              string;
+    og_type:                string;
+    og_title:               string;
+    og_description:         string;
+    og_url:                 string;
+    og_site_name:           string;
+    article_published_time: Date;
+    twitter_card:           string;
+    twitter_misc:           TwitterMisc;
+    schema:                 Schema;
+}
+
+export interface Robots {
+    index:               string;
+    follow:              string;
+    "max-snippet":       string;
+    "max-image-preview": string;
+    "max-video-preview": string;
+}
+
+export interface Schema {
+    "@context": string;
+    "@graph":   Graph[];
+}
+
+export interface Graph {
+    "@type":             string;
+    "@id":               string;
+    name?:               string;
+    url?:                string;
+    sameAs?:             any[];
+    logo?:               Image;
+    image?:              Image;
+    description?:        string;
+    publisher?:          BreadcrumbClass;
+    potentialAction?:    PotentialAction[];
+    inLanguage?:         string;
+    contentUrl?:         string;
+    width?:              number;
+    height?:             number;
+    isPartOf?:           BreadcrumbClass;
+    primaryImageOfPage?: BreadcrumbClass;
+    datePublished?:      Date;
+    dateModified?:       Date;
+    breadcrumb?:         BreadcrumbClass;
+    itemListElement?:    ItemListElement[];
+    author?:             BreadcrumbClass;
+    headline?:           string;
+    mainEntityOfPage?:   BreadcrumbClass;
+    wordCount?:          number;
+    commentCount?:       number;
+    thumbnailUrl?:       string;
+}
+
+export interface BreadcrumbClass {
+    "@id": string;
+}
+
+export interface Image {
+    "@id":       string;
+    "@type"?:    string;
+    inLanguage?: string;
+    url?:        string;
+    contentUrl?: string;
+    caption?:    string;
+    width?:      number;
+    height?:     number;
+}
+
+export interface ItemListElement {
+    "@type":  string;
+    position: number;
+    name:     string;
+    item?:    string;
+}
+
+export interface PotentialAction {
+    "@type":        string;
+    target:         string[] | TargetClass;
+    "query-input"?: string;
+    name?:          string;
+}
+
+export interface TargetClass {
+    "@type":     string;
+    urlTemplate: string;
+}
+
+export interface TwitterMisc {
+    "Written by": string;
+}
+
+```
+
+```Typescript
+/**
+ * Interfaz de la respuesta al iniciar sesión en WordPress 
+ */
+export interface UserWordpress {
+    token:             string;
+    user_email:        string;
+    user_nicename:     string;
+    user_display_name: string;
+}
+```
+
+```Typescript
+/** 
+ * Interfaz del token recibido por WordPress 
+ */
+export interface ValidateWPToken {
+    code: string;
+    data: Data;
+}
+
+export interface Data {
+    status: number;
+}
+
+```
 
 ## Menús
 ### Menú Publico

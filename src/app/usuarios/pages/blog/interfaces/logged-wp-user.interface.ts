@@ -1,3 +1,6 @@
+/**
+ * Interfaz del usuario de WordPress
+ */
 export interface WordpressUser {
     id:                 number;
     username:           string;

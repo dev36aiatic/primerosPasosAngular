@@ -13,7 +13,7 @@ export interface ProfileData {
     description: String,
     image: Photo
 }
-
+/** Interface de la foto de usuario */
 export interface Photo {
     id:string;
     tipo_imagen: string;

@@ -39,7 +39,6 @@ en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la par
             * [Crear entrada](frontend#crear-entrada)
             * [Editar entrada](frontend#editar-entrada)
             * [Administrar categorías](frontend#administrar-categorias)
-        * [Municipios COL](frontend#municipios-col)
         * [Interfaces Involucradas](frontend#interfaces-involucradas)
     * [Menús](frontend#menus)
         * [Menú Publico](frontend#menu-publico)
