@@ -3152,12 +3152,85 @@ export interface WpCategory {
 
 
 
+<center>
 
 ## Guards
 
+![Guards Angular](./img/guards.png)
+
+</center>
+
+Esta sección tiene como objeto principal documentar los guards utilizados en la aplicación para proteger las rutas
+
 ### Token aplicación
 
+Este token es generado luego de iniciar sesión con una cuenta creada por medio de la aplicación o utilizando una cuenta de Facebook o Google, es validado mientras el usuario navega por las distintas rutas de la aplicación, si el token no es valido por algun motivo se cierra sesión automaticamente. 
+
 #### Validar token creado por la aplicación
+
+**Definición del servicio utilizado para validar el token creado por una cuenta propia de la aplicación**
+
+```Typescript
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { AuthResponse, User } from '../interfaces/auth.interface';
+import { catchError, map, tap } from 'rxjs/operators';
+import { of, Observable, pipe } from 'rxjs';
+
+import { SocialAuthService } from "angularx-social-login";
+import { SocialUser } from "angularx-social-login";
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  private baseUrl: string = 'https://dev36-auth.herokuapp.com';
+  private _user!: (AuthResponse | SocialUser | any );
+
+  /**Getter del usuario*/
+  get user() {
+    return { ... this._user }
+  }
+
+  constructor(private httpClient: HttpClient, private authService: SocialAuthService) { }
+
+  /**Metodo para validar token creado utilizando jwt*/
+  validateToken(): Observable<boolean> {
+    const url = `${this.baseUrl}/renew`;
+    // Se toma el token del localStorage
+    const headers = new HttpHeaders().set('x-token', localStorage.getItem('token') || '');
+
+    return this.httpClient.get<AuthResponse>(url, { headers })
+      .pipe(
+        map(resp => {
+          this.setTokenAndUser(resp);
+          return resp.ok;
+        }),
+        catchError(err => of(false))
+      );
+  }
+  /**Metodo para borrar los tokens (cerrar sesion)*/
+  logout() {
+    localStorage.clear();
+  }
+
+  /**Metodo para colocar el token que me devuelve jwt para validar el inicio de sesion*/
+  setTokenAndUser(resp: AuthResponse) {
+    localStorage.setItem('provider', 'ownLogin');
+    localStorage.setItem('token', resp.token!);
+    this._user = resp;
+  }
+
+}
+
+```
+
+
+**Implementacion del servicio utilizado para validar el token creado por una cuenta propia de la aplicación**
+
+
 #### Validar token creado por Google o Facebook
 
 ### Token enviado por WordPress
