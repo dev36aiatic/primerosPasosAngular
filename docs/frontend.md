@@ -2706,9 +2706,6 @@ export interface Data {
 
 ```
 
-
-
-
 <center>
 
 ## Menús
@@ -3148,9 +3145,6 @@ export interface WpCategory {
     slug?: string;
 }
 ```
-
-
-
 
 <center>
 

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, Unique } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, Unique } from 'typeorm';
 import { User } from './User';
 import { SocialUser } from './GoogleOrFbUser';
 
@@ -60,7 +60,6 @@ export class Profile {
     })
     profession: string;
 
-    //TODO: VER LO DE LOS ARRAYS XD
     @Column("simple-array")
     skills: string[];
     

@@ -54,25 +54,26 @@ en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la par
             * [Validar token creado por Google o Facebook](frontend#validar-token-creado-por-google-o-facebook)
         * [Token enviado por WordPress](frontend#token-enviado-por-wordpress)
 
-* Backend
-    * Introducción
-    * Controladores
-        * Controlador de la aplicación
-    * Entidades
-        * Entidad de los usuarios creados por medio de la aplicación
-        * Entidad de los usuarios creados por medio de Google o Facebook
-        * Entidad del perfil de los usuarios
-    * Helpers
-        * Borrar imagen de perfil del usuario
-        * Generar JWT
-        * Información del usuario
-    * Middlewares
-        * Subir imagén de perfil
-        * Validar campos de los formularios de inicio de sesión y registro
-        * Validar JWT
-    * Carpeta Public
-    * Rutas
-    * Carpeta de imágenes de los perfiles
+* [Backend](backend.md)
+    * [Introducción](backend#introduccion)
+    * [Versión de Node](backend#version-de-node)
+    * [Archivo index.ts](backend#archivo-indexts)
+    * [Controladores](backend#controladores)
+    * [Entidades](backend#entidades)
+        * [Entidad de los usuarios creados por medio de la aplicación](backend#entidad-de-los-usuarios-creados-por-medio-de-la-aplicacion)
+        * [Entidad de los usuarios creados por medio de Google o Facebook](backend#entidad-de-los-usuarios-creados-por-medio-de-google-o-facebook)
+        * [Entidad del perfil de los usuarios](backend#entidad-del-perfil-de-los-usuarios)
+    * [Helpers](backend#helpers)
+        * [Borrar imagen de perfil del usuario](backend#borrar-imagen-de-perfil-del-usuario)
+        * [Generar JWT](backend#generar-jwt)
+        * [Información del usuario](backend#informacion-del-usuario)
+    * [Middlewares](backend#middlewares)
+        * [Subir imagén de perfil](backend#subir-imagen-de-perfil)
+        * [Validar campos de los formularios de inicio de sesión y registro](backend#validar-campos-de-los-formularios-de-inicio-de-sesion-y-registro)
+        * [Validar JWT](backend#validar-jwt)
+    * [Carpeta Public](backend#carpeta-public)
+    * [Rutas](backend#rutas)
+    * [Carpeta de imágenes de los perfiles](backend#carpeta-de-imagenes-de-los-perfiles)
     
 
 ## Repositorio

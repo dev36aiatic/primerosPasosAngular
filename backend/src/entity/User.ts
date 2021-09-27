@@ -25,8 +25,8 @@ export class User {
     @Column()
     password: string;
 
-    //Al colocarle eager a usuario le digo que me cargue la informacion que tiene relacionadas
-    //De esta forma me cargan los datos de la tabla profile relacioandas a este usuario
+    //Al colocarle eager a usuario  carga la informacion que tiene relacionadas
+    //De esta forma me cargan los datos de la tabla profile relacionadas a este usuario
     @OneToOne(() => Profile, profile => profile.user,{eager: true})
     @JoinColumn({ name: "profile_id" })
     profile:Profile;
