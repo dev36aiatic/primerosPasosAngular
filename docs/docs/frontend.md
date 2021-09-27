@@ -1883,6 +1883,270 @@ export class UpdatePostComponent implements OnInit {
 
 #### Administrar categorías
 
+En esta página se pueden administrar ( ver, editar, borrar ) las categorías de las entradas de WordPress.
+Parar crear categorías se hace mediante el menú creado para esta sección, más información [aquí](#menu-de-wordpress)
+
+**Para administrar las categorías el usuario debe iniciar sesión y tener el rol de Administrador**
+
+<center>
+
+**Versión Web**
+
+![Categorías web](./img/categorias_wp_web.png);
+
+**Versión Móvil**
+
+![Categorías móvil](./img/categorias_wp_movil.png);
+
+</center>
+&nbsp;
+
+**Definición de los servicios utilizados para administrar las categorías**
+
+```Typescript
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError } from 'rxjs/operators';
+import { of, Observable } from 'rxjs'
+
+import { WpCategory } from '../interfaces/wp-category.interface';
+import { NewCategory } from '../interfaces/new-category.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class WordpressService {
+
+  private urlWP: string = 'https://dev36.latiendasigueabierta.com/wp-json/wp/v2';
+
+  constructor(private http: HttpClient) { }
+
+  /**Getter de los headers */
+  get wpHeaders() {
+    return new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('wp-token') || '');
+  }
+  /**
+   * Funcion que toma la informacion del usuario que inicio sesion
+   * @returns Usuario de wordpress que inicio sesion
+   */
+  getWPUser(): Observable<WordpressUser> {
+    const url = `${this.urlWP}/users/me`;
+
+    return this.http.post<WordpressUser>(url, null, { headers: this.wpHeaders })
+      .pipe(
+        catchError(err => of(err))
+      );
+  }
+  /**
+   * Funcion para obtener las categorias que estan en wordpress
+   * @returns Categorias almacenadas en wordpress 
+   */
+  getCategories(): Observable<WpCategory[]> {
+    // per_page = número de categorías por petición ( si existen )
+    const params = new HttpParams().set('per_page', 100);
+    const url = `${this.urlWP}/categories?`;
+
+    return this.http.get<WpCategory[]>(url, { params })
+      .pipe(
+        catchError(err => of(err))
+      );
+  }
+  /**
+   * Función que permite actualizar una categoria
+   * @param body - Información nueva de la categoria
+   * @param id - Identificador único de la categoria
+   * @returns - Categoria actualizada
+   */
+  updateCategory(body: WpCategory, id: number): Observable<WpCategory> {
+    const url = `${this.urlWP}/categories/${id}`;
+
+    return this.http.put<WpCategory>(url, body, { headers: this.wpHeaders })
+      .pipe(
+        catchError(error => of(error))
+      )
+  }
+  /**
+   * Función que permite borrar una categoria
+   * @param id - Id de la categoría a borrar
+   * @returns - Categoria borrada
+   */
+  deleteCategory(id: number): Observable<WpCategory> {
+    const params = new HttpParams().set('force', true);
+    const url = `${this.urlWP}/categories/${id}`;
+
+    return this.http.delete<WpCategory>(url, { headers: this.wpHeaders, params })
+      .pipe(
+        catchError(error => of(error))
+      );
+  }
+  /**
+   * Función para crear una nueva categoria
+   * @param body - Objeto con la información de la nueva categoria
+   * @returns - Información de la categoria creada
+   */
+  newCategory(body: object): Observable<NewCategory> {
+    const url = `${this.urlWP}/categories`;
+
+    return this.http.post<NewCategory>(url, body, { headers: this.wpHeaders })
+      .pipe(
+        catchError(err => {
+          if (err.error.code == "term_exists") {
+            return of({ error: err.error, msg: 'El slug proporcionado ya existe.' });
+          }
+          return of(err.error.message)
+        })
+      )
+  }
+
+}
+
+
+```
+
+**Implementación de los servicios utilizados para administrar las categorías**
+
+```Typescript
+import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
+import { switchMap } from 'rxjs/operators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { WordpressService } from '../../services/wordpress.service';
+import { WordpressUser } from '../../interfaces/logged-wp-user.interface';
+import { WpCategory } from '../../interfaces/wp-category.interface';
+
+@Component({
+  selector: 'app-manage-categories',
+  templateUrl: './manage-categories.component.html',
+  styleUrls: ['./manage-categories.component.css']
+})
+export class ManageCategoriesComponent implements OnInit {
+  // Variable en la que se guarda el usuario y se verifica que tenga los roles de administrador
+  wpUser!: WordpressUser;
+  // Variable para confirmar si tiene la sesión iniciada
+  isWPLogged: boolean;
+  // Se define el formulario donde se guarda la información para  administrar la categoría
+  formCategory: FormGroup = this.formBuilder.group({
+    name: ['', [Validators.required]],
+    slug: ['', [Validators.required]],
+    description: ['']
+  });
+  // Variables que sirven de banderas en la administración de las categorías
+  isEditingRow: boolean = false;
+  savingChanges: boolean;
+
+  constructor(private wpService: WordpressService, private formBuilder: FormBuilder) { }
+
+  categories: WpCategory[] = [];
+
+  ngOnInit(): void {
+    // Se llama el servicio para verificar las credenciales del usuario
+    this.wpService.getWPUser().subscribe(user => {
+      if (user["error"]) {
+        this.isWPLogged = false;
+        this.wpService.wpLogout();
+      } else {
+        this.wpUser = user;
+        this.isWPLogged = true;
+      }
+    });
+    // Se llama el servicio de las categorías y se almacenan
+    this.wpService.getCategories().subscribe(categories => {
+      categories.forEach(({ id, name, description, slug }) => {
+        this.categories.push({ id, name, description, slug });
+      });
+    });
+  }
+  /**
+   * Funcion que toma los vales de la categoría a editar y lo pone en el formulario a enviar para actualizar
+   */
+  onRowEditInit(category: WpCategory) {
+    this.isEditingRow = true;
+    this.formCategory.setValue({
+      name: category.name,
+      slug: category.slug,
+      description: category.description
+    });
+
+  }
+  /**
+   * Función para guardar los nuevos datos de la categoría
+   * @param category - Información antigua de la categoría
+   */
+  onRowEditSave(category: WpCategory) {
+    this.savingChanges = true;
+    this.wpService.updateCategory(this.formCategory.value, category.id)
+      .pipe(
+        switchMap(category => {
+          if (category["error"]) {
+            Swal.fire('Ha ocurrido un error', category["error"]["message"], 'error');
+            return;
+          } else {
+            return this.wpService.getCategories();
+          }
+        })
+      ).subscribe(categories => {
+        this.categories = [];
+        categories.forEach(({ id, name, description, slug }) => {
+          this.categories.push({ id, name, description, slug });
+        });
+        this.isEditingRow = false;
+        this.savingChanges = false;
+        setTimeout(() => {
+          this.savingChanges = undefined;
+        }, 30000);
+      });
+  }
+  /**
+   * Función para cancelar la edición de una categoría
+   * @param category - Informacion de la categoría
+   * @param index - Indice de la categoría
+   */
+  onRowEditCancel(category: WpCategory, index: number) {
+    this.isEditingRow = false;
+    this.formCategory.reset();
+  }
+  /**
+  * Funcion que recibe del hijo menu-wp las categorias mas recientes 
+  * @param categories - Categorias actualizadas
+  */
+  updateCategories(categories: WpCategory[]) {
+    this.categories = [];
+    categories.forEach(({ id, name, description, slug }) => {
+      this.categories.push({ id, name, description, slug });
+    });
+  }
+
+  /**
+   * Funcioón que permite borrar una categoria
+   * @param category - Información de la categoría
+   */
+  onDeleteCategory(category: WpCategory) {
+    this.savingChanges = true;
+    this.wpService.deleteCategory(category.id).pipe(
+      switchMap(category => {
+        if (category["error"]) {
+          Swal.fire('Ha ocurrido un error', category["error"]["message"], 'error');
+          return;
+        } else {
+          return this.wpService.getCategories();
+        }
+      })
+    ).subscribe(categories => {
+      this.categories = [];
+      categories.forEach(({ id, name, description, slug }) => {
+        this.categories.push({ id, name, description, slug });
+      });
+      this.isEditingRow = false;
+      this.savingChanges = false;
+      setTimeout(() => {
+        this.savingChanges = undefined;
+      }, 30000);
+    });
+  }
+}
+
+```
 
 
 
