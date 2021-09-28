@@ -11,7 +11,7 @@
 
 Esta es la documentación del proyecto [**Dashboard | Practicas II Semestre UNAB**](https://dev36-auth.herokuapp.com/), realizado
 en la empresa **A&A Soluciones TIC**, utilizando MKDOCS para publicarlo
-en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la parte del backend se utilizó NodeJS, TypeORM con base de datos MySQL.  También se hizo uso de la [API REST de los departamentos y municipios de Colombia](frontend#municipios-col) y la [API REST de WordPres](frontend#blog).
+en ReadTheDocs. En este proyecto se utilizó Angular para el Frontend, en la parte del backend se utilizó NodeJS, TypeORM con base de datos MySQL.  También se hizo uso de la [API REST de los departamentos y municipios de Colombia](frontend#perfil) y la [API REST de WordPres](frontend#blog).
 
 ## Contenido
 

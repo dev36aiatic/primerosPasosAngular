@@ -574,7 +574,7 @@ En esta página se encuentra un formulario por medio del cual se puede editar la
 
 **Código utilizado en la página del perfil**
 
-Definición del servicio para subir una guardar el perfil del usuario en el backend
+**Definición del servicio para subir una guardar el perfil del usuario en el backend**
 
 ```Typescript
 import { HttpClient } from '@angular/common/http';
@@ -642,9 +642,101 @@ export class AuthService {
 }
 
 
+
 ```
 
-Implementación del servicio para subir guardar el perfil del usuario en el backend
+&nbsp;
+**Definición de los servicio de la API REST de los departamentos y municipios de colombia**
+&nbsp;
+
+```Typescript
+import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { WebServiceResponse } from '../pages/web-service/interfaces/web-service.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UsuarioService {
+
+  private baseURL: string = 'https://www.datos.gov.co/resource/xdk5-pm3f.json';
+
+  constructor(private http: HttpClient) { }
+  
+  /**Getter de los headers */
+  get getHeaders() {
+    return new HttpHeaders().set('X-App-Token', 'TOKEN_APP');
+  }
+  /**
+   * 
+   * @param {string} department - Nombre departamento
+   * @returns Informacion del departamento
+   */
+  byDepartment(department: string): Observable<WebServiceResponse[]> {
+    const url = `${this.baseURL}?`
+    const params = new HttpParams().set('departamento', department);
+
+    return this.http.get<WebServiceResponse[]>(url, { headers: this.getHeaders, params });
+  }
+}
+
+```
+Para este proyecto se utilizaron los departamentos, más adelante, en la implementación se obtienen los municipios de este cuando el usuario selecciona un departamento.
+El **TOKEN_APP** puede ser obtenido creando una aplicación en el link que se provee a continuación.
+**Para más información sobre el uso que ofrece esta API REST puedes consultar aquí: [API REST de los departamentos y municipios de Colombia](https://www.datos.gov.co/en/Mapas-Nacionales/Departamentos-y-municipios-de-Colombia/xdk5-pm3f)**
+
+
+
+&nbsp;
+**Función adicional utilizada donde son almacenados los departamentos**
+&nbsp;
+
+```Typescript
+ /**Metodo que devuelve los departamentos de colombia
+   * @returns Departamentos de colombia
+   */
+export default function getDepartments() {
+    return [
+      { label: "Amazonas", value: "Amazonas" },
+      { label: "Antioquía", value: "Antioquia" },
+      { label: "Arauca", value: "Arauca" },
+      { label: "Atlántico", value: "Atlántico" },
+      { label: "Bolívar", value: "Bolívar" },
+      { label: "Boyacá", value: "Boyacá" },
+      { label: "Caldas", value: "Caldas" },
+      { label: "Caquetá", value: "Caquetá" },
+      { label: "Casanare", value: "Casanare" },
+      { label: "Cauca", value: "Cauca" },
+      { label: "Cesar", value: "Cesar" },
+      { label: "Chocó", value: "Chocó" },
+      { label: "Córdoba", value: "Córdoba" },
+      { label: "Cundinamarca", value: "Cundinamarca" },
+      { label: "Guainía", value: "Guainía" },
+      { label: "Guaviare", value: "Guaviare" },
+      { label: "Huila", value: "Huila" },
+      { label: "La Guajira", value: "La Guajira" },
+      { label: "Magdalena", value: "Magdalena" },
+      { label: "Meta", value: "Meta" },
+      { label: "Nariño", value: "Nariño" },
+      { label: "Norte de Santander", value: "Norte de Santander" },
+      { label: "Putumayo", value: "Putumayo" },
+      { label: "Quindío", value: "Quindío" },
+      { label: "Risaralda", value: "Risaralda" },
+      { label: "Santander", value: "Santander" },
+      { label: "Sucre", value: "Sucre" },
+      { label: "Tolima", value: "Tolima" },
+      { label: "Valle del Cauca", value: "Valle del Cauca" },
+      { label: "Vaupés", value: "Vaupés" },
+      { label: "Vichada", value: "Vichada" }
+    ]
+  }
+```
+Se obtuvieron los nombres de los departamentos  de esta forma y no utilizando la API REST con el objetivo de simplificar.
+
+&nbsp;
+**Implementación del servicio para subir guardar el perfil del usuario en el backend**
+&nbsp;
 
 ```Typescript
 import { AfterViewInit, Component, OnInit } from '@angular/core';
