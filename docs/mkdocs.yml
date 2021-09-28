@@ -1,13 +1,6 @@
 site_name: Documentación Proyecto Angular & WordPress | Practicas 2021-2 UNAB
 site_favicon: img/favicon.ico
-theme:
-    name: readthedocs
-    nav_style: dark
-    highlightjs: true
-    hljs_languages:
-        - yaml
-        - rust
-    collapse_navigation: true
+theme: readthedocs
 nav: 
     - 'CONTENIDO:':
       - Documentación: 'index.md'
